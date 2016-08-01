@@ -31,8 +31,8 @@ public class AdminSchedulingController {
     private SchedulingSettingsService schedulingSettingsService;// = ServiceFactory.getSchedulingSettingsService();
     @Autowired
     private ScheduleTimePointService timePointService;// = ServiceFactory.getScheduleTimePointService();
-    @Autowired
-    private DaoUtilService daoUtilService;// = ServiceFactory.getDaoUtilService();
+/*    @Autowired
+    private DaoUtilService daoUtilService;*/// = ServiceFactory.getDaoUtilService();
     @Autowired
     private UserTimePriorityService userTimePriorityService;// = ServiceFactory.getUserTimePriorityService();
     @Autowired

@@ -29,7 +29,7 @@ public class UserTimePriorityServiceImpl implements UserTimePriorityService {
     @Autowired
     private TimePriorityTypeService priorityTypeService;// = ServiceFactory.getTimePriorityTypeService();
 
-    private TimePriorityType defaultPriorityType = priorityTypeService.getByID(TimePriorityTypeEnum.CAN.getId());
+/*    private TimePriorityType defaultPriorityType = priorityTypeService.getByID(TimePriorityTypeEnum.CAN.getId());*/
 
     /*public UserTimePriorityServiceImpl(UserTimePriorityDao userTimePriorityDao) {
         this.userTimePriorityDao = userTimePriorityDao;
@@ -72,7 +72,7 @@ public class UserTimePriorityServiceImpl implements UserTimePriorityService {
 
     @Override
     public int[] createStaffTimePriorities(Set<User> staffList) {
-
+        TimePriorityType defaultPriorityType = priorityTypeService.getByID(TimePriorityTypeEnum.CAN.getId());
         List<ScheduleTimePoint> timePoints = timePointService.getAll();
         List<UserTimePriority> staffTimePriorities = new ArrayList<>();
         for (ScheduleTimePoint timePoint : timePoints) {

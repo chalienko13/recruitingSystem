@@ -15,6 +15,8 @@ import javax.sql.DataSource;
 public class SocialNetworkDaoImpl implements SocialNetworkDao {
     private static Logger log = LoggerFactory.getLogger(SocialNetworkDaoImpl.class.getName());
 
+
+
     @Autowired
     private JdbcDaoSupport jdbcDaoSupport;
 
@@ -26,6 +28,10 @@ public class SocialNetworkDaoImpl implements SocialNetworkDao {
 
     private static final String SQL_GET_BY_ID = "SELECT s.id, s.title" + "FROM \"social_network\" s\n"
             + "WHERE s.id = ?";
+
+    public SocialNetworkDaoImpl() {
+
+    }
 
     public SocialNetworkDaoImpl(DataSource dataSource) {
         this.jdbcDaoSupport = new JdbcDaoSupport();

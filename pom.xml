@@ -12,8 +12,8 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <spring.core>4.1.6.RELEASE</spring.core>
-        <spring.mvc>4.1.6.RELEASE</spring.mvc>
+        <spring.core>4.3.2.RELEASE</spring.core>
+        <spring.mvc>4.3.2.RELEASE</spring.mvc>
         <javax.servlet>3.0.1</javax.servlet>
         <postgresVersion>9.1-901-1.jdbc4</postgresVersion>
         <junit.version>4.11</junit.version>
@@ -41,7 +41,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
-            <version>4.1.6.RELEASE</version>
+            <version>${spring.core}</version>
         </dependency>
 
         <dependency>
@@ -59,7 +59,13 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aspects</artifactId>
-            <version>4.3.2.RELEASE</version>
+            <version>${spring.core}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>${spring.core}</version>
         </dependency>
 
         <dependency>

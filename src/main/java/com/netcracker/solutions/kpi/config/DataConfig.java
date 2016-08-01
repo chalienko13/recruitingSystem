@@ -17,9 +17,9 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@EnableTransactionManagement
+/*@EnableTransactionManagement*/
 @PropertySource("classpath:app.properties")
-@EnableJpaRepositories("com.netcracker.solutions.kpi")
+/*@EnableJpaRepositories("com.netcracker.solutions.kpi")*/
 @EnableSpringConfigured
 public class DataConfig {
 

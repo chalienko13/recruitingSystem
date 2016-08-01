@@ -45,7 +45,9 @@ public class CreatingOfAllSchedules {
                                   List<Integer> numbOfBookedPositionByShortTeacherForEachDay,
                                   List<Timestamp> datesAndTimesList, List<User> undistributedStudents,
                                   List<User> allLongTeachers, List<User> allShortTeachers) {
-        this.datesAndTimesList = datesAndTimesList;
+        if (datesAndTimesList != null) {
+            this.datesAndTimesList = datesAndTimesList;
+        }
         Collections.sort(datesAndTimesList); // на всякий випадок - сортую
 
         // Список. Перелік годин, з яких студенти вибирали собі підходящі

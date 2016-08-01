@@ -13,6 +13,7 @@ import com.netcracker.solutions.kpi.util.scheduling.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +25,13 @@ public class ScheduleService {
     private static final String CAN_TIME_PRIORITY = "Can";
 
     @Autowired
-    private static UserService userService;// = ServiceFactory.getUserService();
+    private UserService userService;// = ServiceFactory.getUserService();
     @Autowired
-    private static RecruitmentService recruitmentService;// = ServiceFactory.getRecruitmentService();
+    private RecruitmentService recruitmentService;// = ServiceFactory.getRecruitmentService();
     @Autowired
-    private static ScheduleTimePointService scheduleTimePointService;// = ServiceFactory.getScheduleTimePointService();
+    private ScheduleTimePointService scheduleTimePointService;// = ServiceFactory.getScheduleTimePointService();
     @Autowired
-    private static UserTimePriorityService userTimePriorityService;// = ServiceFactory.getUserTimePriorityService();
+    private UserTimePriorityService userTimePriorityService;// = ServiceFactory.getUserTimePriorityService();
 
     private static final Role TECH_ROLE = new RoleImpl(2L);
     private static final Role SOFT_ROLE = new RoleImpl(5L);
@@ -46,66 +47,78 @@ public class ScheduleService {
     private List<Integer> numbOfBookedPositionByShortTeacherForEachDay = new ArrayList<>();
     private List<User> allLongTeachers = new ArrayList<>();
     private List<User> allShortTeachers = new ArrayList<>();
-    private Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+    private Recruitment recruitment;
     private boolean techLonger;
 
-    public ScheduleService() {
+    @PostConstruct
+    public void init() {
+        recruitment = recruitmentService.getCurrentRecruitmnet();
+        initializeStartParametr();
+/*        creatingOfAllSchedules = new CreatingOfAllSchedules(durationOfLongIntervInMinutes, durationOfShortIntervInMinutes,
+                totalNumbOfRegisteredTeachersWithLongerInterv, totalNumbOfRegisteredTeachersWithShorterInterv,
+                numbOfBookedPositionByLongTeacherForEachDay, numbOfBookedPositionByShortTeacherForEachDay,
+                datesAndTimesList, undistributedStudents, allLongTeachers, allShortTeachers);*/
+    }
+
+/*    public ScheduleService() {
         initializeStartParametr();
         creatingOfAllSchedules = new CreatingOfAllSchedules(durationOfLongIntervInMinutes, durationOfShortIntervInMinutes,
                 totalNumbOfRegisteredTeachersWithLongerInterv, totalNumbOfRegisteredTeachersWithShorterInterv,
                 numbOfBookedPositionByLongTeacherForEachDay,numbOfBookedPositionByShortTeacherForEachDay,
                 datesAndTimesList,undistributedStudents,allLongTeachers,allShortTeachers);
-    }
+    }*/
 
     private void initializeStartParametr() {
-        initializeInterviewTimeParameter();
-        initializeNumOfInterviewerParameter();
-        initializeNumbOfBookedPositionByForEachDay();
-        initializeDatesAndTimesList();
-        initializeUndistributedStudents();
-        initializeTeachersList();
+        if (recruitment != null) {   //toDo fix recruitment
+            initializeInterviewTimeParameter();
+            initializeNumOfInterviewerParameter();
+            initializeNumbOfBookedPositionByForEachDay();
+            initializeDatesAndTimesList();
+            initializeUndistributedStudents();
+            initializeTeachersList();
+        }
     }
 
     private void initializeTeachersList() {
         List<com.netcracker.solutions.kpi.persistence.model.User> softUsers = userService.getActiveStaffByRole(SOFT_ROLE);
         List<com.netcracker.solutions.kpi.persistence.model.User> techUsers = userService.getActiveStaffByRole(TECH_ROLE);
         if (techLonger) {
-            for (com.netcracker.solutions.kpi.persistence.model.User user : softUsers){
+            for (com.netcracker.solutions.kpi.persistence.model.User user : softUsers) {
                 allShortTeachers.add(adaptUser(user));
             }
-            for (com.netcracker.solutions.kpi.persistence.model.User user : techUsers){
+            for (com.netcracker.solutions.kpi.persistence.model.User user : techUsers) {
                 allLongTeachers.add(adaptUser(user));
             }
-        }else {
-            for (com.netcracker.solutions.kpi.persistence.model.User user : softUsers){
+        } else {
+            for (com.netcracker.solutions.kpi.persistence.model.User user : softUsers) {
                 allLongTeachers.add(adaptUser(user));
             }
-            for (com.netcracker.solutions.kpi.persistence.model.User user : techUsers){
+            for (com.netcracker.solutions.kpi.persistence.model.User user : techUsers) {
                 allShortTeachers.add(adaptUser(user));
             }
         }
     }
 
-    private void initializeUndistributedStudents(){
+    private void initializeUndistributedStudents() {
         List<com.netcracker.solutions.kpi.persistence.model.User> users = userService.getAllNotScheduleStudents();
-        for (com.netcracker.solutions.kpi.persistence.model.User user : users){
+        for (com.netcracker.solutions.kpi.persistence.model.User user : users) {
             undistributedStudents.add(adaptUser(user));
         }
     }
 
-    private void initializeDatesAndTimesList(){
+    private void initializeDatesAndTimesList() {
         List<ScheduleTimePoint> scheduleTimePoints = scheduleTimePointService.getAll();
         for (ScheduleTimePoint scheduleTimePoint : scheduleTimePoints) {
             datesAndTimesList.add(scheduleTimePoint.getTimePoint());
         }
     }
 
-    private void initializeNumbOfBookedPositionByForEachDay(){
+    private void initializeNumbOfBookedPositionByForEachDay() {
         if (techLonger) {
             numbOfBookedPositionByLongTeacherForEachDay = userService.getCountUsersOnInterviewDaysForRole(TECH_ROLE);
             numbOfBookedPositionByShortTeacherForEachDay = userService.getCountUsersOnInterviewDaysForRole(SOFT_ROLE);
 
-        }else {
+        } else {
             numbOfBookedPositionByLongTeacherForEachDay = userService.getCountUsersOnInterviewDaysForRole(SOFT_ROLE);
             numbOfBookedPositionByShortTeacherForEachDay = userService.getCountUsersOnInterviewDaysForRole(TECH_ROLE);
         }
@@ -147,7 +160,7 @@ public class ScheduleService {
     }
 
     public boolean startScheduleForStaff() {
-        List<TeachersScheduleCell> scheduleCellList = creatingOfAllSchedules.getTeachersSchedule();
+/*        List<TeachersScheduleCell> scheduleCellList = creatingOfAllSchedules.getTeachersSchedule();
         for (TeachersScheduleCell scheduleCell : scheduleCellList) {
             for (User user : scheduleCell.getTeachers()) {
                 ScheduleTimePoint scheduleTimePoint = scheduleTimePointService
@@ -155,8 +168,10 @@ public class ScheduleService {
                 userService.insertFinalTimePoint(reverseAdaptUser(user), scheduleTimePoint);
             }
         }
-        return (scheduleCellList==null)?false:true;
+        return (scheduleCellList == null) ? false : true;*/
+        return true;
     }
+
 
     private com.netcracker.solutions.kpi.persistence.model.User reverseAdaptUser(User user) {
         return new UserImpl(user.getId());
