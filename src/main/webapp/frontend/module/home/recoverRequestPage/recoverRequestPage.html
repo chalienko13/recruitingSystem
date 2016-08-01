@@ -1,0 +1,46 @@
+<div app-header></div>
+<div app-second-header></div>
+<div app-menu-main></div>
+<div id="main-blockAuth" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
+    <div class="col-md-12 col-sm-12 left-info-col">
+        <div class="info-text" ng-show="emailSend">
+            <p>Dear {{username}}, on your email - {{email}} address  has been sent confirm token for recover your email. Please, visit your email and follow instruction.</p>
+        </div>
+        <div ng-show="!emailSend">
+            <div class="col-xs-12 col-sm-12 col-lg-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Forget password</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 login-box">
+                                <form role="form">
+                                    <div class="input-group">
+                                                <span class="input-group-addon"><span
+                                                        class="glyphicon glyphicon-envelope"></span></span>
+                                        <input ng-model="email" type="text" class="form-control" placeholder="Email" required
+                                               autofocus/>
+                                    </div>
+                                    <p class="alert-danger" ng-show="userExist">User with this email not found</p>
+                                    <p>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <button type="button" class="btn btn-labeled btn-info" value="go"
+                                        ng-click="sendEmail()">
+                                    <span class="btn-label"><i class="glyphicon glyphicon-ok"></i></span>Recover password
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

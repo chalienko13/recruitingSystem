@@ -1,0 +1,30 @@
+<div app-header></div>
+<div app-menu-student></div>
+<div id="main-block"
+     class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
+    <form name="feedbackForm">
+        <div class="col-md-12 col-sm-12 left-info-col">
+
+            <div>
+                <h3>Feedback</h3>
+                <h5>Your opinion about interview</h5>
+
+                <div class="row" name="myForm">
+                    <div class="col-md-12">
+					<textarea ng-model="feedBackText" name="feedback" ng-init="init()" rows="7" class="wide-not"
+                              placeholder="Feedback must be over 5 and less then 5000 characters" required
+                              ng-minlength="5" ng-maxlength="5000"></textarea>
+                        <span ng-show="feedbackForm.feedback.$error.required" class="text-danger">The field can not be empty</span>
+                        <span ng-show="feedbackForm.feedback.$error.minlength" class="text-danger">Must be at least 5 characters</span>
+                        <span ng-show="feedbackForm.feedback.$error.maxlength" class="text-danger">Should be less than 5000 characters</span>
+                    </div>
+                </div>
+                </br>
+                <button type="submit" class="btn btn-sm btn-info search-element" ng-click="saveFeedBack(feedBackText)"
+                        ng-disabled="feedbackForm.$invalid">Send
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<div app-footer></div>

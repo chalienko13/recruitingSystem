@@ -1,0 +1,239 @@
+<div app-header></div>
+<div app-menu-admin></div>
+<div id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
+    <div class="col-md-12 col-sm-12 left-info-col">
+        <div >
+            <div class="row">
+                <div class="col-md-2">
+                    <h4>{{appForm.user.firstName}} {{appForm.user.lastName}} <p></p> <span ng-if="adequate" class="label label-danger">Not adequate</span></h4>
+                </div>
+            </div>
+
+            <ul ng-init="tab = 1;showAppForm()" class="nav nav-tabs">
+                <li ng-class="{active:tab===1}" class="dropdown active">
+                    <a  data-toggle="dropdown" class="dropdown-toggle"  href ng-click="tab = 1">
+                        Application Form
+                        <b class="caret"></b>
+                    </a>
+                </li>
+                <li ng-show="roleTech" ng-class="{active:tab===2}" class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href ng-click="tab = 2; showInterview(2)" >
+                        Tech Form
+                        <b class="caret"></b>
+                    </a>
+                </li>
+
+                <li ng-show="roleSoft" ng-class="{active:tab===3}" class="dropdown" >
+                    <a data-toggle="dropdown" class="dropdown-toggle" href ng-click="tab = 3; showInterview(5)">
+                        Soft Form
+                        <b class="caret"></b>
+                    </a>
+                </li>
+                <li ng-show="oldForms" ng-class="{active:tab===4}" class="dropdown" >
+                    <a data-toggle="dropdown" class="dropdown-toggle" href>
+                        Old Forms
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="prForm in oldForms track by $index">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href ng-click="changeTab(4);">
+                                {{prForm.recruitment.name}}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li ng-show="appForm.feedback !=undefined" ng-class="{active:tab===5}" class="dropdown" >
+                    <a data-toggle="dropdown" class="dropdown-toggle" href ng-click="tab = 5">
+                        Feedback
+                        <b class="caret"></b>
+                    </a>
+                </li>
+            </ul>
+            <div  class="tab-content">
+                <div ng-show="tab === 1"  class="tab-pane fade in active">
+                    <table class="table table-hover table-condensed">
+                        <tr class="text-success">
+                            <td>Status</td>
+                            <td>{{appForm.status}}</td>
+                        </tr>
+                        <tr class="text-success">
+                            <td>ID</td>
+                            <td ng-model="id">{{appForm.id}}</td>
+                        </tr>
+                        <td >
+                            <label class="control-label">Photo</label>
+                        </td>
+                        <td><img ng-src="/photo/{{appForm.photoScope}}" width=100px>
+                            <tr>
+                                <td>Last Name</td>
+                                <td>{{appForm.user.lastName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Firs name</td>
+                                <td>{{appForm.user.firstName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Second name</td>
+                                <td>{{appForm.user.secondName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>{{appForm.user.email}}</td>
+                            </tr>
+                            <tr ng-repeat="question in appForm.questions">
+                                <td > {{question.questionTitle}}</td>
+                                <td ng-if="question.questionType == 'input' || question.questionType == 'textarea' ||
+                            question.questionType == 'radio' || question.questionType == 'select'"  ng-repeat="answer in question.answers">
+                                    {{answer.answer}}
+                                </td>
+                                <td ng-if="question.questionType == 'checkbox'" >
+                                    <p ng-repeat="variant in question.variants">
+                                        {{variant.variant}}<span ng-if="exists(variant.variant, question.answers)" class="glyphicon glyphicon-ok"></span>
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr ng-if="appForm.feedback !=undefined" >
+                                <td>Feedback from Student</td>
+                                <td>{{appForm.feedback}}</td>
+                            </tr>
+                    </table>
+                    <button ng-click = "exportAppForm(appForm)" type="submit" class="btn btn-sm btn-info search-element col-md-2 btn-left">Export</button>
+                </div>
+                <div ng-show="tab === 2"  class="tab-pane fade in active">
+                    <table class="table table-hover table-condensed">
+                        <tr>
+                            <td>
+                                <label>Interviewer</label>
+                            </td>
+                            <td>
+                                <label>{{interviewTech.interviewer.lastName}} {{interviewTech.interviewer.firstName}}</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Mark</label>
+                            </td>
+                            <td>
+                                <label>{{interviewTech.mark}} </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Adequate Mark</label>
+                            </td>
+                            <td>
+                                <label ng-if="interviewTech.adequateMark">Not Adequate</label>
+                                <label ng-if="!interviewTech.adequateMark">Adequate</label>
+                            </td>
+                        </tr>
+                        <tr ng-repeat="question in interviewTech.questions">
+                            <td > {{question.questionTitle}}</td>
+                            <td ng-if="question.questionType == 'input' || question.questionType == 'textarea' ||
+                            question.questionType == 'radio' || question.questionType == 'select'"  ng-repeat="answer in question.answers">
+                                {{answer.answer}}
+                            </td>
+                            <td ng-if="question.questionType == 'checkbox'" >
+                                <p ng-repeat="variant in question.variants">
+                                    {{variant.variant}}<span ng-if="exists(variant.variant, question.answers)" class="glyphicon glyphicon-ok"></span>
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div ng-show="tab === 3"  class="tab-pane fade in active">
+                    <table class="table table-hover table-condensed">
+                        <tr>
+                            <td>
+                                <label>Interviewer</label>
+                            </td>
+                            <td>
+                                <label>{{interviewSoft.interviewer.lastName}} {{interviewSoft.interviewer.firstName}}</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Mark</label>
+                            </td>
+                            <td>
+                                <label>{{interviewSoft.mark}} </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Adequate Mark</label>
+                            </td>
+                            <td>
+                                <label ng-if="interviewSoft.adequateMark">Not Adequate</label>
+                                <label ng-if="!interviewSoft.adequateMark">Adequate</label>
+                            </td>
+                        </tr>
+                        <tr ng-repeat="question in interviewSoft.questions">
+                            <td > {{question.questionTitle}}</td>
+                            <td ng-if="question.questionType == 'input' || question.questionType == 'textarea' ||
+                            question.questionType == 'radio' || question.questionType == 'select'"  ng-repeat="answer in question.answers">
+                                {{answer.answer}}
+                            </td>
+                            <td ng-if="question.questionType == 'checkbox'" >
+                                <p ng-repeat="variant in question.variants">
+                                    {{variant.variant}}<span ng-if="exists(variant.variant, question.answers)" class="glyphicon glyphicon-ok"></span>
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div ng-show="tab === 4"  class="tab-pane fade in active">
+                    <table class="table table-hover table-condensed">
+                        <tr class="text-success">
+                            <td>Status</td>
+                            <td>{{oldForms[oldToShow].status}}</td>
+                        </tr>
+                        <tr class="text-success">
+                            <td>ID</td>
+                            <td ng-model="id">{{oldForms[oldToShow].id}}</td>
+                        </tr>
+                        <td >
+                            <label class="control-label">Photo</label>
+                        </td>
+                        <td><img ng-src="/photo/{{appForm.photoScope}}" width=100px>
+                            <tr>
+                                <td>Last Name</td>
+                                <td>{{oldForms[oldToShow].user.lastName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Firs name</td>
+                                <td>{{oldForms[oldToShow].user.firstName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Second name</td>
+                                <td>{{oldForms[oldToShow].user.secondName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>{{oldForms[oldToShow].user.email}}</td>
+                            </tr>
+                            <tr ng-repeat="question in oldForms[oldToShow].questions">
+                                <td > {{question.questionTitle}}</td>
+                                <td ng-if="question.questionType == 'input' || question.questionType == 'textarea' ||
+                            question.questionType == 'radio' || question.questionType == 'select'"  ng-repeat="answer in question.answers">
+                                    {{answer.answer}}
+                                </td>
+                                <td ng-if="question.questionType == 'checkbox'" >
+                                    <p ng-repeat="variant in question.variants">
+                                        {{variant.variant}}<span ng-if="exists(variant.variant, question.answers)" class="glyphicon glyphicon-ok"></span>
+                                    </p>
+                                </td>
+                            </tr>
+                    </table>
+                    <button ng-click = "exportAppForm(oldForms[0])" type="submit" class="btn btn-sm btn-info search-element col-md-2 btn-left">Export</button>
+                </div>
+                <div ng-show="tab === 5"  class="tab-pane fade in active">
+                    <div>
+                        <h3>Feedback from Student</h3>
+                        <h4 align="left">{{appForm.feedback}}</h4>
+                    </div>
+                </div>
+                </div>
+        </div>
+    </div>
+</div>
+<div app-footer></div>
