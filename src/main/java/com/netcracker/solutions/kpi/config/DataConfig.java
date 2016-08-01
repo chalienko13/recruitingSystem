@@ -48,7 +48,7 @@ public class DataConfig {
         return dataSource;
     }
 
-    @Bean
+  /*  @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 
@@ -66,7 +66,7 @@ public class DataConfig {
         transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
 
         return transactionManager;
-    }
+    }*/
 
     private Properties getHibernateProperties() {
         Properties hiberProps = new Properties();

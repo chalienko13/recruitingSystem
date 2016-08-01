@@ -8,11 +8,13 @@ import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.service.EmailTemplateService;
 import com.netcracker.solutions.kpi.service.ScheduleTimePointService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class EmailTemplateServiceImpl implements EmailTemplateService {
 
     @Autowired
