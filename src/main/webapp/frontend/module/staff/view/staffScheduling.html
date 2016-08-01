@@ -1,0 +1,41 @@
+<div app-header></div>
+<div app-staff-menu></div>
+<div id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
+    <div class="col-md-12 col-sm-12 left-info-col">
+        <div>
+            <form ng-show="showTimePriority==true" >
+                <div class="row">
+                    <h4>Choose appropriate variant for each date.</h4>
+                    <div class="col-md-3 day-point">
+                        <div ng-repeat="timePoint in timePoints" class="col-md-3 day-point">
+                            <div>
+                                <h5>{{timePoint.timePoint | date : format : timezone}}</h5>
+                                <input type="radio" ng-model="timePoint.idPriorityType" ng-value="2"/>
+                                Can
+                                <br>
+                                <input type="radio" ng-model="timePoint.idPriorityType" ng-value="3"/>
+                                Can not
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" ng-click="save()" class="btn btn-info search-element btn-left">Confirm
+                    </button>
+                </div>
+            </form>
+            <form >
+                <h4 style="margin-right: 1000px">Your interviews dates: </h4>
+                <div style="margin-right: 1000px" ng-repeat="finalTimePoint in finalTimePoints">
+                     <p class="par"><h4>{{finalTimePoint | date: "MM/dd/yyyy HH:mm:ss"}}</h4></p>
+                </div>
+                <h4>We will be waiting for you at 18 Corps KPI (Street Polytechnic, 41), audience - 420.</h4>
+                <h4>See you there!</h4>
+            </form>
+            <div id="map">
+                <h3>How to find us</h3>
+
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1778.9304201007299!2d30.456716531876303!3d50.44656005854637!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0000000000000000%3A0x01f5234079336190!2z0KTQsNC60YPQu9GM0YLQtdGCINGW0L3RhNC-0YDQvNCw0YLQuNC60Lgg0YLQsCDQvtCx0YfQuNGB0LvRjtCy0LDQu9GM0L3QvtGXINGC0LXRhdC90ZbQutC4INCd0KLQo9CjICLQmtCf0IYi!5e1!3m2!1sru!2sua!4v1463489226379" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+<div app-footer></div>

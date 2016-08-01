@@ -1,0 +1,136 @@
+<div app-header></div>
+<div app-menu-student></div>
+<div ng-app="questions" id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
+    <div class="col-md-12 col-sm-12 left-info-col">
+        <form name="myForm" data-toggle="validator" role="form">
+            <button type="button" ng-if="id != null && id != 0" class="btn btn-sm btn-info search-element col-md-2 btn-left" ng-click="exportAppForm()">Export</button>
+            <p ng-class="{'text-danger' : resultMessage.type == 'ERROR', 'text-success' : resultMessage.type == 'SUCCESS', 'text-info' : resultMessage.type == 'INFO'}">{{resultMessage.message}}</p>
+            <p class="text-warning" ng-if="data.recruitment == null">Your application form will bound to next recruitment.</p>
+            <table class="table table-hover table-condensed">
+                <tr class="text-success" ng-if="id != null && id != 0">
+                    <td>ID</td>
+                    <td ng-model="id">{{id}}</td>
+                </tr>
+                <tr class="form-group">
+                    <td class="mandatory">
+                        <label for="file" class="control-label">Photo</label>
+                    </td>
+                    <td><img ng-src="/photo/{{data.photoScope}}" width=100px>
+                        <label class="file">
+                            <input type="file" id="file" ng-required="id == null || id == 0" ngf-select ng-model="picFile" name="file"
+                                   accept="image/*"
+                                   ngf-max-size="5MB"
+                                   ngf-min-height="400"
+                                   ngf-max-height="400"
+                                   ngf-max-width="300"
+                                   ngf-min-width="300"
+
+
+                                   
+                                   ngf-model-invalid="errorFile">
+                        </label>
+                        <i ng-show="myForm.file.$error.required">*required</i><br>
+                        <i ng-show="myForm.file.$error.maxSize">Photo too large
+                            {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                        <i ng-show="myForm.file.$error.maxWidth">Photo width must be 300px</i>
+                        <i ng-show="myForm.file.$error.maxHeight">Photo height must be 400px</i>
+                        <i ng-show="myForm.file.$error.minHeight">Photo height must be 400px</i>
+                        <i ng-show="myForm.file.$error.minWidth">Photo width must be 300px</i>
+
+                        <img ng-show="myForm.file.$valid" ngf-thumbnail="picFile" class="thumb"> <button ng-click="picFile = null" ng-show="picFile">Remove</button>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td class="mandatory"><label for="inputLast" class="control-label">Last name</label></td>
+                    <td><input ng-model="user.lastName" type="text" id="inputLast" name="" ng-maxlength="77"  ng-minlength="1"
+                               oninvalid="this.setCustomValidity('Please fill out this field')" class="form-control"
+                               required/>
+
+						<div class="help-block with-errors">
+							<div ng-messages="myForm.lastName.$error">
+								<div ng-message="maxlength">Last name must not exceed 77
+									characters</div>
+								<div ng-message="minlength">Last name must be over 1
+									characters</div>
+							</div>
+						</div>
+					</td>
+                </tr>
+                <tr class="form-group">
+                    <td class="mandatory"><label for="inputFirst" class="control-label">First name</label></td>
+                    <td><input name="firstName" ng-model="user.firstName" type="text" id="inputFirst" ng-maxlength="77"  ng-minlength="1" 
+                               oninvalid="this.setCustomValidity('Please fill out this field')"  class="form-control"
+                               required/>
+                                        
+
+                        <div class="help-block with-errors"><div ng-messages="myForm.firstName.$error">
+                                            <div ng-message="maxlength">First name must not exceed 77 characters</div>
+                                            <div ng-message="minlength">First name must be over 1 characters</div>
+                                        </div></div>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td class="mandatory"><label for="inputSecond" class="control-label">Second name</label></td>
+                    <td><input ng-model="user.secondName" type="text" id="inputSecond" ng-maxlength="77"  ng-minlength="1" 
+                    			name="secondName"
+                               oninvalid="this.setCustomValidity('Please fill out this field')" class="form-control"
+                               required/>
+										<div ng-messages="myForm.secondName.$error">
+                                            <div ng-message="maxlength">Second name must not exceed 77 characters</div>
+                                            <div ng-message="minlength">Second name must be over 1 characters</div>
+                                        </div>
+                        <div class="help-block with-errors"></div>
+                    </td>
+                </tr>
+                <tr class="form-group">
+                    <td class="mandatory"><label for="inputEmail" class="control-label">Email</label></td>
+                    <td><span type="text" class="input-xlarge uneditable-input" id="inputEmail">{{user.email}}</span>
+                    </td>
+                </tr>
+                <tr ng-repeat="question in questions">
+                    <td ng-if="question.isMandatory == true" class="mandatory"> {{question.questionTitle}}</td>
+                    <td ng-if="question.isMandatory == false"> {{question.questionTitle}}</td>
+                    <td ng-if="question.questionType == 'select'">
+                        <select class="form-control" ng-model="question.answers[0].answer" ng-required="question.isMandatory">
+                            <option ng-repeat="variant in question.variants track by $index"
+                                    value="{{variant.variant}}">{{variant.variant}}
+                            </option>
+                        </select>
+                    </td>
+                    <td ng-if="question.questionType == 'input'" ng-repeat="answer in question.answers">
+                        <input ng-model="answer.answer" maxlength="70" ng-model="answer.ID" ng-required="question.isMandatory" type="text" value="{{answer.answer}}"
+                               class="form-control">
+                    </td>
+                    <td ng-if="question.questionType == 'checkbox'">
+                       <span ng-repeat="variant in question.variants">
+                           <p>
+                               <input type="checkbox"
+                               ng-required="question.isMandatory && !checkAnswersSelected(question)"
+                                ng-checked="exists(variant.variant, question.answers)"
+                                      ng-click="toggle(variant.variant, question.answers)"> {{variant.variant}}
+                           </p>
+                       </span>
+                    </td>
+                    <td ng-if="question.questionType == 'radio'">
+                       <div ng-repeat="variant in question.variants">
+                               <input type="radio" name="{{$parent.question.title}}" ng-required="question.isMandatory && !checkAnswersSelected(question)" ng-model="$parent.question.answers[0].answer" name="question.questionTitle" ng-value="variant.variant"> {{variant.variant}}</input>
+					 </div>
+                    </td>
+                    <td ng-if="question.questionType == 'textarea'" ng-repeat="answer in question.answers">
+                        <p>
+                            <textarea style="height: 150px " ng-model="answer.answer" ng-required="question.isMandatory && !checkAnswersSelected(question)" ng-model="answer.ID" class="form-control" type="text"
+                                   value="{{answer.answer}}"> {{variant.variant}}</textarea>
+                        </p>
+
+                    </td>
+                </tr>
+            </table>
+            <div class="form-group">
+                <button ng-click="saveForm()" type="submit" class="btn btn-sm btn-info search-element">
+                    Submit
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<div app-footer></div>
