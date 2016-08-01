@@ -1,0 +1,409 @@
+<div app-header></div>
+<div app-menu-admin></div>
+
+<div id="main-block" class="col-md-10 col-md-offset-0 col-sm-9 col-sm-offset-3">
+    <div class="col-md-12 col-sm-12 left-info-col">
+        <div>
+            <div class="row">
+                <label class="col-md-2 col-md-offset-3">Active Soft Employee: {{activeSoft}}</label>
+                <label class="col-md-2">Active Tech Employee: {{activeTech}}</label>
+                <label class="col-md-3">Active Double Role Employees: {{activeTechSoft}}</label>
+            </div>
+            <div class="row">
+                <button id="add-empl" class="btn btn-info col-md-1 top-button" type="button"
+                        data-toggle="modal"
+                        data-target="#addEmployee">Add
+                    employee
+                </button>
+                <button id="confirmSelection" class="btn btn-info col-md-1 top-button" type="button" ng-click="confirmStaff()"
+                        >
+                    Confirm active staff
+                </button>
+                <button id="filter" class="btn btn-info col-md-1 col-md-offset-8" type="button"
+                        data-toggle="modal"
+                        data-target="#filterTable" ng-click="showFiltration()">Filter table
+                </button>
+            </div>
+            <br>
+        </div>
+        <div class="row">
+            <div class="col-md-2 info-text">Show
+                <select ng-model="itemsPerPage">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                    <option value="30">30</option>
+                </select>
+                entries
+            </div>
+            <div class="col-md-3 info-text col-md-offset-7 search-block">Search:
+                <input ng-model-options="{ debounce: 1000 }"
+                       ng-model="employeeName" ng-change="searchEmployee(employeeName)">
+            </div>
+        </div>
+        <table class="table table-condensed table-hover col-md-8">
+            <thead class="table-head">
+            <tr>
+                <th class="staff-id" custom-sort order="1" sort="sort">ID&nbsp;</th>
+                <th class="staff-name" custom-sort order="3" sort="sort">Name&nbsp;</th>
+                <th class="staff-email" custom-sort order="2" sort="sort">E-mail&nbsp;</th>
+                <th class="staff-role">Role</th>
+                <th class="staff-status">Status</th>
+                <th class="staff-assigned">Assigned students</th>
+                <th class="staff-edit">Edit</th>
+                <th class="staff-delete">Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="employee in allEmployee" data-ng-class="{'employeewarning':exists(employee.email,notMarked)}">
+                <td>{{employee.id}}</td>
+                <td>{{employee.lastName}}</td>
+                <td>{{employee.email}}</td>
+                <td>
+                    <ul>
+                        <li ng-repeat="role in employee.roles">
+                            {{role.roleName}}
+                        </li>
+                    </ul>
+                </td>
+                <td>
+                    <button style="width:80px;height:35px" ng-click="changeEmployeeStatus(employee)"
+                            ng-class="{'btn btn-success' : employee.active, 'btn btn-danger' : !employee.active}"
+                            type="button">{{employee.active? 'Active': 'UnActive'}}
+                    </button>
+                </td>
+                <td>
+
+                    <button class="btn btn-info" ng-click="showAssigned(employee)" type="button"
+                            data-toggle="modal"
+                            data-target="#assignedList">Show list
+                    </button>
+                </td>
+                <td>
+                    <button ng-click="showUserData(employee)" class="btn btn-link" type="button"
+                            data-toggle="modal"
+                            data-target="#editEmployee">
+                            <span class="glyphicon glyphicon-edit"></span>
+                    </button>
+                </td>
+                <td>
+                    <button data-toggle="modal"
+                            data-target="#deleteEmployee" ng-click="getEmployee(employee)"
+                            class="btn btn-danger"
+                            type="button">Delete
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <td colspan="6">
+                <div class="pagination pull-right">
+                    <ul>
+                        <li ng-class="{disabled: currentPage == 1}">
+                            <a href ng-click="prevPage()">« Prev</a>
+                        </li>
+
+                        <li ng-repeat="n in range(amount, currentPage, currentPage + gap) "
+                            ng-class="{active: n == currentPage}"
+                            ng-click="setPage()">
+                            <a href ng-bind="n">1</a>
+                        </li>
+
+                        <li ng-class="{disabled: currentPage == amount}">
+                            <a href ng-click="nextPage()">Next »</a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+            </tfoot>
+        </table>
+    </div>
+</div>
+</div>
+
+<div id="deleteEmployee" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" type="button" data-dismiss="modal"><span
+                        class="glyphicon glyphicon-remove"></span></button>
+                <h4 class="modal-title">Are you sure?</h4>
+                <button ng-click="deleteEmployee(employee)" data-dismiss="modal" class="btn btn-link">Yes
+                </button>
+                <button class="btn btn-link" data-dismiss="modal">NO</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="deleteAssignedStudent" class="modal fade" style="z-index: 2000">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" type="button" data-dismiss="modal"><span
+                        class="glyphicon glyphicon-remove"></span></button>
+                <h4 class="modal-title">Are you sure?</h4>
+                <button ng-click="deleteAssignedStudent(employee)" data-dismiss="modal" class="btn btn-link">Yes
+                </button>
+                <button class="btn btn-link" data-dismiss="modal">NO</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal dialog -->
+
+<div id="filterTable" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" type="button" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-remove"></span></button>
+
+                <h4 class="modal-title">Filtration</h4>
+
+                <div>
+                    <p>Choose appropriate parameters:</p>
+                </div>
+                <table class="table table-hover table-condensed">
+                    <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Restriction</th>
+                    </tr>
+                    <tbody>
+                    <tr>
+                        <td>ID</td>
+                        <td>
+                            <rzslider
+                                    rz-slider-model="slider.minValue"
+                                    rz-slider-high="slider.maxValue"
+                                    rz-slider-options="slider.options">
+                            </rzslider>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Role</td>
+                        <td>
+                            <span ng-repeat="role in existingRoles">
+                           <p>
+                               <input type="checkbox" ng-checked="rolesChoosen.indexOf(role.id)>-1"
+                                      ng-click="toggle(role.id, rolesChoosen)"> {{role.roleName}}
+                           </p>
+                       </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Status</td>
+                        <td>
+                            <input type="checkbox" ng-model="interviewer"> interviewers
+                            <input type="checkbox" ng-model="notInterviewer"> not interviewers
+                        </td>
+                    </tr>
+                    <!--<tr>-->
+                        <!--<td>Just who has not evaluated students</td>-->
+                        <!--<td>-->
+                            <!--<input type="checkbox" ng-checked="notEval" ng-click="toggle()">-->
+                        <!--</td>-->
+                    <!--</tr>-->
+                    </tbody>
+                    </thead>
+
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" ng-click="filter()" type="button" id="acceptFiltration"
+                        data-dismiss="modal">Filter
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="editEmployee" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" type="button" data-dismiss="modal">
+                        <span class="glyphicon glyphicon-remove"></span></button>
+
+                <h4 class="modal-title">Edit employee</h4>
+
+                <div>
+                    <form name="editEmployeeForm">
+                    <table class="table">
+                        <tr>
+                            <td> First Name</td>
+                            <td><input type="text" ng-model="firstNameEdit" id="firstNameEdit" name="firstName" required ng-minlength="2" ng-maxlength="15" ng-pattern="/^\w+$/"></td>
+                                <td><span ng-show="editEmployeeForm.firstName.$error.required" class="text-danger">The field can not be empty.</span>
+                                <span ng-show="editEmployeeForm.firstName.$error.minlength" class="text-danger">Must be at least 2 characters.</span>
+                                <span ng-show="editEmployeeForm.firstName.$error.maxlength" class="text-danger">Password should be no more than 15 characters.</span>
+                                <span ng-show="editEmployeeForm.firstName.$error.pattern" class="text-danger">Can contain only numbers, letters and underscore(_).</span></td>
+                        </tr>
+                        <tr>
+                            <td> Second Name</td>
+                            <td><input type="text" ng-model="secondNameEdit" id="secondNameEdit" name="secondName" required ng-minlength="2" ng-maxlength="15" ng-pattern="/^\w+$/"></td>
+                            <td><span ng-show="editEmployeeForm.secondName.$error.required" class="text-danger">The field can not be empty.</span>
+                                <span ng-show="editEmployeeForm.secondName.$error.minlength" class="text-danger">Must be at least 2 characters.</span>
+                                <span ng-show="editEmployeeForm.secondName.$error.maxlength" class="text-danger">Password should be no more than 15 characters.</span>
+                                <span ng-show="editEmployeeForm.secondName.$error.pattern" class="text-danger">Can contain only numbers, letters and underscore(_).</span></td>
+                        </tr>
+                        <tr>
+                            <td> Last Name</td>
+                            <td><input type="text" ng-model="lastNameEdit" id="lastNameEdit" name="lastName" required ng-minlength="2" ng-maxlength="15" ng-pattern="/^\w+$/"></td>
+                            <td><span ng-show="editEmployeeForm.lastName.$error.required" class="text-danger">The field can not be empty.</span>
+                                <span ng-show="editEmployeeForm.lastName.$error.minlength" class="text-danger">Must be at least 2 characters.</span>
+                                <span ng-show="editEmployeeForm.lastName.$error.maxlength" class="text-danger">Password should be no more than 15 characters.</span>
+                                <span ng-show="editEmployeeForm.lastName.$error.pattern" class="text-danger">Can contain only numbers, letters and underscore(_).</span></td>
+                        </tr>
+                        <tr>
+                            <td> Email</td>
+                            <td><input type="text" ng-model="emailEdit" id="emailEdit" name="email" required ng-pattern="/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]{2,4}$/"></td>
+                              <td><span ng-show="editEmployeeForm.email.$error.required" class="text-danger">The field can not be empty.</span>
+                                <span ng-show="editEmployeeForm.email.$error.pattern" class="text-danger">Invalid email.</span></td>
+                        </tr>
+                        <tr>
+                            <td> Role</td>
+                            <td>
+                                <input type="checkbox" id="techEdit" ng-model="techEdit" value="option1">
+                                Tech </input>
+                                <input type="checkbox" id="softEdit" ng-model="softEdit" value="option2">
+                                Soft </input>
+                                <input type="checkbox" id="adminEdit" ng-model="adminEdit" value="option3">
+                                Administrator </input>
+                            </td>
+                        </tr>
+                    </table>
+                        </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" ng-click="editEmployee()" type="button" id="saveChanges"
+                        data-dismiss="modal" ng-disabled="editEmployeeForm.$invalid">Save changes
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="addEmployee" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" type="button" data-dismiss="modal"><span
+                        class="glyphicon glyphicon-remove"></span></button>
+                <h4 class="modal-title">New employee</h4>
+
+                <div>
+                    <form name="addEmployeeForm">
+                    <table class="table">
+                        <tr>
+                            <td>First Name</td>
+                            <td><input ng-model="firstName" type="text" name="firstName" required ng-minlength="2" ng-maxlength="15" ng-pattern="/^\w+$/"></td>
+                            <td><span ng-show="addEmployeeForm.firstName.$error.required" class="text-danger">The field can not be empty.</span>
+                            <span ng-show="addEmployeeForm.firstName.$error.minlength" class="text-danger">Must be at least 2 characters.</span>
+                            <span ng-show="addEmployeeForm.firstName.$error.maxlength" class="text-danger">Password should be no more than 15 characters.</span>
+                            <span ng-show="addEmployeeForm.firstName.$error.pattern" class="text-danger">Can contain only numbers, letters and underscore(_).</span></td>
+                        </tr>
+                        <tr>
+                            <td>Second Name</td>
+                            <td><input ng-model="secondName" id="secondName" type="text" name="secondName" required ng-minlength="2" ng-maxlength="15" ng-pattern="/^\w+$/"></td>
+                            <td><span ng-show="addEmployeeForm.secondName.$error.required" class="text-danger">The field can not be empty.</span>
+                            <span ng-show="addEmployeeForm.secondName.$error.minlength" class="text-danger">Must be at least 2 characters.</span>
+                            <span ng-show="addEmployeeForm.secondName.$error.maxlength" class="text-danger">Password should be no more than 15 characters.</span>
+                            <span ng-show="addEmployeeForm.secondName.$error.pattern" class="text-danger">Can contain only numbers, letters and underscore(_).</span></td>
+                        </tr>
+                        <tr>
+                            <td>Last Name</td>
+                            <td><input ng-model="lastName" id="lastName" type="text" name="lastName" required ng-minlength="2" ng-maxlength="15" ng-pattern="/^\w+$/"></td>
+                            <td><span ng-show="addEmployeeForm.lastName.$error.required" class="text-danger">The field can not be empty.</span>
+                            <span ng-show="addEmployeeForm.lastName.$error.minlength" class="text-danger">Must be at least 2 characters.</span>
+                            <span ng-show="addEmployeeForm.lastName.$error.maxlength" class="text-danger">Password should be no more than 15 characters.</span>
+                            <span ng-show="addEmployeeForm.lastName.$error.pattern" class="text-danger">Can contain only numbers, letters and underscore(_).</span></td>
+                        </tr>
+                        <tr>
+                            <td> Email</td>
+                            <td><input ng-model="email" id="email" type="text" name="email" required ng-pattern="/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]{2,4}$/"></td>
+                            <td><span ng-show="addEmployeeForm.email.$error.required" class="text-danger">The field can not be empty.</span>
+                            <span ng-show="addEmployeeForm.email.$error.pattern" class="text-danger">Invalid email.</span></td>
+                        </tr>
+                        <tr>
+                            <td> Role</td>
+                            <td>
+                                <div ng-repeat="employee in employees">
+                                    <input id="{{employee.roleName}}" type="checkbox"
+                                           value="{{employee.roleName}}"
+                                           ng-click="toggleSelection(employee.roleName)"
+                                           ng-checked="selection.indexOf(employee.roleName) > -1"
+                                           ng-required="selection.length==0"/>
+                                    {{roleEdit(employee.roleName)}}
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" id="saveEmployee" type="button" data-dismiss="modal"
+                        ng-click="addEmployee()" ng-disabled="addEmployeeForm.$invalid">Add
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="assignedList" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" type="button" data-dismiss="modal"><span
+                        class="glyphicon glyphicon-remove"></span></button>
+                <h4 class="modal-title">Assigned candidates</h4>
+
+                <div>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <!--<th>ID interview</th>-->
+                            <th>First name</th>
+                            <th>Second name</th>
+                            <th>Last name</th>
+                            <th>Mark</th>
+                            <th>Type</th>
+                            <th>Deassigne</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="student in assignedStudents">
+                            <td>{{student.id}}</td>
+                            <!--<td>{{student.idInterview}}</td>-->
+                            <td>{{student.firstName}}</td>
+                            <td>{{student.secondName}}</td>
+                            <td>{{student.lastName}}</td>
+                            <td>{{student.mark}}</td>
+                            <td>{{student.interviewType}}</td>
+                            <td>
+                                <button data-toggle="modal"
+                                        data-target="#deleteAssignedStudent" ng-click="getEmployee(student)"
+                                        class="btn btn-danger"
+                                        type="button">Delete
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div app-footer></div>

@@ -1,5 +1,0 @@
-<application>
-  <component name="ExternalResourceManagerImpl">
-    <resource url="urn:jboss:domain:4.0" location="urn:jboss:domain:4.0" />
-  </component>
-</application>
