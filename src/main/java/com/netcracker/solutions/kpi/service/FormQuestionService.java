@@ -1,5 +1,10 @@
 package com.netcracker.solutions.kpi.service;
 
+import com.netcracker.solutions.kpi.persistence.model.ApplicationForm;
+import com.netcracker.solutions.kpi.persistence.model.FormAnswerVariant;
+import com.netcracker.solutions.kpi.persistence.model.FormQuestion;
+import com.netcracker.solutions.kpi.persistence.model.Role;
+
 import java.util.List;
 import java.util.Set;
 

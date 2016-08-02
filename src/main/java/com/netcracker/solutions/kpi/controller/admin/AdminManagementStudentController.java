@@ -7,7 +7,6 @@ import com.netcracker.solutions.kpi.persistence.model.adapter.GsonFactory;
 import com.netcracker.solutions.kpi.persistence.model.enums.EmailTemplateEnum;
 import com.netcracker.solutions.kpi.persistence.model.enums.RoleEnum;
 import com.netcracker.solutions.kpi.persistence.model.enums.StatusEnum;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.FormQuestionImpl;
 import com.netcracker.solutions.kpi.service.*;
 import com.netcracker.solutions.kpi.service.util.SenderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,7 +105,7 @@ public class AdminManagementStudentController {
 
         Gson questionGson = GsonFactory.getFormQuestionGson();
         for (String question : studentFiltrationParamsDto.getRestrictions()) {
-            questions.add(questionGson.fromJson(question, FormQuestionImpl.class));
+            questions.add(questionGson.fromJson(question, FormQuestion.class));
         }
 
         List<StudentAppFormDto> studentAppFormDtoList = new ArrayList<>();

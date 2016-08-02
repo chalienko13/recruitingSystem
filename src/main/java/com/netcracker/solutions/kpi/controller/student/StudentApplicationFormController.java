@@ -261,14 +261,14 @@ public class StudentApplicationFormController {
 	}
 
 	private FormAnswer createFormAnswer(ApplicationForm applicationForm, FormQuestion question) {
-		FormAnswer answer = new FormAnswerImpl();
+		FormAnswer answer = new FormAnswer();
 		answer.setApplicationForm(applicationForm);
 		answer.setFormQuestion(question);
 		return answer;
 	}
 
 	private ApplicationForm createApplicationForm(User user) {
-		ApplicationForm applicationForm = new ApplicationFormImpl();
+		ApplicationForm applicationForm = new ApplicationForm();
 		applicationForm.setUser(user);
 		Status status = statusService.getStatusById(StatusEnum.REGISTERED.getId());
 		Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();

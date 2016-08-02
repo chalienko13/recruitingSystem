@@ -1,6 +1,8 @@
 package com.netcracker.solutions.kpi.service;
 
+import com.netcracker.solutions.kpi.persistence.model.SocialInformation;
 import com.netcracker.solutions.kpi.persistence.model.SocialNetwork;
+import com.netcracker.solutions.kpi.persistence.model.User;
 
 import java.util.Set;
 

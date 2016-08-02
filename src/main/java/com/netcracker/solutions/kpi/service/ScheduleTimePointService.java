@@ -1,5 +1,8 @@
 package com.netcracker.solutions.kpi.service;
 
+import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
+import com.netcracker.solutions.kpi.persistence.model.User;
+
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;

@@ -2,6 +2,7 @@ package com.netcracker.solutions.kpi.service;
 
 import com.netcracker.solutions.kpi.persistence.model.EmailTemplate;
 import com.netcracker.solutions.kpi.persistence.model.NotificationType;
+import com.netcracker.solutions.kpi.persistence.model.User;
 
 /**
  * Created by Chalienko on 21.04.2016.

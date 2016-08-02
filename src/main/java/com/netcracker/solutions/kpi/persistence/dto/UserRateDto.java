@@ -1,5 +1,7 @@
 package com.netcracker.solutions.kpi.persistence.dto;
 
+import com.netcracker.solutions.kpi.persistence.model.Role;
+import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.persistence.model.enums.RoleEnum;
 
 /**
@@ -34,8 +36,8 @@ public class UserRateDto {
         this.secondName = secondName;
     }
 
-    private String defineInterviewType(Role role){
-        switch (RoleEnum.valueOf(role.getRoleName())){
+    private String defineInterviewType(Role role) {
+        switch (RoleEnum.valueOf(role.getRoleName())) {
             case ROLE_SOFT:
                 return "SOFT";
             case ROLE_TECH:
@@ -80,7 +82,7 @@ public class UserRateDto {
         return mark;
     }
 
-    public void setMark(Integer  mark) {
+    public void setMark(Integer mark) {
         this.mark = mark;
     }
 
