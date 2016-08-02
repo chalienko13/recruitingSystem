@@ -1,8 +1,6 @@
 package com.netcracker.solutions.kpi.persistence.model.adapter;
 
 import com.google.gson.*;
-import com.netcracker.solutions.kpi.persistence.model.FormAnswerVariant;
-import com.netcracker.solutions.kpi.persistence.model.FormQuestion;
 import com.netcracker.solutions.kpi.persistence.model.QuestionType;
 import com.netcracker.solutions.kpi.persistence.model.impl.real.FormAnswerVariantImpl;
 import com.netcracker.solutions.kpi.persistence.model.impl.real.FormQuestionImpl;

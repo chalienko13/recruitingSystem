@@ -1,8 +1,6 @@
 package com.netcracker.solutions.kpi.controller.auth;
 
 import com.netcracker.solutions.kpi.controller.auth.Utils.FaceBookUtils;
-import com.netcracker.solutions.kpi.persistence.model.Role;
-import com.netcracker.solutions.kpi.persistence.model.SocialInformation;
 import com.netcracker.solutions.kpi.persistence.model.SocialNetwork;
 import com.netcracker.solutions.kpi.persistence.model.enums.RoleEnum;
 import com.netcracker.solutions.kpi.persistence.model.enums.SocialNetworkEnum;

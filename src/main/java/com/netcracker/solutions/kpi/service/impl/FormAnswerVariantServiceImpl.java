@@ -1,8 +1,6 @@
 package com.netcracker.solutions.kpi.service.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.FormAnswerVariantDao;
-import com.netcracker.solutions.kpi.persistence.model.FormAnswerVariant;
-import com.netcracker.solutions.kpi.persistence.model.FormQuestion;
 import com.netcracker.solutions.kpi.service.FormAnswerVariantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,6 +1,5 @@
 package com.netcracker.solutions.kpi.controller.admin;
 
-import com.netcracker.solutions.kpi.persistence.model.Recruitment;
 import com.netcracker.solutions.kpi.service.ApplicationFormService;
 import com.netcracker.solutions.kpi.service.RecruitmentService;
 import org.springframework.beans.factory.annotation.Autowired;

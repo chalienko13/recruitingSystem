@@ -8,8 +8,7 @@ import com.netcracker.solutions.kpi.persistence.model.*;
 import com.netcracker.solutions.kpi.persistence.model.adapter.GsonFactory;
 import com.netcracker.solutions.kpi.persistence.model.enums.RoleEnum;
 import com.netcracker.solutions.kpi.persistence.model.enums.StatusEnum;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.ApplicationFormImpl;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.FormAnswerImpl;
+
 import com.netcracker.solutions.kpi.service.*;
 import com.netcracker.solutions.kpi.util.export.ExportApplicationForm;
 import com.netcracker.solutions.kpi.util.export.ExportApplicationFormImp;

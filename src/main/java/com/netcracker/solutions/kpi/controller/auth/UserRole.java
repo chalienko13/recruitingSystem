@@ -1,7 +1,5 @@
 package com.netcracker.solutions.kpi.controller.auth;
 
-import com.netcracker.solutions.kpi.persistence.model.User;
-
 public enum UserRole {
     USER, ADMIN, STUDENT;
 

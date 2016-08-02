@@ -4,11 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.netcracker.solutions.kpi.persistence.dto.StudentAnswerDto;
-import com.netcracker.solutions.kpi.persistence.model.ApplicationForm;
-import com.netcracker.solutions.kpi.persistence.model.FormAnswer;
-import com.netcracker.solutions.kpi.persistence.model.FormAnswerVariant;
-import com.netcracker.solutions.kpi.persistence.model.FormQuestion;
-import com.netcracker.solutions.kpi.persistence.model.Interview;
 import com.netcracker.solutions.kpi.persistence.model.enums.FormQuestionTypeEnum;
 import com.netcracker.solutions.kpi.persistence.model.impl.real.FormAnswerImpl;
 import com.netcracker.solutions.kpi.service.FormAnswerVariantService;

@@ -1,8 +1,6 @@
 package com.netcracker.solutions.kpi.controller.admin;
 
 import com.netcracker.solutions.kpi.persistence.dto.ReportQuestionDto;
-import com.netcracker.solutions.kpi.persistence.model.FormQuestion;
-import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.enums.RoleEnum;
 import com.netcracker.solutions.kpi.report.Report;
 import com.netcracker.solutions.kpi.report.renderer.RendererFactory;

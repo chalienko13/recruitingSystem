@@ -2,8 +2,6 @@ package com.netcracker.solutions.kpi.controller.student;
 
 import com.netcracker.solutions.kpi.controller.auth.UserAuthentication;
 import com.netcracker.solutions.kpi.persistence.dto.ApplicationFormDto;
-import com.netcracker.solutions.kpi.persistence.model.ApplicationForm;
-import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.service.ApplicationFormService;
 import com.netcracker.solutions.kpi.service.UserService;
 import org.slf4j.Logger;

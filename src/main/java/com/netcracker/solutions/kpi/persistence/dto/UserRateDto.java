@@ -1,7 +1,5 @@
 package com.netcracker.solutions.kpi.persistence.dto;
 
-import com.netcracker.solutions.kpi.persistence.model.Role;
-import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.persistence.model.enums.RoleEnum;
 
 /**

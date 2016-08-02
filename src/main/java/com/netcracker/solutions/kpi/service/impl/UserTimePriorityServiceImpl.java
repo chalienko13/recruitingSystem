@@ -2,9 +2,7 @@ package com.netcracker.solutions.kpi.service.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.UserTimePriorityDao;
 import com.netcracker.solutions.kpi.persistence.dto.UserTimePriorityDto;
-import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
 import com.netcracker.solutions.kpi.persistence.model.TimePriorityType;
-import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.persistence.model.UserTimePriority;
 import com.netcracker.solutions.kpi.persistence.model.enums.TimePriorityTypeEnum;
 import com.netcracker.solutions.kpi.service.ScheduleTimePointService;

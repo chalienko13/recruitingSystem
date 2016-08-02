@@ -1,7 +1,5 @@
 package com.netcracker.solutions.kpi.service;
 
-import com.netcracker.solutions.kpi.persistence.model.Recruitment;
-
 import java.util.List;
 
 /**

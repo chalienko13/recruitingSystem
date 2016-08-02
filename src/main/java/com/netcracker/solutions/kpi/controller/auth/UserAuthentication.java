@@ -1,6 +1,5 @@
 package com.netcracker.solutions.kpi.controller.auth;
 
-import com.netcracker.solutions.kpi.persistence.model.SocialInformation;
 import com.netcracker.solutions.kpi.persistence.model.SocialNetwork;
 import com.netcracker.solutions.kpi.persistence.model.impl.real.SocialInformationImpl;
 import com.netcracker.solutions.kpi.persistence.model.User;

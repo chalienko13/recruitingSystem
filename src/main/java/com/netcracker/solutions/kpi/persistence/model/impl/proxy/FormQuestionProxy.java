@@ -1,9 +1,6 @@
 package com.netcracker.solutions.kpi.persistence.model.impl.proxy;
 
-import com.netcracker.solutions.kpi.persistence.model.FormAnswerVariant;
-import com.netcracker.solutions.kpi.persistence.model.FormQuestion;
 import com.netcracker.solutions.kpi.persistence.model.QuestionType;
-import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.impl.real.FormQuestionImpl;
 import com.netcracker.solutions.kpi.service.FormQuestionService;
 import org.apache.commons.lang3.builder.EqualsBuilder;

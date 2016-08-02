@@ -1,7 +1,5 @@
 package com.netcracker.solutions.kpi.persistence.model.impl.proxy;
 
-import com.netcracker.solutions.kpi.persistence.model.FormAnswerVariant;
-import com.netcracker.solutions.kpi.persistence.model.FormQuestion;
 import com.netcracker.solutions.kpi.persistence.model.impl.real.FormAnswerVariantImpl;
 import com.netcracker.solutions.kpi.service.FormAnswerVariantService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,9 +1,7 @@
 package com.netcracker.solutions.kpi.persistence.dao.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.ScheduleTimePointDao;
-import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
 import com.netcracker.solutions.kpi.persistence.model.TimePriorityType;
-import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.persistence.model.UserTimePriority;
 import com.netcracker.solutions.kpi.persistence.model.impl.proxy.UserProxy;
 import com.netcracker.solutions.kpi.persistence.model.impl.real.ScheduleTimePointImpl;

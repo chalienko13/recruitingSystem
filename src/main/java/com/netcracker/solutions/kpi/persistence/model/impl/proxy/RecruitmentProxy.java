@@ -1,6 +1,5 @@
 package com.netcracker.solutions.kpi.persistence.model.impl.proxy;
 
-import com.netcracker.solutions.kpi.persistence.model.Recruitment;
 import com.netcracker.solutions.kpi.persistence.model.SchedulingStatus;
 import com.netcracker.solutions.kpi.persistence.model.impl.real.RecruitmentImpl;
 import com.netcracker.solutions.kpi.service.RecruitmentService;

@@ -1,26 +1,103 @@
 package com.netcracker.solutions.kpi.persistence.model;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Set;
 
-public interface ScheduleTimePoint extends Serializable {
+@Entity
+@Table(name = "schedule_time_point")
+public class ScheduleTimePoint implements Serializable {
 
-	Long getId();
+    private static final long serialVersionUID = -8906473195615020302L;
+    @Id
+    @GeneratedValue
+    @Column(name = "id", unique = true, nullable = false)
+    private Long id;
 
-	void setId(Long id);
+    @Column(name = "schedule_time_point")
+    private Timestamp timePoint;
+    //toDO change db_table??
+    private Set<User> users;
 
-	Timestamp getTimePoint();
+    private Set<UserTimePriority> userTimePriorities;
 
-	void setTimePoint(Timestamp timePoint);
+    public ScheduleTimePoint() {
+    }
 
-	Set<User> getUsers();
 
-	void setUsers(Set<User> users);
+    public ScheduleTimePoint(Timestamp timePoint) {
+        this.timePoint = timePoint;
+    }
 
-	Set<UserTimePriority> getUserTimePriorities();
+    public ScheduleTimePoint(Timestamp timePoint, Set<User> users, Set<UserTimePriority> userTimePriorities) {
+        this.timePoint = timePoint;
+        this.users = users;
+        this.userTimePriorities = userTimePriorities;
+    }
 
-	void setUserTimePriorities(Set<UserTimePriority> priorities);
+    public ScheduleTimePoint(Long id, Timestamp timePoint, Set<User> users) {
+        this.id = id;
+        this.timePoint = timePoint;
+        this.users = users;
+    }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Timestamp getTimePoint() {
+        return timePoint;
+    }
+
+    public void setTimePoint(Timestamp timePoint) {
+        this.timePoint = timePoint;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
+    public Set<UserTimePriority> getUserTimePriorities() {
+        return userTimePriorities;
+    }
+
+    public void setUserTimePriorities(Set<UserTimePriority> userTimePriorities) {
+        this.userTimePriorities = userTimePriorities;
+    }
+
+    @Override
+    public String toString() {
+        return "ScheduleTimePointImpl [id=" + id + ", timePoint=" + timePoint + ", users=" + users + "]";
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(id).append(timePoint).append(users).toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ScheduleTimePoint other = (ScheduleTimePoint) obj;
+        return new EqualsBuilder().append(id, other.id).append(timePoint, other.timePoint).append(users, other.users)
+                .isEquals();
+    }
 
 }

@@ -4,8 +4,6 @@ import com.netcracker.solutions.kpi.DeadlineController;
 import com.netcracker.solutions.kpi.persistence.dto.MessageDto;
 import com.netcracker.solutions.kpi.persistence.dto.RecruitmentSettingsDto;
 import com.netcracker.solutions.kpi.persistence.model.EmailTemplate;
-import com.netcracker.solutions.kpi.persistence.model.Recruitment;
-import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.persistence.model.enums.EmailTemplateEnum;
 import com.netcracker.solutions.kpi.persistence.model.impl.real.RecruitmentImpl;
 import com.netcracker.solutions.kpi.service.EmailTemplateService;

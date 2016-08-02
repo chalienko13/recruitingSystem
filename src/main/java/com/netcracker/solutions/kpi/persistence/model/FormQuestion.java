@@ -1,42 +1,184 @@
 package com.netcracker.solutions.kpi.persistence.model;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Алексей on 21.04.2016.
  */
-public interface FormQuestion extends Serializable {
+@Entity
+@Table(name = "form_question")
+public class FormQuestion implements Serializable {
 
-    Long getId();
+    private static final long serialVersionUID = -4875241221362139428L;
 
-    void setId(Long id);
+    @Id
+    @GeneratedValue
+    @Column(name = "id", unique = true, nullable = false)
+    private Long id;
 
-    List<Role> getRoles();
+    @Column(name = "title")
+    private String title;
+    private QuestionType questionType;
 
-    void setRoles(List<Role> roles);
+    @Column(name = "enable")
+    private boolean enable;
 
-    String getTitle();
+    @Column(name = "mandatory")
+    private boolean mandatory;
 
-    void setTitle(String title);
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "users")
+    private List<Role> roles;
 
-    QuestionType getQuestionType();
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "formQuestion")
+    private List<FormAnswerVariant> formAnswerVariants;
 
-    void setQuestionType(QuestionType questionType);
+    @Column(name = "order")
+    private int order;
 
-    boolean isEnable();
 
-    void setEnable(boolean enable);
+    public FormQuestion() {
+    }
 
-    boolean isMandatory();
+    public FormQuestion(Long id, String title, QuestionType questionType, boolean enable, boolean mandatory, List<Role> roles, List<FormAnswerVariant> formAnswerVariants) {
+        this.id = id;
+        this.title = title;
+        this.questionType = questionType;
+        this.enable = enable;
+        this.mandatory = mandatory;
+        this.roles = roles;
+        this.formAnswerVariants = formAnswerVariants;
+    }
 
-    void setMandatory(boolean mandatory);
+    public FormQuestion(String title, QuestionType questionType, boolean enable, boolean mandatory, List<Role> roles, List<FormAnswerVariant> formAnswerVariants, int order) {
+        this.title = title;
+        this.questionType = questionType;
+        this.enable = enable;
+        this.mandatory = mandatory;
+        this.roles = roles;
+        this.formAnswerVariants = formAnswerVariants;
+        this.order = order;
+    }
 
-    List<FormAnswerVariant> getFormAnswerVariants();
+    public FormQuestion(Long id, String title, QuestionType questionType, List<FormAnswerVariant> formAnswerVariants, int order) {
+        this.id = id;
+        this.title = title;
+        this.questionType = questionType;
+        this.formAnswerVariants = formAnswerVariants;
+        this.order = order;
+    }
 
-    void setFormAnswerVariants(List<FormAnswerVariant> formAnswerVariants);
+    public Long getId() {
+        return id;
+    }
 
-    int getOrder();
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	void setOrder(int order);
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public QuestionType getQuestionType() {
+        return questionType;
+    }
+
+    public void setQuestionType(QuestionType questionType) {
+        this.questionType = questionType;
+    }
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
+
+    public boolean isMandatory() {
+        return mandatory;
+    }
+
+    public void setMandatory(boolean mandatory) {
+        this.mandatory = mandatory;
+    }
+
+    public List<FormAnswerVariant> getFormAnswerVariants() {
+        return formAnswerVariants;
+    }
+
+    public void setFormAnswerVariants(List<FormAnswerVariant> formAnswerVariants) {
+        this.formAnswerVariants = formAnswerVariants;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FormQuestion that = (FormQuestion) o;
+
+        return new EqualsBuilder()
+                .append(enable, that.enable)
+                .append(mandatory, that.mandatory)
+                .append(id, that.id)
+                .append(title, that.title)
+                .append(questionType, that.questionType)
+                .append(order, that.order)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(id)
+                .append(title)
+                .append(questionType)
+                .append(enable)
+                .append(mandatory)
+                .append(order)
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "FormQuestionImpl{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", questionType=" + questionType +
+                ", enable=" + enable +
+                ", mandatory=" + mandatory +
+                ", order=" + order +
+                ", formAnswerVariants=" + formAnswerVariants +
+                '}';
+    }
+
 }

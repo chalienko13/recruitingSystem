@@ -2,10 +2,6 @@ package com.netcracker.solutions.kpi.controller.staff;
 
 import com.google.gson.Gson;
 import com.netcracker.solutions.kpi.persistence.dto.*;
-import com.netcracker.solutions.kpi.persistence.model.ApplicationForm;
-import com.netcracker.solutions.kpi.persistence.model.Interview;
-import com.netcracker.solutions.kpi.persistence.model.Role;
-import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.persistence.model.enums.StatusEnum;
 import com.netcracker.solutions.kpi.service.ApplicationFormService;
 import com.netcracker.solutions.kpi.service.InterviewService;

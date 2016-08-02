@@ -2,7 +2,6 @@ package com.netcracker.solutions.kpi.controller.auth;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.netcracker.solutions.kpi.persistence.model.User;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,7 +1,5 @@
 package com.netcracker.solutions.kpi.persistence.dao;
 
-import com.netcracker.solutions.kpi.persistence.model.Recruitment;
-
 import java.util.List;
 
 /**

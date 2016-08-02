@@ -2,17 +2,14 @@ package com.netcracker.solutions.kpi.persistence.dao.impl;
 
 
 import com.netcracker.solutions.kpi.persistence.dao.RecruitmentDAO;
-import com.netcracker.solutions.kpi.persistence.model.Recruitment;
 import com.netcracker.solutions.kpi.persistence.model.SchedulingStatus;
 import com.netcracker.solutions.kpi.persistence.model.impl.real.RecruitmentImpl;
-import com.netcracker.solutions.kpi.persistence.util.JdbcTemplate;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 @Repository

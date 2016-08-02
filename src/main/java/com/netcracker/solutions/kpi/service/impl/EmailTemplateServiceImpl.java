@@ -3,8 +3,6 @@ package com.netcracker.solutions.kpi.service.impl;
 import com.netcracker.solutions.kpi.persistence.dao.EmailTemplateDao;
 import com.netcracker.solutions.kpi.persistence.model.EmailTemplate;
 import com.netcracker.solutions.kpi.persistence.model.NotificationType;
-import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
-import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.service.EmailTemplateService;
 import com.netcracker.solutions.kpi.service.ScheduleTimePointService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,9 +1,6 @@
 package com.netcracker.solutions.kpi.service.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.ReportDao;
-import com.netcracker.solutions.kpi.persistence.model.FormAnswerVariant;
-import com.netcracker.solutions.kpi.persistence.model.FormQuestion;
-import com.netcracker.solutions.kpi.persistence.model.Recruitment;
 import com.netcracker.solutions.kpi.persistence.model.ReportInfo;
 import com.netcracker.solutions.kpi.persistence.model.enums.ReportTypeEnum;
 import com.netcracker.solutions.kpi.report.Line;

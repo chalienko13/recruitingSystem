@@ -4,7 +4,6 @@ package com.netcracker.solutions.kpi.controller.auth;
 import com.netcracker.solutions.kpi.persistence.dto.MessageDto;
 import com.netcracker.solutions.kpi.persistence.dto.PasswordChangeDto;
 import com.netcracker.solutions.kpi.persistence.dto.UserDto;
-import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.service.EmailTemplateService;
 import com.netcracker.solutions.kpi.service.UserService;
 import com.netcracker.solutions.kpi.service.util.SenderService;

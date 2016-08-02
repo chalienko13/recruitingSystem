@@ -1,9 +1,7 @@
 package com.netcracker.solutions.kpi.persistence.dao.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.SocialInformationDao;
-import com.netcracker.solutions.kpi.persistence.model.SocialInformation;
 import com.netcracker.solutions.kpi.persistence.model.SocialNetwork;
-import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.persistence.model.impl.proxy.UserProxy;
 import com.netcracker.solutions.kpi.persistence.model.impl.real.SocialInformationImpl;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;

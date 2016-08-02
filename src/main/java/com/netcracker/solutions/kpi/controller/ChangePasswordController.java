@@ -1,7 +1,6 @@
 package com.netcracker.solutions.kpi.controller;
 
 import com.netcracker.solutions.kpi.controller.auth.PasswordEncoderGeneratorService;
-import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

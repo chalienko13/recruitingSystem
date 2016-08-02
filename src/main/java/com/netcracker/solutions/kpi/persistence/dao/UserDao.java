@@ -1,9 +1,5 @@
 package com.netcracker.solutions.kpi.persistence.dao;
 
-import com.netcracker.solutions.kpi.persistence.model.Role;
-import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
-import com.netcracker.solutions.kpi.persistence.model.User;
-
 import java.sql.Connection;
 import java.util.List;
 import java.util.Set;

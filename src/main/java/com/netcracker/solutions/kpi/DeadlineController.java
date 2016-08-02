@@ -1,7 +1,5 @@
 package com.netcracker.solutions.kpi;
 
-import com.netcracker.solutions.kpi.persistence.model.ApplicationForm;
-import com.netcracker.solutions.kpi.persistence.model.Recruitment;
 import com.netcracker.solutions.kpi.persistence.model.enums.StatusEnum;
 import com.netcracker.solutions.kpi.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
