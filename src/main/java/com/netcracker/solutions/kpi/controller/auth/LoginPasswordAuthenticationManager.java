@@ -41,6 +41,10 @@ public class LoginPasswordAuthenticationManager implements AuthenticationManager
         log.info("Looking user - {} in data base", username);
         User user = userAuthServiceLoginPassword.loadUserByUsername(username);
 
+        if(user == null) {
+            throw new BadCredentialsException("User is not active");
+        }
+
         if (!user.isActive()){
             log.info("User - {} is not active", username);
             throw new BadCredentialsException("User is not active");
@@ -58,5 +62,4 @@ public class LoginPasswordAuthenticationManager implements AuthenticationManager
         log.info("User - {} has been auth", username);
         return new UserAuthentication(user);
     }
-
 }

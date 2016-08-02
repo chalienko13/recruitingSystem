@@ -30,12 +30,7 @@ public class UserAuthServiceLoginPassword implements UserDetailsService {
 
     @Override
     public User loadUserByUsername(String userName) throws UsernameNotFoundException {
-
-        User user = userService.getUserByUsername(userName);
-        if (user == null) {
-            return null;
-        }
-        return user;
+        return userService.getUserByUsername(userName);
     }
 }
 
