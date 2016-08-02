@@ -5,10 +5,9 @@ import com.netcracker.solutions.kpi.persistence.dto.MessageDto;
 import com.netcracker.solutions.kpi.persistence.dto.UserDto;
 import com.netcracker.solutions.kpi.persistence.model.EmailTemplate;
 import com.netcracker.solutions.kpi.persistence.model.Role;
-import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.persistence.model.enums.EmailTemplateEnum;
 import com.netcracker.solutions.kpi.persistence.model.enums.RoleEnum;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.UserImpl;
+import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.service.EmailTemplateService;
 import com.netcracker.solutions.kpi.service.RoleService;
 import com.netcracker.solutions.kpi.service.UserService;
@@ -65,7 +64,7 @@ public class RegistrationController {
             Set<Role> roles = new HashSet<>();
             roles.add(role);
             String token = RandomStringUtils.randomAlphabetic(50);
-            User user = new UserImpl(userDto.getEmail(),
+            com.netcracker.solutions.kpi.persistence.model.User user = new User(userDto.getEmail(),
                     userDto.getFirstName(),
                     userDto.getSecondName(),
                     userDto.getLastName(),
@@ -96,7 +95,7 @@ public class RegistrationController {
     @RequestMapping(value = "/{token}", method = RequestMethod.GET)
     public ResponseEntity registrationConfirm(@PathVariable("token") String token) {
         log.info("Looking user with token - {}", token);
-        User user = userService.getUserByToken(token);
+        com.netcracker.solutions.kpi.persistence.model.User user = userService.getUserByToken(token);
         if (null == user) {
             log.info("Token expired");
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(TOKEN_EXPIRED));

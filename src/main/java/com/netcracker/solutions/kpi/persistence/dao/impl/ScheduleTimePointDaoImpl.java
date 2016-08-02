@@ -7,14 +7,12 @@ import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.persistence.model.UserTimePriority;
 import com.netcracker.solutions.kpi.persistence.model.impl.proxy.UserProxy;
 import com.netcracker.solutions.kpi.persistence.model.impl.real.ScheduleTimePointImpl;
-import com.netcracker.solutions.kpi.persistence.util.JdbcTemplate;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -132,7 +130,7 @@ public class ScheduleTimePointDaoImpl implements ScheduleTimePointDao {
         return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(USERS_FINAL_TIME_QUERY, resultSet -> {
             Set<User> set = new HashSet<>();
             do {
-                set.add(new UserProxy(resultSet.getLong("id")));
+                set.add(new User(resultSet.getLong("id")));
             } while (resultSet.next());
             return set;
         }, timeID);
@@ -142,7 +140,7 @@ public class ScheduleTimePointDaoImpl implements ScheduleTimePointDao {
         return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(USER_TIME_PRIORITY, resultSet -> {
             Set<UserTimePriority> set = new HashSet<>();
             do {
-                set.add(new UserTimePriority(new UserProxy(resultSet.getLong("id_user")), scheduleTimePoint,
+                set.add(new UserTimePriority(new User(resultSet.getLong("id_user")), scheduleTimePoint,
                         new TimePriorityType(resultSet.getLong("id_priority_type"), resultSet.getString("choice"))));
             } while (resultSet.next());
             return set;

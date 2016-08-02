@@ -2,7 +2,7 @@ package com.netcracker.solutions.kpi.persistence.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.netcracker.solutions.kpi.persistence.model.User;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.RoleImpl;
+import com.netcracker.solutions.kpi.persistence.model.Role;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class UserDto {
     private String lastName;
     private String password;
     private String token;
-    private List<RoleImpl> roleList;
+    private List<Role> roleList;
 
     public UserDto(User user) {
         this.id = user.getId();
@@ -40,7 +40,7 @@ public class UserDto {
 
 
 
-    public UserDto(String email, String firstName, String secondName, String lastName, List<RoleImpl> roleList) {
+    public UserDto(String email, String firstName, String secondName, String lastName, List<Role> roleList) {
         this.email = email;
         this.firstName = firstName;
         this.secondName = secondName;
@@ -48,7 +48,7 @@ public class UserDto {
         this.password = password;
     }
 
-    public UserDto(String email, String firstName, String secondName, String lastName, String password, List<RoleImpl> roleList) {
+    public UserDto(String email, String firstName, String secondName, String lastName, String password, List<Role> roleList) {
         this.email = email;
         this.firstName = firstName;
         this.secondName = secondName;
@@ -102,7 +102,7 @@ public class UserDto {
         this.lastName = lastName;
     }
 
-    public List<RoleImpl> getRoleList() {
+    public List<Role> getRoleList() {
 
         return roleList;
     }
@@ -115,7 +115,7 @@ public class UserDto {
         this.password = password;
     }
 
-    public void setRoleList(List<RoleImpl> roleList) {
+    public void setRoleList(List<Role> roleList) {
         this.roleList = roleList;
     }
 

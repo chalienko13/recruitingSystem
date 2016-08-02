@@ -13,12 +13,19 @@ public class UserTimePriority implements Serializable {
 
 	private static final long serialVersionUID = 4644874842084608413L;
 
+	@Id
+	@AttributeOverrides({
+			@AttributeOverride(name = "user", column = @Column(name="id_user")),
+			@AttributeOverride(name = "scheduleTimePoint", column = @Column(name="id_time_point")),
+			@AttributeOverride(name = "timePriorityType", column = @Column(name="id_priority_type"))
+	})
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_user")
 	private User user;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_time_point")
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "id_time_point")
 	private ScheduleTimePoint scheduleTimePoint;
 
 	@ManyToOne(fetch = FetchType.LAZY)

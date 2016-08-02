@@ -2,18 +2,14 @@ package com.netcracker.solutions.kpi.persistence.dao.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.RoleDao;
 import com.netcracker.solutions.kpi.persistence.model.ApplicationForm;
-import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.User;
-import com.netcracker.solutions.kpi.persistence.model.impl.proxy.UserProxy;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.RoleImpl;
-import com.netcracker.solutions.kpi.persistence.util.JdbcTemplate;
+import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,7 +21,7 @@ public class RoleDaoImpl implements RoleDao {
     private JdbcDaoSupport jdbcDaoSupport;
 
     private ResultSetExtractor<Role> extractor = resultSet -> {
-        Role role = new RoleImpl();
+        Role role = new Role();
         long roleId = resultSet.getLong("id");
         role.setId(roleId);
         role.setRoleName(resultSet.getString("role"));
@@ -74,7 +70,7 @@ public class RoleDaoImpl implements RoleDao {
                 + "INNER JOIN user_role ur on ur.id_user = u.id WHERE ur.id_role = ?;", resultSet -> {
             Set<User> set = new HashSet<>();
             do {
-                set.add(new UserProxy(resultSet.getLong("id")));
+                set.add(new User(resultSet.getLong("id")));
             } while (resultSet.next());
             return set;
         }, roleId);

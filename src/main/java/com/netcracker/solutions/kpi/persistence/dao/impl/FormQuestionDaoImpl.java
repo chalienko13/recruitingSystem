@@ -173,7 +173,7 @@ public class FormQuestionDaoImpl implements FormQuestionDao {
                 resultSet -> {
                     List<Role> roles = new ArrayList<>();
                     do {
-                        roles.add(new RoleProxy(resultSet.getLong(ROLE_MAP_TABLE_ROLE_ID)));
+                        roles.add(new Role(resultSet.getLong(ROLE_MAP_TABLE_ROLE_ID)));
                     } while (resultSet.next());
                     return roles;
                 }, formQuestionID);

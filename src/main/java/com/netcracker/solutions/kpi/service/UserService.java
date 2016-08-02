@@ -3,6 +3,7 @@ package com.netcracker.solutions.kpi.service;
 import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
 import com.netcracker.solutions.kpi.persistence.model.User;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
@@ -10,7 +11,7 @@ import java.util.Set;
 /**
  * Created by Chalienko on 13.04.2016.
  */
-
+@Service
 public interface UserService {
 
     User getUserByUsername(String username);

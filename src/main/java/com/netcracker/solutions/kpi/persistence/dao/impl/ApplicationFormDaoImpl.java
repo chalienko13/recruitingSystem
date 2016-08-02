@@ -49,7 +49,7 @@ public class ApplicationFormDaoImpl implements ApplicationFormDao {
         applicationForm.setInterviews(getInterviews(id));
         applicationForm.setPhotoScope(resultSet.getString(PHOTO_SCOPE_COL));
         applicationForm.setStatus(new Status(resultSet.getLong(ID_STATUS_COL), resultSet.getString("title")));
-        applicationForm.setUser(new UserProxy(resultSet.getLong(ID_USER_COL)));
+        applicationForm.setUser(new User(resultSet.getLong(ID_USER_COL)));
         applicationForm.setQuestions(getQuestions(id));
         return applicationForm;
     };

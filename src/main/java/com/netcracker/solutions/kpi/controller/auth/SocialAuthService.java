@@ -36,7 +36,7 @@ public class SocialAuthService implements SocialUserDetailsService {
         if (user == null){
             return null;
         }else {
-            return user;
+            return (SocialUserDetails) user;
         }
 
     }

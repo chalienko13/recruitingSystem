@@ -2,13 +2,13 @@ package com.netcracker.solutions.kpi.controller.auth;
 
 import com.netcracker.solutions.kpi.persistence.model.SocialInformation;
 import com.netcracker.solutions.kpi.persistence.model.SocialNetwork;
-import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.persistence.model.impl.real.SocialInformationImpl;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.UserImpl;
+import com.netcracker.solutions.kpi.persistence.model.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
@@ -18,19 +18,19 @@ import java.util.LinkedHashSet;
 public class UserAuthentication implements Authentication {
 
 
-    private User user;
+    private com.netcracker.solutions.kpi.persistence.model.User user;
     private boolean authenticated = true;
     private Long idUserSocialNetwork;
     private Long idNetwork;
 
     public UserAuthentication(String email, SocialNetwork socialNetwork, String accessToken, Long userSocialId) {
-        user = new UserImpl();
+        user = new User();
         SocialInformation socialInformation = new SocialInformationImpl
                 (
                         socialNetwork, accessToken, new Timestamp(System.currentTimeMillis())
                 );
         socialInformation.setIdUserInSocialNetwork(userSocialId);
-        user.setSocialInformations(new LinkedHashSet<>());
+        user.setSocialInformations(new ArrayList<>());
         user.getSocialInformations().add(socialInformation);
         user.setEmail(email);
         socialInformation.setUser(user);
@@ -38,12 +38,12 @@ public class UserAuthentication implements Authentication {
         this.idNetwork = socialNetwork.getId();
     }
 
-    public UserAuthentication(User user) {
+    public UserAuthentication(com.netcracker.solutions.kpi.persistence.model.User user) {
         this.user = user;
 //        user.getRoles();
     }
 
-    public UserAuthentication(User user, Long idUserSocialNetwork, Long idNetwork) {
+    public UserAuthentication(com.netcracker.solutions.kpi.persistence.model.User user, Long idUserSocialNetwork, Long idNetwork) {
         this.user = user;
         this.idUserSocialNetwork = idUserSocialNetwork;
         this.idNetwork = idNetwork;
@@ -65,7 +65,7 @@ public class UserAuthentication implements Authentication {
     }
 
     @Override
-    public User getDetails() {
+    public com.netcracker.solutions.kpi.persistence.model.User getDetails() {
         return user;
     }
 

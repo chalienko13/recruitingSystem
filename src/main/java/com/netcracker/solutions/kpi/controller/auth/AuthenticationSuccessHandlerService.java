@@ -7,7 +7,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletException;
@@ -38,6 +37,9 @@ public class AuthenticationSuccessHandlerService implements AuthenticationSucces
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response, Authentication authentication) throws
             ServletException, IOException {
+        System.out.println("authentication " + authentication);
+        System.out.println("ID: " + ((User) authentication.getDetails()).getId());
+        System.out.println("username: " + ((User) authentication.getDetails()).getUsername());
         response.getWriter().write(new Gson().toJson(
                 new AuthUserDto(
                         ((User) authentication.getDetails()).getId(),
@@ -50,7 +52,9 @@ public class AuthenticationSuccessHandlerService implements AuthenticationSucces
     }
 
     private String determineTargetUrl(Authentication authentication) {
+        System.out.println(authentication.getAuthorities());
         Set<String> authorities = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+        System.out.println(authorities);
         if (authorities.contains("ROLE_ADMIN")) {
             return "admin/main";
         } else if (authorities.contains("ROLE_STUDENT")) {

@@ -4,16 +4,19 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.jdo.annotations.PrimaryKey;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 @Entity
 @Table(name = "decision_matrix")
 public class Decision implements Serializable {
 
 	private static final long serialVersionUID = 8612505383687321937L;
-
+	@Id
+	@AttributeOverrides({
+			@AttributeOverride(name = "softMark", column = @Column(name="soft_mark")),
+			@AttributeOverride(name = "final_mark", column = @Column(name="final_mark")),
+			@AttributeOverride(name = "tech_mark", column = @Column(name="tech_mark"))
+	})
 	@Column(name = "soft_mark")
 	private int softMark;
 	@Column(name = "final_mark")

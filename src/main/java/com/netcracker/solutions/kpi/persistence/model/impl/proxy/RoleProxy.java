@@ -1,9 +1,8 @@
 package com.netcracker.solutions.kpi.persistence.model.impl.proxy;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.User;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.RoleImpl;
+import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -11,7 +10,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 import java.util.Set;
 
 @Configurable
-public class RoleProxy implements Role {
+public class RoleProxy  {
     private static final long serialVersionUID = -2080439528365867845L;
 
     @Autowired
@@ -19,41 +18,37 @@ public class RoleProxy implements Role {
 
     private Long id;
 
-    private RoleImpl role;
+    private Role role;
 
     public  RoleProxy(Long id) {
         this.id = id;
     }
 
-    @Override
     public Long getId() {
         return id;
     }
 
-    @Override
+
     public void setId(Long id) {
         this.id = id;
     }
 
-    @Override
     public String getRoleName() {
         checkRoleForExist();
         return role.getRoleName();
     }
 
-    @Override
+
     public void setRoleName(String roleName) {
         checkRoleForExist();
         role.setRoleName(roleName);
     }
     @JsonIgnore
-    @Override
     public Set<User> getUsers() {
         checkRoleForExist();
         return role.getUsers();
     }
 
-    @Override
     public void setUsers(Set<User> users) {
         checkRoleForExist();
         role.setUsers(users);
@@ -65,13 +60,12 @@ public class RoleProxy implements Role {
         }
     }
 
-    @Override
     public String getAuthority() {
         return this.getRoleName();
     }
 
-    private RoleImpl downloadRole() {
-        return (RoleImpl) roleService.getRoleById(id);
+    private Role downloadRole() {
+        return (Role) roleService.getRoleById(id);
     }
 
     @Override

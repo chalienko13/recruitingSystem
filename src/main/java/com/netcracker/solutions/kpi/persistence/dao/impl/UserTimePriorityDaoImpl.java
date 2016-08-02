@@ -8,14 +8,12 @@ import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.persistence.model.UserTimePriority;
 import com.netcracker.solutions.kpi.persistence.model.impl.proxy.ScheduleTimePointProxy;
 import com.netcracker.solutions.kpi.persistence.model.impl.proxy.UserProxy;
-import com.netcracker.solutions.kpi.persistence.util.JdbcTemplate;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
@@ -32,7 +30,7 @@ public class UserTimePriorityDaoImpl implements UserTimePriorityDao {
 
     private ResultSetExtractor<UserTimePriority> extractor = resultSet -> {
         UserTimePriority userTimePriority = new UserTimePriority();
-        userTimePriority.setUser(new UserProxy(resultSet.getLong("id_user")));
+        userTimePriority.setUser(new User(resultSet.getLong("id_user")));
         userTimePriority.setScheduleTimePoint(new ScheduleTimePointProxy(resultSet.getLong("id_time_point")));
         userTimePriority.setTimePriorityType(new TimePriorityType(resultSet.getLong("id_priority_type"), resultSet.getString("choice")));
         return userTimePriority;

@@ -1,15 +1,12 @@
 package com.netcracker.solutions.kpi.service;
 
 import com.netcracker.solutions.kpi.persistence.model.Recruitment;
-import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
 import com.netcracker.solutions.kpi.persistence.model.UserTimePriority;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.RoleImpl;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.UserImpl;
+import com.netcracker.solutions.kpi.persistence.model.Role;
+import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.util.scheduling.CreatingOfAllSchedules;
 import com.netcracker.solutions.kpi.util.scheduling.StudentsScheduleCell;
-import com.netcracker.solutions.kpi.util.scheduling.TeachersScheduleCell;
-import com.netcracker.solutions.kpi.util.scheduling.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,11 +30,11 @@ public class ScheduleService {
     @Autowired
     private UserTimePriorityService userTimePriorityService;// = ServiceFactory.getUserTimePriorityService();
 
-    private static final Role TECH_ROLE = new RoleImpl(2L);
-    private static final Role SOFT_ROLE = new RoleImpl(5L);
+    private static final Role TECH_ROLE = new Role(2L);
+    private static final Role SOFT_ROLE = new Role(5L);
 
 
-    private List<User> undistributedStudents = new ArrayList<>();
+    private List<com.netcracker.solutions.kpi.util.scheduling.User> undistributedStudents = new ArrayList<>();
     private List<Timestamp> datesAndTimesList = new ArrayList<>();
     private int durationOfLongIntervInMinutes;
     private int durationOfShortIntervInMinutes;
@@ -45,8 +42,8 @@ public class ScheduleService {
     private int totalNumbOfRegisteredTeachersWithShorterInterv;
     private List<Integer> numbOfBookedPositionByLongTeacherForEachDay = new ArrayList<>();
     private List<Integer> numbOfBookedPositionByShortTeacherForEachDay = new ArrayList<>();
-    private List<User> allLongTeachers = new ArrayList<>();
-    private List<User> allShortTeachers = new ArrayList<>();
+    private List<com.netcracker.solutions.kpi.util.scheduling.User> allLongTeachers = new ArrayList<>();
+    private List<com.netcracker.solutions.kpi.util.scheduling.User> allShortTeachers = new ArrayList<>();
     private Recruitment recruitment;
     private boolean techLonger;
 
@@ -151,7 +148,7 @@ public class ScheduleService {
     public void startScheduleForStudents() {
         List<StudentsScheduleCell> scheduleCellList = creatingOfAllSchedules.getStudentsSchedule();
         for (StudentsScheduleCell scheduleCell : scheduleCellList) {
-            for (User user : scheduleCell.getStudents()) {
+            for (com.netcracker.solutions.kpi.util.scheduling.User user : scheduleCell.getStudents()) {
                 ScheduleTimePoint scheduleTimePoint = scheduleTimePointService
                         .getScheduleTimePointByTimepoint(scheduleCell.getDateAndHour());
                 userService.insertFinalTimePoint(reverseAdaptUser(user), scheduleTimePoint);
@@ -173,11 +170,11 @@ public class ScheduleService {
     }
 
 
-    private com.netcracker.solutions.kpi.persistence.model.User reverseAdaptUser(User user) {
-        return new UserImpl(user.getId());
+    private com.netcracker.solutions.kpi.persistence.model.User reverseAdaptUser(com.netcracker.solutions.kpi.util.scheduling.User user) {
+        return new User(user.getId());
     }
 
-    private User adaptUser(com.netcracker.solutions.kpi.persistence.model.User user) {
+    private com.netcracker.solutions.kpi.util.scheduling.User adaptUser(com.netcracker.solutions.kpi.persistence.model.User user) {
         List<Timestamp> timesAndDates = new ArrayList<>();
         List<UserTimePriority> userTimePriorities = userTimePriorityService.getAllUserTimePriorities(user.getId());
         for (UserTimePriority userTimePriority : userTimePriorities) {
@@ -185,6 +182,6 @@ public class ScheduleService {
                 timesAndDates.add(userTimePriority.getScheduleTimePoint().getTimePoint());
             }
         }
-        return new User(user.getId(), timesAndDates);
+        return new com.netcracker.solutions.kpi.util.scheduling.User(user.getId(), timesAndDates);
     }
 }

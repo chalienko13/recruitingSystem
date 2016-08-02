@@ -2,7 +2,6 @@ package com.netcracker.solutions.kpi.persistence.model.enums;
 
 import com.netcracker.solutions.kpi.controller.auth.UserAuthority;
 import com.netcracker.solutions.kpi.persistence.model.Role;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.RoleImpl;
 
 public enum RoleEnum {
     ROLE_ADMIN(1L), ROLE_STUDENT(3L), ROLE_SOFT(5L), ROLE_TECH(2L);
@@ -36,7 +35,7 @@ public enum RoleEnum {
     public static Role getRole(RoleEnum role) {
         switch (role) {
             case ROLE_STUDENT:
-                return new RoleImpl(
+                return new Role(
                         role.getId(),
                         valueOf(role)
                 );

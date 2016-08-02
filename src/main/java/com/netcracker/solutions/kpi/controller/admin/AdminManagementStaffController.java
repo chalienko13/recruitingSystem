@@ -7,11 +7,9 @@ import com.netcracker.solutions.kpi.persistence.dto.UserDto;
 import com.netcracker.solutions.kpi.persistence.dto.UserRateDto;
 import com.netcracker.solutions.kpi.persistence.model.EmailTemplate;
 import com.netcracker.solutions.kpi.persistence.model.Interview;
+import com.netcracker.solutions.kpi.persistence.model.enums.RoleEnum;
 import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.User;
-import com.netcracker.solutions.kpi.persistence.model.enums.RoleEnum;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.RoleImpl;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.UserImpl;
 import com.netcracker.solutions.kpi.service.*;
 import com.netcracker.solutions.kpi.service.util.SenderService;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -72,13 +70,13 @@ public class AdminManagementStaffController {
 
 
     @RequestMapping(value = "showAllEmployees", method = RequestMethod.GET)
-    public List<User> showEmployees(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
-                                    @RequestParam boolean increase) {
+    public List<com.netcracker.solutions.kpi.persistence.model.User> showEmployees(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
+                                                                                   @RequestParam boolean increase) {
         return userService.getEmployeesFromToRows(calculateStartRow(pageNum, rowsNum), rowsNum, sortingCol, increase);
     }
 
     @RequestMapping(value = "showFilteredEmployees", method = RequestMethod.POST)
-    public List<User> showFilteredEmployees(@RequestBody StaffFiltrationParamsDto staffFiltrationParamsDto) {
+    public List<com.netcracker.solutions.kpi.persistence.model.User> showFilteredEmployees(@RequestBody StaffFiltrationParamsDto staffFiltrationParamsDto) {
         List<Role> neededRoles = new ArrayList<>();
         for(Long roleId: staffFiltrationParamsDto.getRolesId())
             neededRoles.add(roleService.getRoleById(roleId));
@@ -117,21 +115,21 @@ public class AdminManagementStaffController {
     }
 
     @RequestMapping(value = "search", method = RequestMethod.POST)
-    public List<User> searchEmployee(@RequestParam String lastName) {
+    public List<com.netcracker.solutions.kpi.persistence.model.User> searchEmployee(@RequestParam String lastName) {
         return userService.getEmployeesByNameFromToRows(lastName);
     }
 
 
     @RequestMapping(value = "addEmployee", method = RequestMethod.POST)
     public void addEmployee(@RequestBody UserDto userDto) throws MessagingException {
-        List<RoleImpl> roles = userDto.getRoleList();
+        List<Role> roles = userDto.getRoleList();
         List<Role> userRoles = new ArrayList<>();
         for (Role role : roles) {
             userRoles.add(roleService.getRoleByTitle(role.getRoleName()));
         }
         Date date = new Date();
         String password = RandomStringUtils.randomAlphabetic(10);
-        User user = new UserImpl();
+        com.netcracker.solutions.kpi.persistence.model.User user = new User();
         user.setEmail(userDto.getEmail());
         user.setFirstName(userDto.getFirstName());
         user.setSecondName(userDto.getSecondName());
@@ -149,7 +147,7 @@ public class AdminManagementStaffController {
 
     @RequestMapping(value = "editEmployee", method = RequestMethod.POST)
     public ResponseEntity editEmployeeParams(@RequestBody UserDto userDto) {
-        User user = userService.getUserByID(userDto.getId());
+        com.netcracker.solutions.kpi.persistence.model.User user = userService.getUserByID(userDto.getId());
         user.setFirstName(userDto.getFirstName());
         user.setSecondName(userDto.getSecondName());
         user.setLastName(userDto.getLastName());
@@ -168,7 +166,7 @@ public class AdminManagementStaffController {
 
     @RequestMapping(value = "changeEmployeeStatus", method = RequestMethod.GET)
     public Boolean changeEmployeeStatus(@RequestParam String email) {
-        User user = userService.getUserByUsername(email);
+        com.netcracker.solutions.kpi.persistence.model.User user = userService.getUserByUsername(email);
         user.setActive(!user.isActive());
         userService.updateUser(user);
         return user.isActive();
@@ -176,7 +174,7 @@ public class AdminManagementStaffController {
 
     @RequestMapping(value = "showAssignedStudent", method = RequestMethod.POST)
     public List<UserRateDto> showAssignedStudent(@RequestParam String email) {
-        User user = userService.getUserByUsername(email);
+        com.netcracker.solutions.kpi.persistence.model.User user = userService.getUserByUsername(email);
         List<UserRateDto> userRateDtos = new ArrayList<>();
         for (Interview interview : interviewService.getByInterviewer(user)) {
             UserRateDto userRateDto = new UserRateDto(interview.getApplicationForm().getUser(),
@@ -190,7 +188,7 @@ public class AdminManagementStaffController {
 
     @RequestMapping(value = "deleteEmployee", method = RequestMethod.GET)
     public void deleteEmployee(@RequestParam String email) {
-        User user = userService.getUserByUsername(email);
+        com.netcracker.solutions.kpi.persistence.model.User user = userService.getUserByUsername(email);
         userService.deleteUser(user);
     }
 
@@ -239,8 +237,8 @@ public class AdminManagementStaffController {
         if (userTimePriorityService.isSchedulePrioritiesExistStaff()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(TIME_PRIORITY_ALREADY_EXIST));
         } else {
-            List<User> softList = userService.getActiveStaffByRole(new RoleImpl(RoleEnum.ROLE_SOFT.getId()));
-            List<User> techList = userService.getActiveStaffByRole(new RoleImpl(RoleEnum.ROLE_TECH.getId()));
+            List<com.netcracker.solutions.kpi.persistence.model.User> softList = userService.getActiveStaffByRole(new Role(RoleEnum.ROLE_SOFT.getId()));
+            List<com.netcracker.solutions.kpi.persistence.model.User> techList = userService.getActiveStaffByRole(new Role(RoleEnum.ROLE_TECH.getId()));
             if (softList.isEmpty() & techList.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(NEED_MORE_TECH_SOFT));
             } else if (softList.isEmpty()) {
@@ -248,10 +246,10 @@ public class AdminManagementStaffController {
             } else if (techList.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(NEED_MORE_TECH));
             } else {
-                Set<User> staff = new LinkedHashSet<>(softList);
+                Set<com.netcracker.solutions.kpi.persistence.model.User> staff = new LinkedHashSet<>(softList);
                 staff.addAll(techList);
                 EmailTemplate emailTemplate = emailTemplateService.getById(STAFF_INTERVIEW_SELECT.getId());
-                for (User user : staff) {
+                for (com.netcracker.solutions.kpi.persistence.model.User user : staff) {
                     String template = emailTemplateService.showTemplateParams(emailTemplate.getText(), user);
                     try {
                         senderService.send(user.getEmail(), emailTemplate.getTitle(), template);

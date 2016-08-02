@@ -58,9 +58,9 @@ public class InterviewDaoImpl implements InterviewDao {
         if (resultSet.wasNull()) {
             interview.setMark(null);
         }
-        interview.setRole(new RoleProxy(resultSet.getLong("interviewer_role")));
+        interview.setRole(new Role(resultSet.getLong("interviewer_role")));
         interview.setApplicationForm(new ApplicationFormProxy(resultSet.getLong("id_application_form")));
-        interview.setInterviewer(new UserProxy(resultSet.getLong("id_interviewer")));
+        interview.setInterviewer(new User(resultSet.getLong("id_interviewer")));
         interview.setAnswers(getAnswers(resultSet.getLong("id")));
         return interview;
     };

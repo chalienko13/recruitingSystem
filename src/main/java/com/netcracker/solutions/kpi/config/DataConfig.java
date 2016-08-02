@@ -13,13 +13,14 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-/*@EnableTransactionManagement*/
+@EnableTransactionManagement
 @PropertySource("classpath:app.properties")
-/*@EnableJpaRepositories("com.netcracker.solutions.kpi")*/
+@EnableJpaRepositories("com.netcracker.solutions.kpi")
 @EnableSpringConfigured
 public class DataConfig {
 
@@ -27,6 +28,8 @@ public class DataConfig {
     private static final String DATABASE_PASSWD_PROP = "db.password";
     private static final String DATABASE_URL_PROP = "db.url";
     private static final String DATABASE_USERNAME_PROP = "db.username";
+
+    private static final String ENTITY_PACKAGE = "com.netcracker.solutions.kpi.persistence.model";
 
     private static final String HIBERNATE_DIALECT_PROP = "db.hibernate.dialect";
     private static final String HIBERNATE_SHOW_SQL_PROP = "db.hibernate.show_sql";
@@ -48,15 +51,14 @@ public class DataConfig {
         return dataSource;
     }
 
-  /*  @Bean
+    @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 
         entityManagerFactoryBean.setDataSource(dataSource());
         entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-        //entityManagerFactoryBean.setPackagesToScan();
+        entityManagerFactoryBean.setPackagesToScan(ENTITY_PACKAGE);
         entityManagerFactoryBean.setJpaProperties(getHibernateProperties());
-
         return entityManagerFactoryBean;
     }
 
@@ -66,7 +68,7 @@ public class DataConfig {
         transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
 
         return transactionManager;
-    }*/
+    }
 
     private Properties getHibernateProperties() {
         Properties hiberProps = new Properties();

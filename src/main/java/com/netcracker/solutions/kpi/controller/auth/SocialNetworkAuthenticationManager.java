@@ -4,10 +4,9 @@ import com.netcracker.solutions.kpi.controller.auth.Utils.FaceBookUtils;
 import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.SocialInformation;
 import com.netcracker.solutions.kpi.persistence.model.SocialNetwork;
-import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.persistence.model.enums.RoleEnum;
 import com.netcracker.solutions.kpi.persistence.model.enums.SocialNetworkEnum;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.UserImpl;
+import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.service.SocialInformationService;
 import com.netcracker.solutions.kpi.service.UserService;
 import org.slf4j.Logger;
@@ -67,7 +66,7 @@ public class SocialNetworkAuthenticationManager implements AuthenticationManager
         socialInformation.setIdUserInSocialNetwork(FaceBookUtils.getSocialUserId(socialInformation.getAccessInfo()));
         SocialNetwork socialNetwork = SocialNetworkEnum.getSocialNetwork(getSocialNetworkId(socialInformation));
         if (Objects.equals(socialNetwork.getTitle(), SocialNetworkEnum.FaceBook.getTitle())) {
-            User user = userAuthServiceSocial.loadUserBySocialIdNetworkId(socialInformation.getIdUserInSocialNetwork(), socialNetwork.getId());
+            com.netcracker.solutions.kpi.persistence.model.User user = userAuthServiceSocial.loadUserBySocialIdNetworkId(socialInformation.getIdUserInSocialNetwork(), socialNetwork.getId());
             if (null == user) {
                 user = userDetailsService.loadUserByUsername(socialInformation.getUser().getEmail());
                 if (null != user){
@@ -86,7 +85,7 @@ public class SocialNetworkAuthenticationManager implements AuthenticationManager
     private UserAuthentication registerFaceBookUser(SocialInformation socialInformation) {
         Facebook facebook = new FacebookTemplate(FaceBookUtils.getFaceBookAccessToken(socialInformation.getAccessInfo()));
         org.springframework.social.facebook.api.User profile = facebook.userOperations().getUserProfile();
-        User user = createNewUser(profile);
+        com.netcracker.solutions.kpi.persistence.model.User user = createNewUser(profile);
         userService.insertUser(user, new ArrayList<>(Collections.singletonList(RoleEnum.getRole(RoleEnum.ROLE_STUDENT))));
         socialInformation.setUser(user);
         socialInformationService.insertSocialInformation(socialInformation, user, socialInformation.getSocialNetwork());
@@ -100,8 +99,8 @@ public class SocialNetworkAuthenticationManager implements AuthenticationManager
         }
     }
 
-    private User createNewUser(org.springframework.social.facebook.api.User profile) {
-        User user = new UserImpl(profile.getEmail(),
+    private com.netcracker.solutions.kpi.persistence.model.User createNewUser(org.springframework.social.facebook.api.User profile) {
+        com.netcracker.solutions.kpi.persistence.model.User user = new User(profile.getEmail(),
                 profile.getFirstName(),
                 profile.getMiddleName(),
                 profile.getLastName(),
@@ -124,7 +123,7 @@ public class SocialNetworkAuthenticationManager implements AuthenticationManager
         return userAuthentication.getDetails().getSocialInformations().iterator().next();
     }
 
-    private static void changeSocialInformation(Long id, User user, String info){
+    private static void changeSocialInformation(Long id, com.netcracker.solutions.kpi.persistence.model.User user, String info){
         user.getSocialInformations().stream().filter(socialInformation -> Objects.equals(socialInformation.getSocialNetwork().getId(), id)).forEach(socialInformation -> {
             socialInformation.setAccessInfo(info);
         });
