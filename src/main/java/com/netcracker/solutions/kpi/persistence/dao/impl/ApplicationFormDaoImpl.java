@@ -3,8 +3,6 @@ package com.netcracker.solutions.kpi.persistence.dao.impl;
 import com.netcracker.solutions.kpi.persistence.dao.ApplicationFormDao;
 import com.netcracker.solutions.kpi.persistence.model.*;
 import com.netcracker.solutions.kpi.persistence.model.enums.StatusEnum;
-import com.netcracker.solutions.kpi.persistence.model.impl.proxy.*;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.ApplicationFormImpl;
 import com.netcracker.solutions.kpi.persistence.util.JdbcTemplate;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
 import org.slf4j.Logger;
@@ -35,14 +33,14 @@ public class ApplicationFormDaoImpl implements ApplicationFormDao {
     private static final String TABLE_NAME = "application_form";
 
     private ResultSetExtractor<ApplicationForm> extractor = resultSet -> {
-        ApplicationForm applicationForm = new ApplicationFormImpl();
+        ApplicationForm applicationForm = new ApplicationForm();
         long id = resultSet.getLong(ID_COL);
         applicationForm.setActive(resultSet.getBoolean(IS_ACTIVE_COL));
         applicationForm.setAnswers(getAnswers(id));
         applicationForm.setDateCreate(resultSet.getTimestamp(DATE_CREATE_COL));
         applicationForm.setFeedback(resultSet.getString(FEEDBACK));
         applicationForm.setId(id);
-        applicationForm.setRecruitment(new RecruitmentProxy(resultSet.getLong(ID_RECRUITMENT_COL)));
+        applicationForm.setRecruitment(new Recruitment(resultSet.getLong(ID_RECRUITMENT_COL)));
         if (resultSet.wasNull()) {
             applicationForm.setRecruitment(null);
         }
@@ -290,7 +288,7 @@ public class ApplicationFormDaoImpl implements ApplicationFormDao {
 
     private List<Interview> getInterviews(Long applicationFormId) {
         return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_INTERVIEWS, (ResultSetExtractor<Interview>) resultSet -> {
-            InterviewProxy interviewProxy = new InterviewProxy(resultSet.getLong("id"));
+            Interview interviewProxy = new Interview(resultSet.getLong("id"));
             return interviewProxy;
         }, applicationFormId);
     }
@@ -299,7 +297,7 @@ public class ApplicationFormDaoImpl implements ApplicationFormDao {
 
     private List<FormAnswer> getAnswers(Long applicationFormId) {
         return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_ANSWERS, resultSet -> {
-            FormAnswer formAnswerProxy = new FormAnswerProxy(resultSet.getLong("id"));
+            FormAnswer formAnswerProxy = new FormAnswer(resultSet.getLong("id"));
             return formAnswerProxy;
         }, applicationFormId);
     }
@@ -309,7 +307,7 @@ public class ApplicationFormDaoImpl implements ApplicationFormDao {
                 + "a on (q.id= a.id_question) where a.id_application_form = ?;", resultSet -> {
             List<FormQuestion> questions = new ArrayList<>();
             do {
-                questions.add(new FormQuestionProxy(resultSet.getLong(FormQuestionDaoImpl.ID_COL)));
+                questions.add(new FormQuestion(resultSet.getLong(FormQuestionDaoImpl.ID_COL)));
             } while (resultSet.next());
             return questions;
         }, applicationFormId);

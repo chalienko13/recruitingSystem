@@ -1,6 +1,8 @@
 package com.netcracker.solutions.kpi.service.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.ScheduleTimePointDao;
+import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
+import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.service.ScheduleTimePointService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

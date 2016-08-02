@@ -1,5 +1,7 @@
 package com.netcracker.solutions.kpi.persistence.dao;
 
+import com.netcracker.solutions.kpi.persistence.model.FormAnswerVariant;
+import com.netcracker.solutions.kpi.persistence.model.FormQuestion;
 import com.netcracker.solutions.kpi.persistence.model.ReportInfo;
 import com.netcracker.solutions.kpi.report.Line;
 

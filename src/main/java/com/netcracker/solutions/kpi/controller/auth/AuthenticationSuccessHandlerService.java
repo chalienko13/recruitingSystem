@@ -2,6 +2,7 @@ package com.netcracker.solutions.kpi.controller.auth;
 
 import com.google.gson.Gson;
 import com.netcracker.solutions.kpi.persistence.dto.AuthUserDto;
+import com.netcracker.solutions.kpi.persistence.model.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;

@@ -1,5 +1,7 @@
 package com.netcracker.solutions.kpi.controller.auth;
 
+import com.netcracker.solutions.kpi.persistence.model.SocialInformation;
+import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.service.SocialInformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

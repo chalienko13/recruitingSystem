@@ -4,7 +4,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.*;
-import javax.xml.registry.infomodel.User;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -35,7 +34,7 @@ public class SocialInformation implements Serializable {
 
     @Column(name = "id_user_in_social_network")
     private Long idUserInSocialNetwork;
-
+    @Transient
     private Timestamp writeTime;
 
     public SocialInformation(Long id, SocialNetwork socialNetwork, String accessInfo) {
@@ -63,6 +62,10 @@ public class SocialInformation implements Serializable {
         this.accessInfo = accessInfo;
         this.user = user;
         this.socialNetwork = socialNetwork;
+    }
+
+    public SocialInformation(Long id) {
+        this.id = id;
     }
 
 

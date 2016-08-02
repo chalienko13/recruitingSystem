@@ -2,9 +2,6 @@ package com.netcracker.solutions.kpi.persistence.dao.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.FormQuestionDao;
 import com.netcracker.solutions.kpi.persistence.model.*;
-import com.netcracker.solutions.kpi.persistence.model.impl.proxy.FormAnswerVariantProxy;
-import com.netcracker.solutions.kpi.persistence.model.impl.proxy.RoleProxy;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.FormQuestionImpl;
 import com.netcracker.solutions.kpi.persistence.util.JdbcTemplate;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
 import org.slf4j.Logger;
@@ -26,7 +23,7 @@ public class FormQuestionDaoImpl implements FormQuestionDao {
     private JdbcDaoSupport jdbcDaoSupport;
 
     private ResultSetExtractor<FormQuestion> extractor = resultSet -> {
-        FormQuestion formQuestion = new FormQuestionImpl();
+        FormQuestion formQuestion = new FormQuestion();
         formQuestion.setId(resultSet.getLong(ID_COL));
         formQuestion.setEnable(resultSet.getBoolean(ENABLE_COL));
         formQuestion.setMandatory(resultSet.getBoolean(MANDATORY_COL));
@@ -184,7 +181,7 @@ public class FormQuestionDaoImpl implements FormQuestionDao {
                 resultSet -> {
                     List<FormAnswerVariant> answersVariants = new ArrayList<>();
                     do {
-                        answersVariants.add(new FormAnswerVariantProxy(resultSet.getLong(FormAnswerVariantDaoImpl.ID_COL)));
+                        answersVariants.add(new FormAnswerVariant(resultSet.getLong(FormAnswerVariantDaoImpl.ID_COL)));
                     } while (resultSet.next());
                     return answersVariants;
                 }, formQuestionID);

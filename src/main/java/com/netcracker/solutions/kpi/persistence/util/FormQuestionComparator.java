@@ -1,5 +1,7 @@
 package com.netcracker.solutions.kpi.persistence.util;
 
+import com.netcracker.solutions.kpi.persistence.model.FormQuestion;
+
 import java.util.Comparator;
 
 

@@ -43,12 +43,12 @@ public class ApplicationForm implements Serializable {
 
     @Column(name = "feedback")
     private String feedback;
-
+    @Transient
     private List<Interview> interviews;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "applicationForm")
     private List<FormAnswer> answers;
-
+    @Transient
     private List<FormQuestion> questions;
 
     public ApplicationForm() {
@@ -87,7 +87,9 @@ public class ApplicationForm implements Serializable {
         this.questions = questions;
     }
 
-
+    public ApplicationForm(Long id) {
+        this.id = id;
+    }
 
     public Long getId() {
         return id;

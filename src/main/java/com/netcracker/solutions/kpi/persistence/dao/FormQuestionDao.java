@@ -1,5 +1,9 @@
 package com.netcracker.solutions.kpi.persistence.dao;
 
+import com.netcracker.solutions.kpi.persistence.model.ApplicationForm;
+import com.netcracker.solutions.kpi.persistence.model.FormQuestion;
+import com.netcracker.solutions.kpi.persistence.model.Role;
+
 import java.sql.Connection;
 import java.util.List;
 import java.util.Set;

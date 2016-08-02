@@ -2,8 +2,8 @@ package com.netcracker.solutions.kpi.persistence.dao.impl;
 
 
 import com.netcracker.solutions.kpi.persistence.dao.RecruitmentDAO;
+import com.netcracker.solutions.kpi.persistence.model.Recruitment;
 import com.netcracker.solutions.kpi.persistence.model.SchedulingStatus;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.RecruitmentImpl;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ public class RecruitmentDaoImpl implements RecruitmentDAO {
     }*/
 
     private ResultSetExtractor<Recruitment> extractor = resultSet -> {
-        Recruitment recruitment = new RecruitmentImpl();
+        Recruitment recruitment = new Recruitment();
         recruitment.setId(resultSet.getLong("id"));
         recruitment.setEndDate(resultSet.getTimestamp("end_date"));
         recruitment.setName(resultSet.getString("name"));

@@ -1,10 +1,10 @@
 package com.netcracker.solutions.kpi.persistence.dao.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.ScheduleTimePointDao;
+import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
 import com.netcracker.solutions.kpi.persistence.model.TimePriorityType;
+import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.persistence.model.UserTimePriority;
-import com.netcracker.solutions.kpi.persistence.model.impl.proxy.UserProxy;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.ScheduleTimePointImpl;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +22,7 @@ public class ScheduleTimePointDaoImpl implements ScheduleTimePointDao {
     private JdbcDaoSupport jdbcDaoSupport;
 
     private ResultSetExtractor<ScheduleTimePoint> extractor = resultSet -> {
-        ScheduleTimePoint scheduleTimePoint = new ScheduleTimePointImpl();
+        ScheduleTimePoint scheduleTimePoint = new ScheduleTimePoint();
         scheduleTimePoint.setId(resultSet.getLong("id"));
         scheduleTimePoint.setTimePoint(resultSet.getTimestamp("tp"));
         scheduleTimePoint.setUserTimePriorities(getUserTimePriority(resultSet.getLong("id"), scheduleTimePoint));

@@ -1,7 +1,7 @@
 package com.netcracker.solutions.kpi.controller.auth;
 
+import com.netcracker.solutions.kpi.persistence.model.SocialInformation;
 import com.netcracker.solutions.kpi.persistence.model.SocialNetwork;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.SocialInformationImpl;
 import com.netcracker.solutions.kpi.persistence.model.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,7 +24,7 @@ public class UserAuthentication implements Authentication {
 
     public UserAuthentication(String email, SocialNetwork socialNetwork, String accessToken, Long userSocialId) {
         user = new User();
-        SocialInformation socialInformation = new SocialInformationImpl
+        SocialInformation socialInformation = new SocialInformation
                 (
                         socialNetwork, accessToken, new Timestamp(System.currentTimeMillis())
                 );

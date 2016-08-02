@@ -21,17 +21,22 @@ public class ScheduleTimePoint implements Serializable {
     @Column(name = "schedule_time_point")
     private Timestamp timePoint;
     //toDO change db_table??
+    @Transient
     private Set<User> users;
-
+    @Transient
     private Set<UserTimePriority> userTimePriorities;
 
     public ScheduleTimePoint() {
     }
 
+    public ScheduleTimePoint(Long id) {
+        this.id = id;
+    }
 
     public ScheduleTimePoint(Timestamp timePoint) {
         this.timePoint = timePoint;
     }
+
 
     public ScheduleTimePoint(Timestamp timePoint, Set<User> users, Set<UserTimePriority> userTimePriorities) {
         this.timePoint = timePoint;

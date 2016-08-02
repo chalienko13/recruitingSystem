@@ -64,6 +64,10 @@ public class Recruitment implements Serializable {
     public Recruitment() {
     }
 
+    public Recruitment(Long id) {
+        this.id = id;
+    }
+
     public Recruitment(int numberOfDays, String name, Timestamp startDate, Timestamp endDate,
                        int maxGeneralGroup, int maxAdvancedGroup, Timestamp registrationDeadline,
                        Timestamp scheduleChoicesDeadline, int studentsOnInterview, int timeInterviewTech,

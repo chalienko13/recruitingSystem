@@ -1,5 +1,7 @@
 package com.netcracker.solutions.kpi.persistence.dto;
 
+import com.netcracker.solutions.kpi.persistence.model.Role;
+
 import java.util.Set;
 
 public class CurrentAuthUser {

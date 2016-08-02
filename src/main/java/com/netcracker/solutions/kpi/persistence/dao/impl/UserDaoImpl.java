@@ -5,9 +5,6 @@ import com.netcracker.solutions.kpi.persistence.dao.UserDao;
 import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
 import com.netcracker.solutions.kpi.persistence.model.SocialInformation;
-import com.netcracker.solutions.kpi.persistence.model.impl.proxy.RoleProxy;
-import com.netcracker.solutions.kpi.persistence.model.impl.proxy.ScheduleTimePointProxy;
-import com.netcracker.solutions.kpi.persistence.model.impl.proxy.SocialInformationProxy;
 import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
 import org.slf4j.Logger;
@@ -15,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -27,6 +26,9 @@ public class UserDaoImpl implements UserDao {
 
     @Autowired
     private JdbcDaoSupport jdbcDaoSupport;
+
+    @Autowired
+    private EntityManagerFactory entityManager;
 
     private static final int ROLE_STUDENT = 3;
     private static final int APPROVED_STATUS = 3;
@@ -224,12 +226,21 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getByID(Long id) {
+        System.out.println("Get by id");
+        EntityManager entityManager1 = entityManager.createEntityManager();
+        System.out.println(entityManager1);
+        entityManager1.getTransaction().begin();
+        User result = entityManager1.find(User.class, id);
+        entityManager1.getTransaction().commit();
+        entityManager1.close();
         log.info("Looking for user with id = {}", id);
-        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
+        System.out.println("close");
+        return result;
+        //return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
     }
 
     @Override
-    public com.netcracker.solutions.kpi.persistence.model.User getByUsername(String email) {
+    public User getByUsername(String email) {
         log.info("Looking for user with email = {}", email);
         return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_EMAIL, extractor, email);
     }
@@ -426,7 +437,7 @@ public class UserDaoImpl implements UserDao {
                 "WHERE si.id_user = ?;", resultSet -> {
             List<SocialInformation> set = new ArrayList<>();
             do {
-                set.add(new SocialInformationProxy(resultSet.getLong("id")));
+                set.add(new SocialInformation(resultSet.getLong("id")));
             } while (resultSet.next());
             return set;
         }, userID);
@@ -455,7 +466,7 @@ public class UserDaoImpl implements UserDao {
         return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_FINAL_TIME_POINT, resultSet -> {
             List<ScheduleTimePoint> list = new ArrayList<ScheduleTimePoint>();
             do {
-                list.add(new ScheduleTimePointProxy(resultSet.getLong("id")));
+                list.add(new ScheduleTimePoint(resultSet.getLong("id")));
             } while (resultSet.next());
             return list;
         }, timeID);

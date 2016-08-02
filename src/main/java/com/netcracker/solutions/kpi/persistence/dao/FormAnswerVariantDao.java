@@ -1,5 +1,8 @@
 package com.netcracker.solutions.kpi.persistence.dao;
 
+import com.netcracker.solutions.kpi.persistence.model.FormAnswerVariant;
+import com.netcracker.solutions.kpi.persistence.model.FormQuestion;
+
 import java.sql.Connection;
 import java.util.List;
 

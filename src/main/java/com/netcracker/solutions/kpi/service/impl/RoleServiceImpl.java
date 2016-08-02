@@ -1,6 +1,9 @@
 package com.netcracker.solutions.kpi.service.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.RoleDao;
+import com.netcracker.solutions.kpi.persistence.model.ApplicationForm;
+import com.netcracker.solutions.kpi.persistence.model.Role;
+import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.persistence.model.enums.RoleEnum;
 import com.netcracker.solutions.kpi.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;

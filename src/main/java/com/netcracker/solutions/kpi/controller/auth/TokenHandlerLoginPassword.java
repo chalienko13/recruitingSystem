@@ -1,5 +1,6 @@
 package com.netcracker.solutions.kpi.controller.auth;
 
+import com.netcracker.solutions.kpi.persistence.model.User;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,6 +1,7 @@
 package com.netcracker.solutions.kpi.controller.auth;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.netcracker.solutions.kpi.persistence.model.User;
 import org.springframework.security.core.GrantedAuthority;
 
 

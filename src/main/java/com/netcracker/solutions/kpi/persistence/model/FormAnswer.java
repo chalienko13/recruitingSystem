@@ -62,6 +62,10 @@ public class FormAnswer implements Serializable {
         this.interview = interview;
     }
 
+    public FormAnswer(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }

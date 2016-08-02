@@ -40,7 +40,7 @@ public class Interview implements Serializable {
     @JoinColumn(name = "id_application_form")
     private ApplicationForm applicationForm;
 
-
+    @Transient
     private List<FormAnswer> answers;
 
     public Interview() {
@@ -65,6 +65,10 @@ public class Interview implements Serializable {
         this.role = role;
         this.adequateMark = adequateMark;
         this.applicationForm = applicationForm;
+    }
+
+    public Interview(Long id) {
+        this.id = id;
     }
 
 

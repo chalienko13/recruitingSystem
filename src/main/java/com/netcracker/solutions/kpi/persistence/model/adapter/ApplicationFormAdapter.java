@@ -1,6 +1,10 @@
 package com.netcracker.solutions.kpi.persistence.model.adapter;
 
 import com.google.gson.*;
+import com.netcracker.solutions.kpi.persistence.model.ApplicationForm;
+import com.netcracker.solutions.kpi.persistence.model.FormQuestion;
+import com.netcracker.solutions.kpi.persistence.model.Recruitment;
+import com.netcracker.solutions.kpi.persistence.model.User;
 
 import java.lang.reflect.Type;
 import java.util.Map;

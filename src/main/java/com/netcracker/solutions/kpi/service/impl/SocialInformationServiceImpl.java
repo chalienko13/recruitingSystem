@@ -1,7 +1,9 @@
 package com.netcracker.solutions.kpi.service.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.SocialInformationDao;
+import com.netcracker.solutions.kpi.persistence.model.SocialInformation;
 import com.netcracker.solutions.kpi.persistence.model.SocialNetwork;
+import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.service.SocialInformationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -30,6 +30,9 @@ public class FormAnswerVariant implements Serializable {
     public FormAnswerVariant() {
     }
 
+    public FormAnswerVariant(Long id) {
+        this.id = id;
+    }
 
     public FormAnswerVariant(String answer) {
         this.answer = answer;

@@ -72,6 +72,10 @@ public class FormQuestion implements Serializable {
         this.order = order;
     }
 
+    public FormQuestion(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }

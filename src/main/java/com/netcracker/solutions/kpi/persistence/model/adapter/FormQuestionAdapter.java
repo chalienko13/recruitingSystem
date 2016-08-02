@@ -1,9 +1,9 @@
 package com.netcracker.solutions.kpi.persistence.model.adapter;
 
 import com.google.gson.*;
+import com.netcracker.solutions.kpi.persistence.model.FormAnswerVariant;
+import com.netcracker.solutions.kpi.persistence.model.FormQuestion;
 import com.netcracker.solutions.kpi.persistence.model.QuestionType;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.FormAnswerVariantImpl;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.FormQuestionImpl;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class FormQuestionAdapter implements JsonSerializer<FormQuestion>,JsonDes
 
 
     public FormQuestion deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        FormQuestion formQuestion = new FormQuestionImpl();
+        FormQuestion formQuestion = new FormQuestion();
         JsonObject jsonObject = (JsonObject) jsonElement;
         formQuestion.setId(jsonObject.get("id").getAsLong());
         formQuestion.setTitle(jsonObject.get("title").getAsString());
@@ -47,7 +47,7 @@ public class FormQuestionAdapter implements JsonSerializer<FormQuestion>,JsonDes
         for(JsonElement arrayElement: jsonObject.get("variants").getAsJsonArray()) {
                 JsonObject jsonVariant = (JsonObject) arrayElement;
             if (!jsonVariant.get("variant").getAsString().isEmpty()) {
-                formAnswerVariantList.add(new FormAnswerVariantImpl(jsonVariant.get("variant").getAsString()));
+                formAnswerVariantList.add(new FormAnswerVariant(jsonVariant.get("variant").getAsString()));
             }
         }
         formQuestion.setFormAnswerVariants(formAnswerVariantList);

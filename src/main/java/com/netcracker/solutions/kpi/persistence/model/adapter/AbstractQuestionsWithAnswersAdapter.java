@@ -2,6 +2,9 @@ package com.netcracker.solutions.kpi.persistence.model.adapter;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.netcracker.solutions.kpi.persistence.model.FormAnswer;
+import com.netcracker.solutions.kpi.persistence.model.FormAnswerVariant;
+import com.netcracker.solutions.kpi.persistence.model.FormQuestion;
 
 import java.util.List;
 import java.util.Map;
