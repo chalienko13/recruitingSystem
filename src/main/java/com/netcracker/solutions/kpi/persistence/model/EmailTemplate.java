@@ -3,18 +3,27 @@ package com.netcracker.solutions.kpi.persistence.model;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity
+@Table(name = "email_template")
 public class EmailTemplate implements Serializable {
 
     private static final long serialVersionUID = -325738497072982583L;
 
+    @Id
+    @GeneratedValue
     private Long id;
 
+    @Column(name = "title")
     private String title;
 
+    @Column(name = "text")
     private String text;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_notification")
     private NotificationType notificationType;
 
     public EmailTemplate() {

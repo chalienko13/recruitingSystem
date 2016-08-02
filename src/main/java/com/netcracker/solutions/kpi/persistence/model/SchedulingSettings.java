@@ -2,17 +2,27 @@ package com.netcracker.solutions.kpi.persistence.model;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.annotations.ColumnDefault;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * @author Korzh
  */
+
+@Entity
+@Table(name = "scheduling_settings")
 public class SchedulingSettings implements Serializable {
     private static final long serialVersionUID = 3756080692775410186L;
+
+    @Id
+    @GeneratedValue
     private Long id;
+    @Column(name = "start_time")
     private Timestamp startDate;
+    @Column(name = "end_time")
     private Timestamp endDate;
 
 

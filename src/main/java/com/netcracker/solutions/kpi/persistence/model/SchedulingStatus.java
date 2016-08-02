@@ -3,16 +3,22 @@ package com.netcracker.solutions.kpi.persistence.model;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
  * @author Korzh
  */
+
+@Entity
+@Table(name = "scheduling_status")
 public class SchedulingStatus implements Serializable {
 
     private static final long serialVersionUID = -4656348714213157794L;
-
+    @Id
+    @GeneratedValue
     private Long id;
+    @Column(name = "title")
     private String title;
 
     public SchedulingStatus() {

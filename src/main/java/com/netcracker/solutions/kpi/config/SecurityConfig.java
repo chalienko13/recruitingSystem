@@ -6,6 +6,7 @@ import com.netcracker.solutions.kpi.filter.StatelessAuthenticationFilter;
 import com.netcracker.solutions.kpi.filter.StatelessLoginFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -16,6 +17,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import javax.annotation.PostConstruct;
 
 @Configuration
 @EnableWebSecurity
@@ -43,10 +46,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     @Qualifier("TokenHandlerSocial")
     private TokenHandler tokenHandlerSocial;// = TokenHandlerSocial.getInstance();
+    @Autowired
+    private AuthenticationSuccessHandlerService authenticationSuccessHandlerService;
 
-    private TokenAuthenticationService tokenAuthenticationServiceLoginPassword = new TokenAuthenticationService(tokenHandlerLoginPassword);
+    private TokenAuthenticationService tokenAuthenticationServiceLoginPassword;
 
-    private TokenAuthenticationService tokenAuthenticationServiceSocial = new TokenAuthenticationService(tokenHandlerSocial);
+    private TokenAuthenticationService tokenAuthenticationServiceSocial;
+
+    @PostConstruct
+    public void init() {
+        tokenAuthenticationServiceLoginPassword = new TokenAuthenticationService(tokenHandlerLoginPassword);
+        tokenAuthenticationServiceSocial = new TokenAuthenticationService(tokenHandlerSocial);
+    }
 
 
     @Override
@@ -75,9 +86,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
 
-                .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationServiceLoginPassword, tokenAuthenticationServiceSocial), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationServiceLoginPassword, loginPasswordAuthenticationManager, authenticationSuccessHandler), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new SocialLoginFilter(new AntPathRequestMatcher("/socialAuth/**"), socialNetworkAuthenticationManager, authenticationSuccessHandler, tokenAuthenticationServiceSocial), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationServiceLoginPassword,
+                        tokenAuthenticationServiceSocial),
+                        UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationServiceLoginPassword,
+                        loginPasswordAuthenticationManager, authenticationSuccessHandler, authenticationSuccessHandlerService),
+                        UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new SocialLoginFilter(new AntPathRequestMatcher("/socialAuth/**"),
+                        socialNetworkAuthenticationManager,
+                        authenticationSuccessHandler,
+                        tokenAuthenticationServiceSocial),
+                        UsernamePasswordAuthenticationFilter.class)
 
 
                 .exceptionHandling().and()

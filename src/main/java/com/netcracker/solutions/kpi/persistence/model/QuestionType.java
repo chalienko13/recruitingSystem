@@ -1,15 +1,23 @@
 package com.netcracker.solutions.kpi.persistence.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
  * Created by Алексей on 21.04.2016.
  */
+
+@Entity
+@Table(name = "form_question_type")
 public class QuestionType implements Serializable {
 
     private static final long serialVersionUID = -191062081481479636L;
 
+    @Id
+    @GeneratedValue
     private Long id;
+
+    @Column(name = "type_title")
     private String typeTitle;
 
     public QuestionType() {

@@ -1,16 +1,25 @@
 package com.netcracker.solutions.kpi.persistence.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
  * Created by Nikita on 24.04.2016.
  */
+
+@Entity
+@Table(name = "report")
 public class ReportInfo implements Serializable {
 
     private static final long serialVersionUID = 4682674283630923553L;
 
+    @Id
+    @GeneratedValue
     private Long id;
+
+    @Column(name = "query")
     private String query;
+    @Column(name = "title")
     private String title;
 
 

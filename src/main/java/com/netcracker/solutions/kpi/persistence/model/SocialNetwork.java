@@ -3,14 +3,22 @@ package com.netcracker.solutions.kpi.persistence.model;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
  * Created by Chalienko on 15.04.2016.
  */
+
+@Entity
+@Table(name = "social_network")
 public class SocialNetwork implements Serializable {
     private static final long serialVersionUID = 1244579714594167060L;
+
+    @Id
+    @GeneratedValue
     private Long id;
+    @Column(name = "title")
     private String title;
 
     public SocialNetwork() {

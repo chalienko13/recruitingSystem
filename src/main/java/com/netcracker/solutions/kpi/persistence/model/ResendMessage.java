@@ -3,18 +3,26 @@ package com.netcracker.solutions.kpi.persistence.model;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
  * @author Korzh
  */
+
+@Entity
+@Table(name = "resend_message")
 public class ResendMessage implements Serializable {
 
     private static final long serialVersionUID = 1799312788939954583L;
-
+    @Id
+    @GeneratedValue
     private Long id;
+    @Column(name = "subject")
     private String subject;
+    @Column(name = "text")
     private String text;
+    @Column(name = "email")
     private String email;
 
     public ResendMessage() {

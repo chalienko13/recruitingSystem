@@ -4,16 +4,25 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity
+@Table(name = "user_time_priority")
 public class UserTimePriority implements Serializable {
 
 	private static final long serialVersionUID = 4644874842084608413L;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_user")
 	private User user;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_time_point")
 	private ScheduleTimePoint scheduleTimePoint;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_priority_type")
 	private TimePriorityType timePriorityType;
 
 	public UserTimePriority() {

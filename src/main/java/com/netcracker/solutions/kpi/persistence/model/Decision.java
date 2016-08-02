@@ -3,18 +3,24 @@ package com.netcracker.solutions.kpi.persistence.model;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import javax.jdo.annotations.PrimaryKey;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
-
+@Entity
+@Table(name = "decision_matrix")
 public class Decision implements Serializable {
 
 	private static final long serialVersionUID = 8612505383687321937L;
 
+	@Column(name = "soft_mark")
 	private int softMark;
-
-	private int techMark;
-
+	@Column(name = "final_mark")
 	private int finalMark;
-
+	@Column(name = "tech_mark")
+	private int techMark;
+	@Column(name = "scale")
 	private int scale;
 
 	public Decision() {

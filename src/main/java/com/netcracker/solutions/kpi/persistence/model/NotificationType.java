@@ -3,15 +3,26 @@ package com.netcracker.solutions.kpi.persistence.model;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
+@Entity
+@Table(name = "notification_type")
 public class NotificationType implements Serializable {
 
 	private static final long serialVersionUID = 5660260758528854372L;
 
+	@Id
+	@GeneratedValue
 	private Long id;
 
+	@Column(name = "n_title")
 	private String title;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "notificationType")
+	private List<EmailTemplate> emailTemplateList;
+
 
 	public NotificationType() {
 	}
@@ -40,6 +51,14 @@ public class NotificationType implements Serializable {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public List<EmailTemplate> getEmailTemplateList() {
+		return emailTemplateList;
+	}
+
+	public void setEmailTemplateList(List<EmailTemplate> emailTemplateList) {
+		this.emailTemplateList = emailTemplateList;
 	}
 
 	@Override
