@@ -46,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     @Qualifier("TokenHandlerSocial")
     private TokenHandler tokenHandlerSocial;// = TokenHandlerSocial.getInstance();
+
     @Autowired
     private AuthenticationSuccessHandlerService authenticationSuccessHandlerService;
 

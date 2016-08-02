@@ -8,14 +8,9 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Created by Chalienko on 13.04.2016.
- */
-public interface UserDao {
+public interface UserDao extends GenericDAO <User, Long> {
 
     User getByUsername(String username);
-
-    User getByID(Long id);
 
     boolean isExist(String username);
 

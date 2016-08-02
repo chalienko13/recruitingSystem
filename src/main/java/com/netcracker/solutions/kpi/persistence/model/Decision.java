@@ -11,6 +11,7 @@ import java.io.Serializable;
 public class Decision implements Serializable {
 
 	private static final long serialVersionUID = 8612505383687321937L;
+
 	@Id
 	@AttributeOverrides({
 			@AttributeOverride(name = "softMark", column = @Column(name="soft_mark")),

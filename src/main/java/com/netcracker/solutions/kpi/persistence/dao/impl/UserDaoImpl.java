@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 @Repository
-public class UserDaoImpl implements UserDao {
+public class UserDaoImpl extends GenericHibernateDAO<User, Long> implements UserDao {
     private static Logger log = LoggerFactory.getLogger(UserDaoImpl.class.getName());
 
     @Autowired
@@ -47,15 +47,10 @@ public class UserDaoImpl implements UserDao {
         return user;
     };
 
-  /*  public UserDaoImpl(DataSource dataSource) {
-        this.jdbcDaoSupport = new JdbcDaoSupport();
-        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
-    }*/
-
-    private static final String SQL_GET_BY_ID = "SELECT u.id, u.email, u.first_name,u.last_name, u.second_name, " +
+   /* private static final String SQL_GET_BY_ID = "SELECT u.id, u.email, u.first_name,u.last_name, u.second_name, " +
             "u.password, u.confirm_token, u.is_active, u.registration_date\n" +
             "FROM \"user\" u\n" +
-            "WHERE u.id = ?;";
+            "WHERE u.id = ?;";*/
 
     private static final String SQL_GET_ALL_NOT_SCHEDULE_STUDENTS = "SELECT u.id, u.email, u.first_name,u.last_name, u.second_name,\n" +
             "u.password, u.confirm_token, u.is_active, u.registration_date FROM \"user\" u\n" +
@@ -203,6 +198,10 @@ public class UserDaoImpl implements UserDao {
             "u.password, u.confirm_token, u.is_active, u.registration_date\n" +
             "from public.user u JOIN user_time_final uf on uf.id_user=u.id and uf.id_time_point IS NOT NULL";
 
+    public UserDaoImpl(Class<User> type) {
+        super(type);
+    }
+
     @Override
     public List<Integer> getCountUsersOnInterviewDaysForRole(Role role) {
         log.info("Get count users on interview days for role {}", role.getId());
@@ -222,11 +221,11 @@ public class UserDaoImpl implements UserDao {
         return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_ALL_NOT_SCHEDULE_STUDENTS, extractor);
     }
 
-    @Override
+   /* @Override
     public User getByID(Long id) {
         log.info("Looking for user with id = {}", id);
         return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
-    }
+    }*/
 
     @Override
     public com.netcracker.solutions.kpi.persistence.model.User getByUsername(String email) {

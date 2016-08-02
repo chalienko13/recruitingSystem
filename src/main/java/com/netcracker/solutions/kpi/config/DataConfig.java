@@ -8,12 +8,12 @@ import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.annotation.Resource;
-import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 import java.util.Properties;
 
@@ -29,7 +29,7 @@ public class DataConfig {
     private static final String DATABASE_URL_PROP = "db.url";
     private static final String DATABASE_USERNAME_PROP = "db.username";
 
-    private static final String ENTITY_PACKAGE = "com.netcracker.solutions.kpi.persistence.model";
+    private static final String ENTITY_PACKAGES = "com.netcracker.solutions.kpi.persistence.model";
 
     private static final String HIBERNATE_DIALECT_PROP = "db.hibernate.dialect";
     private static final String HIBERNATE_SHOW_SQL_PROP = "db.hibernate.show_sql";
@@ -52,20 +52,19 @@ public class DataConfig {
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+    public LocalSessionFactoryBean sessionFactory() {
+        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+        sessionFactory.setDataSource(dataSource());
+        sessionFactory.setPackagesToScan(ENTITY_PACKAGES);
+        sessionFactory.setHibernateProperties(getHibernateProperties());
 
-        entityManagerFactoryBean.setDataSource(dataSource());
-        entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-        entityManagerFactoryBean.setPackagesToScan(ENTITY_PACKAGE);
-        entityManagerFactoryBean.setJpaProperties(getHibernateProperties());
-        return entityManagerFactoryBean;
+        return sessionFactory;
     }
 
     @Bean
     public JpaTransactionManager transactionManager() {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+        transactionManager.setEntityManagerFactory(sessionFactory().getObject());
 
         return transactionManager;
     }
@@ -81,7 +80,6 @@ public class DataConfig {
 
     private Properties getConnectionProperties() {
         Properties conProps = new Properties();
-
         return  conProps;
     }
 }
