@@ -14,25 +14,20 @@ public interface UserDao extends GenericDAO <User, Long> {
 //
 //    boolean isExist(String username);
 
-//    Long insertUser(User user, Connection connection);
-
-    List<User> getAllNotScheduleStudents();
+//    List<User> getAllNotScheduleStudents();
 
     int[] batchUpdate(List<User> users);
 
-    boolean addRole(User user, Role role);
+    //boolean addRole(User user, Role role);
 
-    boolean addRole(User user, Role role, Connection connection);
-
-    int deleteRole(User user, Role role);
-
-    int deleteAllRoles(User user, Connection connection);
+    //Seems as NOT USED
+    //int deleteRole(User user, Role role);
 
     Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
 
     int deleteFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
 
-    User getUserByToken(String token);
+    //User getUserByToken(String token);
 
     Set<User> getAssignedStudents(Long id);
 

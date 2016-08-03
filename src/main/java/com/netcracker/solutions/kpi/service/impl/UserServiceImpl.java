@@ -1,6 +1,5 @@
 package com.netcracker.solutions.kpi.service.impl;
 
-import com.netcracker.solutions.kpi.persistence.dao.DataSourceSingleton;
 import com.netcracker.solutions.kpi.persistence.dao.UserDao;
 import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
@@ -13,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -28,6 +25,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    ///REFACTORED TO REPOSITORY - START
+    ///--------------------------------
 
     @Override
     public User getUserByUsername(String userName) {
@@ -45,14 +45,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User insertUser(User user, List<Role> roles) {
-        return userRepository.save(user);
+    public void createUser(User user) {
+        userRepository.save(user);
     }
 
     @Override
     public void updateUser(User user) {
         userRepository.save(user);
     }
+
     //// TODO: 03.08.2016
     @Override
     public boolean updateUserWithRole(User user) {
@@ -62,23 +63,27 @@ public class UserServiceImpl implements UserService {
 
     // TODO: 03.08.2016
     @Override
-    public boolean addRole(User user, Role role) {
-        return userDao.addRole(user, role);
+    public void addRole(User user, Role role) {
+        if(role != null) {
+            Set<Role> currentRoles = user.getRoles();
+            currentRoles.add(role);
+            updateUser(user);
+        }
     }
-    // TODO: 03.08.2016
+
     @Override
-    public int deleteRole(User user, Role role) {
-        return userDao.deleteRole(user, role);
+    public Long getUserCount() {
+        return userRepository.count();
     }
 
     @Override
     public List<User> getAllNotScheduleStudents() {
-        return userDao.getAllNotScheduleStudents();
+        return userRepository.getAllNotScheduleStudents();
     }
 
     @Override
     public List<User> getActiveStaffByRole(Role role) {
-        if (role != null){
+        if (role != null) {
             return userRepository.getActiveStaffByRole(role.getId());
         } else {
             return Collections.EMPTY_LIST;
@@ -91,34 +96,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint) {
-        return userDao.insertFinalTimePoint(user, scheduleTimePoint);
-    }
-
-    @Override
-    public int deleteFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint) {
-        return userDao.deleteFinalTimePoint(user, scheduleTimePoint);
-    }
-
-    @Override
     public User getUserByToken(String token) {
-        return userDao.getUserByToken(token);
+        return userRepository.getByConfirmToken(token);
     }
 
     @Override
-    public Set<User> getAssignedStudents(Long id) {
-        return userDao.getAssignedStudents(id);
+    public List<User> getAll() {
+        return userRepository.findAll();
     }
 
     @Override
-    public Set<User> getAllStudents() {
-        return userDao.getAllStudents();
+    public User getAuthorizedUser() {
+        return ((User) SecurityContextHolder.getContext().getAuthentication().getDetails());
     }
 
-    @Override
-    public List<User> getStudentsFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase) {
-        return userDao.getStudentsFromToRows(fromRows, rowsNum, sortingCol, increase);
-    }
+    ///REFACTORED TO REPOSITORY - END
+    ///--------------------------------------------------
 
     @Override
     public List<User> getFilteredEmployees(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart,
@@ -136,26 +129,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getEmployeesFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase) {
         return userDao.getEmployeesFromToRows(fromRows, rowsNum, sortingCol, increase);
-    }
-
-    @Override
-    public Set<User> getAllEmploees() {
-        return userDao.getAllEmploees();
-    }
-
-    @Override
-    public List<User> getAll() {
-        return userRepository.findAll();
-    }
-
-    @Override
-    public User getAuthorizedUser() {
-        return ((User) SecurityContextHolder.getContext().getAuthentication().getDetails());
-    }
-
-    @Override
-    public List<Integer> getCountUsersOnInterviewDaysForRole(Role role) {
-        return userDao.getCountUsersOnInterviewDaysForRole(role);
     }
 
     @Override
@@ -187,13 +160,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getStudentsByNameFromToRows(String lastName, Long fromRows, Long rowsNum) {
-        return userDao.getStudentsByNameFromToRows(lastName, fromRows, rowsNum);
+    public int disableAllStaff() {
+        return userDao.disableAllStaff();
     }
 
     @Override
-    public Long getUserCount() {
-        return userDao.getUserCount();
+    public List<User> getStudentsWithNotconnectedForms() {
+        return userDao.getStudentsWithNotconnectedForms();
     }
 
     @Override
@@ -207,23 +180,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int disableAllStaff() {
-        return userDao.disableAllStaff();
+    public List<String> getNotMarkedInterviwers() {
+        return userDao.getNotMarkedInterviwers();
     }
 
-    @Override
-    public List<User> getStudentsWithNotconnectedForms() {
-        return userDao.getStudentsWithNotconnectedForms();
-    }
+    //SCHEDULING - not necessary to refactor now as scheduling will be changed
 
     @Override
     public List<User> getUserByTimeAndRole(Long scheduleTimePointId, Long roleId) {
         return userDao.getUserByTimeAndRole(scheduleTimePointId, roleId);
-    }
-
-    @Override
-    public List<String> getNotMarkedInterviwers() {
-        return userDao.getNotMarkedInterviwers();
     }
 
     @Override
@@ -235,5 +200,58 @@ public class UserServiceImpl implements UserService {
     public List<User> getUserWithFinalTimePoint() {
         return userDao.getUserWithFinalTimePoint();
     }
+
+    @Override
+    public List<Integer> getCountUsersOnInterviewDaysForRole(Role role) {
+        return userDao.getCountUsersOnInterviewDaysForRole(role);
+    }
+
+    @Override
+    public Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint) {
+        return userDao.insertFinalTimePoint(user, scheduleTimePoint);
+    }
+
+    @Override
+    public int deleteFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint) {
+        return userDao.deleteFinalTimePoint(user, scheduleTimePoint);
+    }
+    /////---------------------------------------------------------------------------
+
+
+    //NOT USED
+   /* @Override
+    public Set<User> getAssignedStudents(Long id) {
+        return userDao.getAssignedStudents(id);
+    }
+
+    @Override
+    public Set<User> getAllStudents() {
+        return userDao.getAllStudents();
+    }
+
+    @Override
+    public List<User> getStudentsFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase) {
+        return userDao.getStudentsFromToRows(fromRows, rowsNum, sortingCol, increase);
+    }
+*/
+
+    /*// TODO: 03.08.2016 - Seems as NOT USED
+  @Override
+  public int deleteRole(User user, Role role) {
+      return userDao.deleteRole(user, role);
+  }*/
+
+    //NOT USED
+   /* @Override
+    public Set<User> getAllEmploees() {
+        return userDao.getAllEmploees();
+    }
+*/
+
+    //NOT USED
+   /* @Override
+    public List<User> getStudentsByNameFromToRows(String lastName, Long fromRows, Long rowsNum) {
+        return userDao.getStudentsByNameFromToRows(lastName, fromRows, rowsNum);
+    }*/
 }
 

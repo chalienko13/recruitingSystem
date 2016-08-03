@@ -20,15 +20,16 @@ public interface UserService {
 
     boolean isExist(String username);
 
-    User insertUser(User user, List<Role> roles);
+    void createUser(User user);
 
     void updateUser(User user);
     // // TODO: 03.08.2016
     boolean updateUserWithRole(User user);
 
-    boolean addRole(User user, Role role);
+    void addRole(User user, Role role);
 
-    int deleteRole(User user, Role role);
+    //Seems as NOT USED
+    //int deleteRole(User user, Role role);
 
     List<User> getAllNotScheduleStudents();
 
@@ -42,15 +43,19 @@ public interface UserService {
 
     User getUserByToken(String token);
 
-    Set<User> getAssignedStudents(Long id);
+    //NOT USED
+    //Set<User> getAssignedStudents(Long id);
 
-    Set<User> getAllStudents();
+    //NOT USED
+    //Set<User> getAllStudents();
 
-    List<User> getStudentsFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase);
+    //NOT USED
+    //List<User> getStudentsFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase);
 
     List<User> getEmployeesFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase);
 
-    Set<User> getAllEmploees();
+    //NOT USED
+    //Set<User> getAllEmploees();
 
     List<User> getAll();
 
@@ -68,7 +73,8 @@ public interface UserService {
 
     List<User> getEmployeesByNameFromToRows(String name);
 
-    List<User> getStudentsByNameFromToRows(String lastName, Long fromRows, Long rowsNum);
+    ////NOT USED
+    //List<User> getStudentsByNameFromToRows(String lastName, Long fromRows, Long rowsNum);
 
     int[] batchUpdate(List<User> users);
 
