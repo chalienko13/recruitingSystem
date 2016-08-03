@@ -10,11 +10,11 @@ import java.util.Set;
 
 public interface UserDao extends GenericDAO <User, Long> {
 
-    User getByUsername(String username);
+//    User getByUsername(String username);
+//
+//    boolean isExist(String username);
 
-    boolean isExist(String username);
-
-    Long insertUser(User user, Connection connection);
+//    Long insertUser(User user, Connection connection);
 
     List<User> getAllNotScheduleStudents();
 

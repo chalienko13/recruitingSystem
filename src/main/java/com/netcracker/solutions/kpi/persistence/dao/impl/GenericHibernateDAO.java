@@ -2,6 +2,7 @@ package com.netcracker.solutions.kpi.persistence.dao.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.GenericDAO;
 import org.hibernate.SessionFactory;
+//import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
@@ -60,6 +61,15 @@ public abstract class GenericHibernateDAO <T, PK extends Serializable> extends H
         }
         return Collections.EMPTY_SET;
     }
+
+//    public List<T> queryForList(String queryString, Objects... params){
+//         Query query = getSessionFactory().getCurrentSession().createQuery(queryString);
+//        int rowNum = 1;
+//         for (Object param : params){
+//             query.setParameter(rowNum++, param);
+//         }
+//        return query.getResultList();
+//    }
 
     @Override
     public void deleteAll(Collection<T> entities) {

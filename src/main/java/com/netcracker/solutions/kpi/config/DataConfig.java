@@ -1,6 +1,8 @@
 package com.netcracker.solutions.kpi.config;
 
+import org.hibernate.ejb.HibernatePersistence;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
@@ -9,17 +11,20 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
 @PropertySource("classpath:app.properties")
+@ComponentScan("com.netcracker.solutions.kpi")
 @EnableJpaRepositories("com.netcracker.solutions.kpi")
-@EnableSpringConfigured
+//@EnableSpringConfigured
 public class DataConfig {
 
     private static final String DATABASE_DRIVER_PROP = "db.driver";
@@ -50,19 +55,35 @@ public class DataConfig {
     }
 
     @Bean
-    public LocalSessionFactoryBean sessionFactory() {
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan(ENTITY_PACKAGES);
-        sessionFactory.setHibernateProperties(getHibernateProperties());
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+        entityManagerFactoryBean.setDataSource(dataSource());
+        entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistence.class);
+        entityManagerFactoryBean.setPackagesToScan(ENTITY_PACKAGES);
 
-        return sessionFactory;
+        entityManagerFactoryBean.setJpaProperties(getHibernateProperties());
+
+        return entityManagerFactoryBean;
     }
+
+//    @Bean
+//    public LocalSessionFactoryBean sessionFactory() {
+//        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+//        sessionFactory.setDataSource(dataSource());
+//        sessionFactory.setPackagesToScan(ENTITY_PACKAGES);
+//        sessionFactory.setHibernateProperties(getHibernateProperties());
+//
+//        return sessionFactory;
+//    }
 
     @Bean
     public JpaTransactionManager transactionManager() {
+//        JpaTransactionManager transactionManager = new JpaTransactionManager();
+//        transactionManager.setEntityManagerFactory((EntityManagerFactory) sessionFactory().getObject());
+//
+//        return transactionManager;
         JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(sessionFactory().getObject());
+        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
 
         return transactionManager;
     }

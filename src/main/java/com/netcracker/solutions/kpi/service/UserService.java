@@ -20,10 +20,10 @@ public interface UserService {
 
     boolean isExist(String username);
 
-    boolean insertUser(User user, List<Role> roles);
+    User insertUser(User user, List<Role> roles);
 
     void updateUser(User user);
-
+    // // TODO: 03.08.2016
     boolean updateUserWithRole(User user);
 
     boolean addRole(User user, Role role);
@@ -52,7 +52,7 @@ public interface UserService {
 
     Set<User> getAllEmploees();
 
-    Set<User> getAll();
+    List<User> getAll();
 
     List<Integer> getCountUsersOnInterviewDaysForRole(Role role);
 

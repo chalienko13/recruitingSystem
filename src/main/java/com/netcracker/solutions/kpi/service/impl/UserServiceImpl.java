@@ -5,6 +5,7 @@ import com.netcracker.solutions.kpi.persistence.dao.UserDao;
 import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
 import com.netcracker.solutions.kpi.persistence.model.User;
+import com.netcracker.solutions.kpi.persistence.repository.UserRepository;
 import com.netcracker.solutions.kpi.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -24,65 +26,46 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
-    public User getUserByUsername(String username) {
-        return userDao.getByUsername(username);
+    public User getUserByUsername(String userName) {
+        return userRepository.getByEmail(userName);
     }
 
     @Override
     public User getUserByID(Long id) {
-        return userDao.getByID(id);
+        return userRepository.getOne(id);
     }
 
     @Override
     public boolean isExist(String username) {
-        return userDao.isExist(username);
+        return userRepository.isExistByEmail(username);
     }
 
     @Override
-    public boolean insertUser(User user, List<Role> roles) {
-        try (Connection connection = DataSourceSingleton.getInstance().getConnection()) {
-            connection.setAutoCommit(false);
-            Long generatedUserId = userDao.insertUser(user, connection);
-            user.setId(generatedUserId);
-            for (Role role : roles) {
-                userDao.addRole(user, role, connection);
-            }
-            connection.commit();
-        } catch (SQLException e) {
-            log.error("Cannot insert user {}", e);
-            return false;
-        }
-        return true;
+    public User insertUser(User user, List<Role> roles) {
+        return userRepository.save(user);
     }
 
     @Override
     public void updateUser(User user) {
-        userDao.update(user);
+        userRepository.save(user);
     }
-
+    //// TODO: 03.08.2016
     @Override
     public boolean updateUserWithRole(User user) {
-        try (Connection connection = DataSourceSingleton.getInstance().getConnection()) {
-            connection.setAutoCommit(false);
-            userDao.update(user);
-            userDao.deleteAllRoles(user, connection);
-            for (Role role : user.getRoles())
-                userDao.addRole(user, role, connection);
-            connection.commit();
-        } catch (SQLException e) {
-            log.error("Cannot update user {}", e);
-            return false;
-        }
+        updateUser(user);
         return true;
     }
 
-
+    // TODO: 03.08.2016
     @Override
     public boolean addRole(User user, Role role) {
         return userDao.addRole(user, role);
     }
-
+    // TODO: 03.08.2016
     @Override
     public int deleteRole(User user, Role role) {
         return userDao.deleteRole(user, role);
@@ -95,12 +78,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getActiveStaffByRole(Role role) {
-        return userDao.getActiveStaffByRole(role);
+        if (role != null){
+            return userRepository.getActiveStaffByRole(role.getId());
+        } else {
+            return Collections.EMPTY_LIST;
+        }
     }
 
     @Override
     public void deleteUser(User user) {
-        userDao.delete(user);
+        userRepository.delete(user);
     }
 
     @Override
@@ -157,8 +144,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Set<User> getAll() {
-        return userDao.getAllUnique();
+    public List<User> getAll() {
+        return userRepository.findAll();
     }
 
     @Override

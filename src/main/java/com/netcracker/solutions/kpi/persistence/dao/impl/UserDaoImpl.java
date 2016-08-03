@@ -1,4 +1,5 @@
 package com.netcracker.solutions.kpi.persistence.dao.impl;
+
 import com.netcracker.solutions.kpi.persistence.dao.UserDao;
 import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
@@ -216,29 +217,35 @@ public class UserDaoImpl extends GenericHibernateDAO<User, Long> implements User
         return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_ALL_NOT_SCHEDULE_STUDENTS, extractor);
     }
 
-   /* @Override
+   /*@Override
     public User getByID(Long id) {
         log.info("Looking for user with id = {}", id);
         return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
     }*/
 
-    @Override
-    public com.netcracker.solutions.kpi.persistence.model.User getByUsername(String email) {
-        log.info("Looking for user with email = {}", email);
-        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_EMAIL, extractor, email);
-    }
+//    @Override
+//    public com.netcracker.solutions.kpi.persistence.model.User getByUsername(String email) {
+//        log.info("Looking for user with email = {}", email);
+//        List list = getHibernateTemplate().find("from User where email = ?", email);
+//        if (list.size() != 0) {
+//            return (User) list.get(0);
+//        } else {
+//            return new User();
+//        }
+////        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_EMAIL, extractor, email);
+//    }
 
-    @Override
-    public boolean isExist(String email) {
-        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_EXIST, resultSet -> resultSet.getBoolean(1), email);
-    }
+//    @Override
+//    public boolean isExist(String email) {
+//        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_EXIST, resultSet -> resultSet.getBoolean(1), email);
+//    }
 
-    @Override
-    public Long insertUser(com.netcracker.solutions.kpi.persistence.model.User user, Connection connection) {
-        log.info("Insert user with email = {}", user.getEmail());
-        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_INSERT, connection, user.getEmail(), user.getFirstName(), user.getSecondName(),
-                user.getLastName(), user.getPassword(), user.getConfirmToken(), user.isActive(), user.getRegistrationDate());
-    }
+//    @Override
+//    public Long insertUser(User user, Connection connection) {
+//        log.info("Insert user with email = {}", user.getEmail());
+//        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_INSERT, connection, user.getEmail(), user.getFirstName(), user.getSecondName(),
+//                user.getLastName(), user.getPassword(), user.getConfirmToken(), user.isActive(), user.getRegistrationDate());
+//    }
 
     @Override
     public int[] batchUpdate(List<com.netcracker.solutions.kpi.persistence.model.User> users) {
