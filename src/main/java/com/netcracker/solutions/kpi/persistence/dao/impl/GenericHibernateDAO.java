@@ -3,13 +3,15 @@ package com.netcracker.solutions.kpi.persistence.dao.impl;
 import com.netcracker.solutions.kpi.persistence.dao.GenericDAO;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
+import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
 import java.io.Serializable;
 import java.util.*;
 
-public class GenericHibernateDAO <T, PK extends Serializable> extends HibernateDaoSupport implements GenericDAO <T, PK>{
+@Repository
+public abstract class GenericHibernateDAO <T, PK extends Serializable> extends HibernateDaoSupport implements GenericDAO <T, PK>{
 
     @Autowired
     public void injectSessionFactory(SessionFactory sessionFactory) {

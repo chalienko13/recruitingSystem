@@ -35,7 +35,8 @@ public class User implements UserDetails{
     @Column(name = "last_name")
     private String lastName;
 
-    @ManyToMany
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "id_role", referencedColumnName = "id"))
@@ -96,7 +97,6 @@ public class User implements UserDetails{
     }
 
     public User() {
-
     }
 
     public User(Long id) {
@@ -114,26 +114,6 @@ public class User implements UserDetails{
         this.registrationDate = registrationDate;
         this.confirmToken = confirmToken;
 
-    }
-
-    public User(String email, String firstName, String secondName, String lastName, Set<Role> roles) {
-        this.email = email;
-        this.firstName = firstName;
-        this.secondName = secondName;
-        this.lastName = lastName;
-        this.roles = roles;
-    }
-
-    public User(String email, String firstName, String secondName, String lastName) {
-        this.email = email;
-        this.firstName = firstName;
-        this.secondName = secondName;
-        this.lastName = lastName;
-    }
-
-    public User(String email, String password) {
-        this.email = email;
-        this.password = password;
     }
 
     public List<ScheduleTimePoint> getScheduleTimePoint() {

@@ -20,6 +20,9 @@ public class FormQuestion implements Serializable {
 
     @Column(name = "title")
     private String title;
+
+    @OneToOne(fetch =  FetchType.LAZY)
+    @JoinColumn(name = "id_question_type")
     private QuestionType questionType;
 
     @Column(name = "enable")
@@ -27,9 +30,10 @@ public class FormQuestion implements Serializable {
 
     @Column(name = "mandatory")
     private boolean mandatory;
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "users")
-    private List<Role> questionRoles;
+//
+//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "users")
+//    @Transient
+//    private List<Role> questionRoles;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "formQuestion")
     private List<FormAnswerVariant> formAnswerVariants;
@@ -41,22 +45,22 @@ public class FormQuestion implements Serializable {
     public FormQuestion() {
     }
 
-    public FormQuestion(Long id, String title, QuestionType questionType, boolean enable, boolean mandatory, List<Role> questionRoles, List<FormAnswerVariant> formAnswerVariants) {
+    public FormQuestion(Long id, String title, QuestionType questionType, boolean enable, boolean mandatory, List<FormAnswerVariant> formAnswerVariants) {// List<Role> questionRoles, List<FormAnswerVariant> formAnswerVariants) {
         this.id = id;
         this.title = title;
         this.questionType = questionType;
         this.enable = enable;
         this.mandatory = mandatory;
-        this.questionRoles = questionRoles;
+//        this.questionRoles = questionRoles;
         this.formAnswerVariants = formAnswerVariants;
     }
 
-    public FormQuestion(String title, QuestionType questionType, boolean enable, boolean mandatory, List<Role> questionRoles, List<FormAnswerVariant> formAnswerVariants, int order) {
+    public FormQuestion(String title, QuestionType questionType, boolean enable, boolean mandatory,List<FormAnswerVariant> formAnswerVariants, int order) {// List<Role> questionRoles,
         this.title = title;
         this.questionType = questionType;
         this.enable = enable;
         this.mandatory = mandatory;
-        this.questionRoles = questionRoles;
+//        this.questionRoles = questionRoles;
         this.formAnswerVariants = formAnswerVariants;
         this.order = order;
     }
@@ -82,14 +86,14 @@ public class FormQuestion implements Serializable {
     }
 
 
-    public List<Role> getQuestionRoles() {
-        return questionRoles;
-    }
-
-
-    public void setQuestionRoles(List<Role> questionRoles) {
-        this.questionRoles = questionRoles;
-    }
+//    public List<Role> getQuestionRoles() {
+//        return questionRoles;
+//    }
+//
+//
+//    public void setQuestionRoles(List<Role> questionRoles) {
+//        this.questionRoles = questionRoles;
+//    }
 
     public String getTitle() {
         return title;
