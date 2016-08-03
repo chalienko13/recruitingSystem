@@ -7,9 +7,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * Created by Алексей on 21.04.2016.
- */
 @Entity
 @Table(name = "form_question")
 public class FormQuestion implements Serializable {
@@ -31,12 +28,7 @@ public class FormQuestion implements Serializable {
     @Column(name = "mandatory")
     private boolean mandatory;
 
-    //@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "users")
-    /*@ManyToMany
-    @JoinTable(name = "form_question_role",
-            joinColumns = @JoinColumn(name = "id_form_question", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "id_role", referencedColumnName = "id"))*/
-    @Transient
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "users")
     private List<Role> questionRoles;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "formQuestion")
