@@ -18,5 +18,5 @@ public interface RoleService {
 
 	public boolean isInterviewerRole(Role role);
 	
-	//List<Role> getPossibleInterviewsRoles(ApplicationForm applicationForm, User interviewer);
+	List<Role> getPossibleInterviewsRoles(ApplicationForm applicationForm, User interviewer);
 }
