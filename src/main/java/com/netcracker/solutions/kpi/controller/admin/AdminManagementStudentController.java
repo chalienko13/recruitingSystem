@@ -46,8 +46,8 @@ public class AdminManagementStudentController {
     private RecruitmentService recruitmentService;// = ServiceFactory.getRecruitmentService();
     @Autowired
     private InterviewService interviewService;// = ServiceFactory.getInterviewService();
-    @Autowired
-    private UserTimePriorityService userTimePriorityService;// = ServiceFactory.getUserTimePriorityService();
+    //@Autowired
+    //private UserTimePriorityService userTimePriorityService;// = ServiceFactory.getUserTimePriorityService();
     @Autowired
     private ScheduleTimePointService scheduleTimePointService;// = ServiceFactory.getScheduleTimePointService();
     @Autowired
@@ -301,7 +301,8 @@ public class AdminManagementStudentController {
         return scheduleTimePointService.isScheduleDatesExists();
     }
 
-    @RequestMapping(value = "confirmSelection", method = RequestMethod.POST)
+    //TODO (Olesia)
+    /*@RequestMapping(value = "confirmSelection", method = RequestMethod.POST)
     public String confirmSelection() throws MessagingException {
         Gson gson = new Gson();
         if (userTimePriorityService.isSchedulePrioritiesExistStudent()) {
@@ -322,9 +323,10 @@ public class AdminManagementStudentController {
         processRejectedStudentsSelection(recruitment);
         return gson.toJson(new MessageDto("Selection confirmed.",
                 MessageDtoType.SUCCESS));
-    }
+    }*/
 
-    private void processApprovedStudents(Recruitment recruitment) throws MessagingException {
+    //TODO (Olesia)
+    /*private void processApprovedStudents(Recruitment recruitment) throws MessagingException {
         Status approvedStatus = statusService.getStatusById(APPROVED.getId());
         EmailTemplate approvedTemplate = emailTemplateService.getById(5L);
         List<ApplicationForm> approvedForms = applicationFormService.getByStatusAndRecruitment(approvedStatus,
@@ -334,7 +336,7 @@ public class AdminManagementStudentController {
             User student = applicationForm.getUser();
             userTimePriorityService.createStudentTimePriotities(student);
         }
-    }
+    }*/
 
     private void processRejectedStudentsSelection(Recruitment recruitment) throws MessagingException {
         Status rejectedStatus = statusService.getStatusById(REJECTED.getId());
@@ -354,7 +356,8 @@ public class AdminManagementStudentController {
         return getAllStudent(applicationForms);
     }
 
-    @RequestMapping(value = "getRecruitmentStatus", method = RequestMethod.GET)
+    //TODO(Olesia)
+    /*@RequestMapping(value = "getRecruitmentStatus", method = RequestMethod.GET)
     public String getRecruitmentStatus() {
         Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
         RecruitmentStatusDto recruitmentStatusDto = new RecruitmentStatusDto();
@@ -363,7 +366,7 @@ public class AdminManagementStudentController {
             recruitmentStatusDto.setScheduleExists(userTimePriorityService.isSchedulePrioritiesExistStudent());
         }
         return new Gson().toJson(recruitmentStatusDto);
-    }
+    }*/
 
     @RequestMapping(value = "getTimePoints", method = RequestMethod.GET)
     public List<ScheduleTimePoint> getTimePoints() {

@@ -1,15 +1,11 @@
 package com.netcracker.solutions.kpi.persistence.dao.impl;
 
-import com.netcracker.solutions.kpi.persistence.dao.TimePriorityTypeDao;
-import com.netcracker.solutions.kpi.persistence.model.TimePriorityType;
-import com.netcracker.solutions.kpi.persistence.util.JdbcTemplate;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 @Repository

@@ -69,8 +69,6 @@ public class User implements UserDetails{
     private List<ScheduleTimePoint> scheduleTimePoint;
     @Transient
     private Set<UserAuthority> userAuthorities;
-    @Transient
-    private List<UserTimePriority> userTimePriorities;
 
 
     /******************** UserDetails */
@@ -148,13 +146,6 @@ public class User implements UserDetails{
         this.scheduleTimePoint = scheduleTimePoint;
     }
 
-    public List<UserTimePriority> getUserTimePriorities() {
-        return userTimePriorities;
-    }
-
-    public void setUserTimePriorities(List<UserTimePriority> userTimePriorities) {
-        this.userTimePriorities = userTimePriorities;
-    }
 
     public Long getId() {
         return id;

@@ -2,9 +2,7 @@ package com.netcracker.solutions.kpi.persistence.dao.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.ScheduleTimePointDao;
 import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
-import com.netcracker.solutions.kpi.persistence.model.TimePriorityType;
 import com.netcracker.solutions.kpi.persistence.model.User;
-import com.netcracker.solutions.kpi.persistence.model.UserTimePriority;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,16 +132,7 @@ public class ScheduleTimePointDaoImpl implements ScheduleTimePointDao {
         }, timeID);
     }
 
-    private Set<UserTimePriority> getUserTimePriority(Long timeID, ScheduleTimePoint scheduleTimePoint) {
-        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(USER_TIME_PRIORITY, resultSet -> {
-            Set<UserTimePriority> set = new HashSet<>();
-            do {
-                set.add(new UserTimePriority(new User(resultSet.getLong("id_user")), scheduleTimePoint,
-                        new TimePriorityType(resultSet.getLong("id_priority_type"), resultSet.getString("choice"))));
-            } while (resultSet.next());
-            return set;
-        }, timeID);
-    }
+
 
     @Override
     public ScheduleTimePoint getScheduleTimePointByTimepoint(Timestamp timestamp) {

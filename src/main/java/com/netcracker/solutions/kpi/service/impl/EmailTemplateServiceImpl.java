@@ -52,7 +52,9 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
 		return emailTemplateDao.deleteEmailTemplate(emailTemplate);
 	}
 
-	@Override
+
+	//TODO rewrite with new schedule
+	/*@Override
 	public String showTemplateParams(String inputText, User user) {
 		List<ScheduleTimePoint> finalTimePoints = scheduleTimePointService.getFinalTimePointByUserId(user.getId());
 		StringBuilder finalTimePoint = new StringBuilder();
@@ -71,5 +73,5 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
 			inputText = inputText.replace('%' + entry.getKey() + '%', entry.getValue());
 		}
 		return inputText;
-	}
+	}*/
 }

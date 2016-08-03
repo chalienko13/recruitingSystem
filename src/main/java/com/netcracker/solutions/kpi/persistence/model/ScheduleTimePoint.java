@@ -74,7 +74,7 @@ public class ScheduleTimePoint implements Serializable {
         this.users = users;
     }
 
-    public Set<UserTimePriority> getUserTimePriorities() {
+    public Set<serTimePriority> getUserTimePriorities() {
         return userTimePriorities;
     }
 

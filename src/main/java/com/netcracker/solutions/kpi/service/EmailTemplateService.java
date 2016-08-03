@@ -19,6 +19,7 @@ public interface EmailTemplateService {
 
     int deleteEmailTemplate(EmailTemplate emailTemplate);
 
-    String showTemplateParams(String inputText, User user);
+    //TODO rewrite (Olesia)
+    //String showTemplateParams(String inputText, User user);
 
 }

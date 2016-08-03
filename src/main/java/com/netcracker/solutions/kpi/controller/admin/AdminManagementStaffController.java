@@ -47,9 +47,10 @@ public class AdminManagementStaffController {
     @Autowired
     private PasswordEncoderGeneratorService passwordEncoderGeneratorService;// = PasswordEncoderGeneratorService.getInstance();
 
-    @Autowired
+    //outdated, because of new schedule
+   /* @Autowired
     private UserTimePriorityService userTimePriorityService;// = ServiceFactory.getUserTimePriorityService();
-
+*/
     @Autowired
     private RecruitmentService recruitmentService;// = ServiceFactory.getRecruitmentService();
 
@@ -232,7 +233,9 @@ public class AdminManagementStaffController {
         return userService.getNotMarkedInterviwers();
     }
 
-    @RequestMapping(value = "confirmStaff", method = RequestMethod.GET)
+    //TODO rewrite (Olesia)
+    // outdated method, because of new schedule
+/*    @RequestMapping(value = "confirmStaff", method = RequestMethod.GET)
     public ResponseEntity confirmStaff() {
         if (userTimePriorityService.isSchedulePrioritiesExistStaff()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(TIME_PRIORITY_ALREADY_EXIST));
@@ -261,6 +264,6 @@ public class AdminManagementStaffController {
                 return ResponseEntity.ok(null);
             }
         }
-    }
+    }*/
 
 }
