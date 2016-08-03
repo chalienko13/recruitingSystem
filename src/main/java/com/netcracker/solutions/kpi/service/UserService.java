@@ -22,7 +22,7 @@ public interface UserService {
 
     boolean insertUser(User user, List<Role> roles);
 
-    int updateUser(User user);
+    void updateUser(User user);
 
     boolean updateUserWithRole(User user);
 
@@ -34,7 +34,7 @@ public interface UserService {
 
     List<User> getActiveStaffByRole(Role role);
 
-    int deleteUser(User user);
+    void deleteUser(User user);
 
     Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
 

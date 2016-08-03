@@ -14,17 +14,11 @@ public interface UserDao extends GenericDAO <User, Long> {
 
     boolean isExist(String username);
 
-    int deleteUser(User user);
-
     Long insertUser(User user, Connection connection);
 
     List<User> getAllNotScheduleStudents();
 
     int[] batchUpdate(List<User> users);
-
-    int updateUser(User user);
-
-    int updateUser(User user, Connection connection);
 
     boolean addRole(User user, Role role);
 
@@ -55,8 +49,6 @@ public interface UserDao extends GenericDAO <User, Long> {
     List<Integer> getCountUsersOnInterviewDaysForRole(Role role);
 
     List<User> getActiveStaffByRole(Role role);
-
-    Set<User> getAll();
 
     Long getEmployeeCount();
 

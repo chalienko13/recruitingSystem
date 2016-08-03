@@ -82,7 +82,7 @@
 								<td>{{$parent.foundStudent.secondName}}</td>
 								<td>
 								<div ng-repeat="interview in $parent.foundStudent.interviews">
-									<input type="checkbox" ng-checked="assigning.roles.indexOf(interview.role) > -1"
+									<input type="checkbox" ng-checked="assigning.questionRoles.indexOf(interview.role) > -1"
 									ng-click="chooseRoleForAssign(interview.role)"> {{roleNames[interview.role - 1]}}
 								</div>
 								</td>

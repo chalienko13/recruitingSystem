@@ -3,8 +3,6 @@ package com.netcracker.solutions.kpi.controller.admin;
 import com.netcracker.solutions.kpi.persistence.dto.FormQuestionDto;
 import com.netcracker.solutions.kpi.persistence.model.*;
 import com.netcracker.solutions.kpi.persistence.model.enums.FormQuestionTypeEnum;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.FormAnswerVariantImpl;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.FormQuestionImpl;
 import com.netcracker.solutions.kpi.service.DecisionService;
 import com.netcracker.solutions.kpi.service.FormQuestionService;
 import com.netcracker.solutions.kpi.service.QuestionTypeService;
@@ -67,10 +65,10 @@ public class AdminFormSettingsController {
         roleList.add(role);
         List<FormAnswerVariant> formAnswerVariantList = new ArrayList<>();
         for (String formAnswerVariantString : formQuestionDto.getFormAnswerVariants()) {
-            FormAnswerVariant formAnswerVariant = new FormAnswerVariantImpl(formAnswerVariantString);
+            FormAnswerVariant formAnswerVariant = new FormAnswerVariant(formAnswerVariantString);
             formAnswerVariantList.add(formAnswerVariant);
         }
-        FormQuestion formQuestion = new FormQuestionImpl();
+        FormQuestion formQuestion = new FormQuestion();
         formQuestion.setTitle(formQuestionDto.getQuestion());
         formQuestion.setQuestionType(questionType);
         formQuestion.setEnable(formQuestionDto.isEnable());
@@ -89,12 +87,12 @@ public class AdminFormSettingsController {
                 questionType.getTypeTitle().equals(FormQuestionTypeEnum.SELECT.getTitle()) ||
                 questionType.getTypeTitle().equals(FormQuestionTypeEnum.RADIO.getTitle())) {
             for (String s : formQuestionDto.getFormAnswerVariants()) {
-                FormAnswerVariant formAnswerVariant = new FormAnswerVariantImpl();
+                FormAnswerVariant formAnswerVariant = new FormAnswerVariant();
                 formAnswerVariant.setAnswer(s);
                 formAnswerVariantList.add(formAnswerVariant);
             }
         }
-        FormQuestion formQuestion = new FormQuestionImpl();
+        FormQuestion formQuestion = new FormQuestion();
         formQuestion.setId(formQuestionDto.getId());
         formQuestion.setTitle(formQuestionDto.getQuestion());
         formQuestion.setQuestionType(questionType);

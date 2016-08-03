@@ -7,7 +7,6 @@ import com.netcracker.solutions.kpi.persistence.model.EmailTemplate;
 import com.netcracker.solutions.kpi.persistence.model.Recruitment;
 import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.persistence.model.enums.EmailTemplateEnum;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.RecruitmentImpl;
 import com.netcracker.solutions.kpi.service.EmailTemplateService;
 import com.netcracker.solutions.kpi.service.RecruitmentService;
 import com.netcracker.solutions.kpi.service.UserService;
@@ -40,9 +39,9 @@ public class AdminRecruitmentSettingsController {
     @Autowired
     private SenderService senderService;// = SenderServiceImpl.getInstance();
 
-    private final static String END_DATE_ERROR =  "End Date of recruitment must be after registration deadline and schedule choice deadline";
-    private final static String SCHEDULE_DEADLINE_ERROR =  "Schedule choice deadline must be after registration deadline ";
-    private final static String END_DATE_LESS_THEN_CURRENT_ERROR =  "End of recruitment must be after current date";
+    private final static String END_DATE_ERROR = "End Date of recruitment must be after registration deadline and schedule choice deadline";
+    private final static String SCHEDULE_DEADLINE_ERROR = "Schedule choice deadline must be after registration deadline ";
+    private final static String END_DATE_LESS_THEN_CURRENT_ERROR = "End of recruitment must be after current date";
 
     @RequestMapping(value = "/addRecruitment", method = RequestMethod.POST)
     public ResponseEntity addRecruitmentSettings(@RequestBody RecruitmentSettingsDto recruitmentDto) throws MessagingException {
@@ -53,7 +52,7 @@ public class AdminRecruitmentSettingsController {
         if (null != response) {
             return response;
         }
-        Recruitment recruitment = new RecruitmentImpl();
+        Recruitment recruitment = new Recruitment();
         recruitment.setName(recruitmentDto.getName());
         recruitment.setEndDate(endDate);
         recruitment.setStartDate(new Timestamp(System.currentTimeMillis()));
@@ -87,7 +86,7 @@ public class AdminRecruitmentSettingsController {
     }
 
     @RequestMapping(value = "/editRecruitment", method = RequestMethod.POST)
-    public ResponseEntity editRecruitment(@RequestBody RecruitmentSettingsDto recruitmentDto){
+    public ResponseEntity editRecruitment(@RequestBody RecruitmentSettingsDto recruitmentDto) {
         Timestamp registrationDeadline = Timestamp.valueOf(recruitmentDto.getRegistrationDeadline());
         Timestamp scheduleChoicesDeadline = Timestamp.valueOf(recruitmentDto.getScheduleChoicesDeadline());
         Timestamp endDate = Timestamp.valueOf(recruitmentDto.getEndDate());

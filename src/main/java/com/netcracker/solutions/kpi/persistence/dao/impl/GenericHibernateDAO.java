@@ -4,8 +4,10 @@ import com.netcracker.solutions.kpi.persistence.dao.GenericDAO;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
+import org.springframework.util.CollectionUtils;
 
 import java.io.Serializable;
+import java.util.*;
 
 public class GenericHibernateDAO <T, PK extends Serializable> extends HibernateDaoSupport implements GenericDAO <T, PK>{
 
@@ -38,5 +40,27 @@ public class GenericHibernateDAO <T, PK extends Serializable> extends HibernateD
     @Override
     public void delete(T persistentObject) {
         getHibernateTemplate().delete(persistentObject);
+    }
+
+    @Override
+    public List<T> getAll() {
+        return getHibernateTemplate().loadAll(type);
+    }
+
+    @Override
+    public Set<T> getAllUnique() {
+        List<T> allEntities = getAll();
+        if(!CollectionUtils.isEmpty(allEntities)) {
+            Set<T> uniqueEntities = new HashSet<>();
+            uniqueEntities.addAll(allEntities);
+
+            return uniqueEntities;
+        }
+        return Collections.EMPTY_SET;
+    }
+
+    @Override
+    public void deleteAll(Collection<T> entities) {
+        getHibernateTemplate().deleteAll(entities);
     }
 }

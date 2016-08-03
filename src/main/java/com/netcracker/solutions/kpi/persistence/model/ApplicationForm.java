@@ -1,5 +1,9 @@
 package com.netcracker.solutions.kpi.persistence.model;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
@@ -7,49 +11,228 @@ import java.util.List;
 /**
  * Created by Алексей on 21.04.2016.
  */
-public interface ApplicationForm extends Serializable {
+@Entity
+@Table(name = "application_form")
+public class ApplicationForm implements Serializable {
+    private static final long serialVersionUID = 2573334038825578138L;
+    @Id
+    @GeneratedValue
+    @Column(name = "id", unique = true, nullable = false)
+    private Long id;
 
-	Long getId();
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_status")
+    private Status status;
 
-	void setId(Long id);
+    @Column(name = "is_active")
+    private boolean active;
 
-	Status getStatus();
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_recruitment")
+    private Recruitment recruitment;
 
-	void setStatus(Status status);
+    @Column(name = "photo_scope")
+    private String photoScope;
 
-	boolean isActive();
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_user")
+    private User user;
 
-	void setActive(boolean active);
+    @Column(name = "date_create")
+    private Timestamp dateCreate;
 
-	Recruitment getRecruitment();
+    @Column(name = "feedback")
+    private String feedback;
+    @Transient
+    private List<Interview> interviews;
 
-	void setRecruitment(Recruitment recruitment);
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "applicationForm")
+    private List<FormAnswer> answers;
+    @Transient
+    private List<FormQuestion> questions;
 
-	String getPhotoScope();
+    public ApplicationForm() {
+    }
 
-	void setPhotoScope(String photoScope);
+    public ApplicationForm(Status status, boolean active, Recruitment recruitment, String photoScope, User user,
+                           Timestamp dateCreate, List<Interview> interviews, List<FormAnswer> answers, List<FormQuestion> questions) {
+        this.status = status;
+        this.active = active;
+        this.recruitment = recruitment;
+        this.photoScope = photoScope;
+        this.user = user;
+        this.dateCreate = dateCreate;
+        this.interviews = interviews;
+        this.answers = answers;
+        this.questions = questions;
+    }
 
-	User getUser();
+    public ApplicationForm(Long id, Status status, User user) {
+        this.id = id;
+        this.status = status;
+        this.user = user;
+    }
 
-	void setUser(User user);
+    public ApplicationForm(Long id, Status status, boolean active, Recruitment recruitment, String photoScope,
+                           User user, Timestamp dateCreate, List<Interview> interviews, List<FormAnswer> answers, List<FormQuestion> questions) {
+        this.id = id;
+        this.status = status;
+        this.active = active;
+        this.recruitment = recruitment;
+        this.photoScope = photoScope;
+        this.user = user;
+        this.dateCreate = dateCreate;
+        this.interviews = interviews;
+        this.answers = answers;
+        this.questions = questions;
+    }
 
-	Timestamp getDateCreate();
+    public ApplicationForm(Long id) {
+        this.id = id;
+    }
 
-	void setDateCreate(Timestamp dateCreate);
+    public Long getId() {
+        return id;
+    }
 
-	String getFeedback();
 
-	void setFeedback(String feedback);
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	List<Interview> getInterviews();
 
-	void setInterviews(List<Interview> interviews);
+    public Status getStatus() {
+        return status;
+    }
 
-	List<FormAnswer> getAnswers();
 
-	void setAnswers(List<FormAnswer> answers);
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
-	List<FormQuestion> getQuestions();
 
-	void setQuestions(List<FormQuestion> questions);
+    public boolean isActive() {
+        return active;
+    }
+
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+
+    public Recruitment getRecruitment() {
+        return recruitment;
+    }
+
+
+    public void setRecruitment(Recruitment recruitment) {
+        this.recruitment = recruitment;
+    }
+
+
+    public String getPhotoScope() {
+        return photoScope;
+    }
+
+
+    public void setPhotoScope(String photoScope) {
+        this.photoScope = photoScope;
+    }
+
+
+    public User getUser() {
+        return user;
+    }
+
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+
+    public Timestamp getDateCreate() {
+        return dateCreate;
+    }
+
+
+    public void setDateCreate(Timestamp dateCreate) {
+        this.dateCreate = dateCreate;
+    }
+
+
+    public List<Interview> getInterviews() {
+        return interviews;
+    }
+
+
+    public void setInterviews(List<Interview> interviews) {
+        this.interviews = interviews;
+    }
+
+
+    public List<FormAnswer> getAnswers() {
+        return answers;
+    }
+
+
+    public void setAnswers(List<FormAnswer> answers) {
+        this.answers = answers;
+    }
+
+
+    public List<FormQuestion> getQuestions() {
+        return questions;
+    }
+
+
+    public void setQuestions(List<FormQuestion> questions) {
+        this.questions = questions;
+    }
+
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
+    }
+
+    @Override
+    public String toString() {
+        return "ApplicationFormImpl{" +
+                "id=" + id +
+                ", status=" + status +
+                ", active=" + active +
+                ", recruitment=" + recruitment +
+                ", photoScope='" + photoScope + '\'' +
+                ", user=" + user +
+                ", dateCreate=" + dateCreate +
+                ", feedback='" + feedback + '\'' +
+                '}';
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31).append(active).append(dateCreate).append(id).append(photoScope)
+                .append(status).toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ApplicationForm other = (ApplicationForm) obj;
+        return new EqualsBuilder().append(active, other.active).append(dateCreate, other.dateCreate)
+                .append(id, other.id).append(interviews, other.interviews).append(photoScope, other.photoScope)
+                .append(status, other.status).isEquals();
+    }
+
+
 }

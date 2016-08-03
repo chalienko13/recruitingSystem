@@ -2,17 +2,12 @@ package com.netcracker.solutions.kpi.persistence.dao.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.FormQuestionDao;
 import com.netcracker.solutions.kpi.persistence.model.*;
-import com.netcracker.solutions.kpi.persistence.model.impl.proxy.FormAnswerVariantProxy;
-import com.netcracker.solutions.kpi.persistence.model.impl.proxy.RoleProxy;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.FormQuestionImpl;
-import com.netcracker.solutions.kpi.persistence.util.JdbcTemplate;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +21,12 @@ public class FormQuestionDaoImpl implements FormQuestionDao {
     private JdbcDaoSupport jdbcDaoSupport;
 
     private ResultSetExtractor<FormQuestion> extractor = resultSet -> {
-        FormQuestion formQuestion = new FormQuestionImpl();
+        FormQuestion formQuestion = new FormQuestion();
         formQuestion.setId(resultSet.getLong(ID_COL));
         formQuestion.setEnable(resultSet.getBoolean(ENABLE_COL));
         formQuestion.setMandatory(resultSet.getBoolean(MANDATORY_COL));
         formQuestion.setOrder(resultSet.getInt(ORDER_COL));
-        formQuestion.setRoles(getRoles(resultSet.getLong(ID_COL)));
+        formQuestion.setQuestionRoles(getRoles(resultSet.getLong(ID_COL)));
         formQuestion.setTitle(resultSet.getString(TITLE_COL));
         formQuestion.setQuestionType(new QuestionType(resultSet.getLong(ID_QUESTION_TYPE_COL),
                 resultSet.getString(QuestionTypeDaoImpl.TYPE_TITLE_COL)));
@@ -184,7 +179,7 @@ public class FormQuestionDaoImpl implements FormQuestionDao {
                 resultSet -> {
                     List<FormAnswerVariant> answersVariants = new ArrayList<>();
                     do {
-                        answersVariants.add(new FormAnswerVariantProxy(resultSet.getLong(FormAnswerVariantDaoImpl.ID_COL)));
+                        answersVariants.add(new FormAnswerVariant(resultSet.getLong(FormAnswerVariantDaoImpl.ID_COL)));
                     } while (resultSet.next());
                     return answersVariants;
                 }, formQuestionID);

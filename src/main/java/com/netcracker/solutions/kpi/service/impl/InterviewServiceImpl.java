@@ -4,8 +4,6 @@ import com.netcracker.solutions.kpi.persistence.dao.DataSourceSingleton;
 import com.netcracker.solutions.kpi.persistence.dao.FormAnswerDao;
 import com.netcracker.solutions.kpi.persistence.dao.InterviewDao;
 import com.netcracker.solutions.kpi.persistence.model.*;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.FormAnswerImpl;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.InterviewImpl;
 import com.netcracker.solutions.kpi.service.ApplicationFormService;
 import com.netcracker.solutions.kpi.service.FormQuestionService;
 import com.netcracker.solutions.kpi.service.InterviewService;
@@ -139,7 +137,7 @@ public class InterviewServiceImpl implements InterviewService {
 		log.info("Interviewer {} is assigning student {} for role {}", interviewer.getId(), applicationForm.getId(), role.getRoleName());
 		if (roleService.isInterviewerRole(role)
 				&& !applicationFormService.isAssignedForThisRole(applicationForm, role)) {
-			Interview interview = new InterviewImpl();
+			Interview interview = new Interview();
 			interview.setInterviewer(interviewer);
 			interview.setApplicationForm(applicationForm);
 			interview.setDate(new Timestamp(System.currentTimeMillis()));
@@ -148,7 +146,7 @@ public class InterviewServiceImpl implements InterviewService {
 			List<FormQuestion> questions = questionService.getEnableByRole(role);
 			List<FormAnswer> answers = new ArrayList<>();
 			for (FormQuestion formQuestion : questions) {
-				FormAnswer formAnswer = new FormAnswerImpl();
+				FormAnswer formAnswer = new FormAnswer();
 				formAnswer.setFormQuestion(formQuestion);
 				formAnswer.setInterview(interview);
 				answers.add(formAnswer);

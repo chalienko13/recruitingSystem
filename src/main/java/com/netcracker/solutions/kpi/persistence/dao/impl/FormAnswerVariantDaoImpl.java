@@ -3,16 +3,12 @@ package com.netcracker.solutions.kpi.persistence.dao.impl;
 import com.netcracker.solutions.kpi.persistence.dao.FormAnswerVariantDao;
 import com.netcracker.solutions.kpi.persistence.model.FormAnswerVariant;
 import com.netcracker.solutions.kpi.persistence.model.FormQuestion;
-import com.netcracker.solutions.kpi.persistence.model.impl.proxy.FormQuestionProxy;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.FormAnswerVariantImpl;
-import com.netcracker.solutions.kpi.persistence.util.JdbcTemplate;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.util.List;
 
@@ -29,10 +25,10 @@ public class FormAnswerVariantDaoImpl implements FormAnswerVariantDao {
     }*/
 
     private ResultSetExtractor<FormAnswerVariant> extractor = resultSet -> {
-        FormAnswerVariant formAnswerVariant = new FormAnswerVariantImpl();
+        FormAnswerVariant formAnswerVariant = new FormAnswerVariant();
         formAnswerVariant.setId(resultSet.getLong(ID_COL));
         formAnswerVariant.setAnswer(resultSet.getString("" + ANSWER_COL + ""));
-        formAnswerVariant.setFormQuestion(new FormQuestionProxy(resultSet.getLong(ID_QUESTION_COL)));
+        formAnswerVariant.setFormQuestion(new FormQuestion(resultSet.getLong(ID_QUESTION_COL)));
         return formAnswerVariant;
     };
 

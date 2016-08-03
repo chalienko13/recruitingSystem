@@ -2,12 +2,6 @@ package com.netcracker.solutions.kpi.persistence.dao.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.FormAnswerDao;
 import com.netcracker.solutions.kpi.persistence.model.*;
-import com.netcracker.solutions.kpi.persistence.model.impl.proxy.ApplicationFormProxy;
-import com.netcracker.solutions.kpi.persistence.model.impl.proxy.FormAnswerVariantProxy;
-import com.netcracker.solutions.kpi.persistence.model.impl.proxy.FormQuestionProxy;
-import com.netcracker.solutions.kpi.persistence.model.impl.proxy.InterviewProxy;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.FormAnswerImpl;
-import com.netcracker.solutions.kpi.persistence.util.JdbcTemplate;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,15 +19,15 @@ public class FormAnswerDaoImpl implements FormAnswerDao {
     private JdbcDaoSupport jdbcDaoSupport;
 
     private ResultSetExtractor<FormAnswer> extractor = resultSet -> {
-        FormAnswer formAnswer = new FormAnswerImpl();
+        FormAnswer formAnswer = new FormAnswer();
         formAnswer.setId(resultSet.getLong(ID_COL));
         formAnswer.setAnswer(resultSet.getString(ANSWER_COL));
-        formAnswer.setInterview(new InterviewProxy(resultSet.getLong(ID_INTERVIEW_COL)));
-        formAnswer.setApplicationForm(new ApplicationFormProxy(resultSet.getLong(ID_APPLICATION_FORM_COL)));
+        formAnswer.setInterview(new Interview(resultSet.getLong(ID_INTERVIEW_COL)));
+        formAnswer.setApplicationForm(new ApplicationForm(resultSet.getLong(ID_APPLICATION_FORM_COL)));
         long answerVariantId = resultSet.getLong(ID_VARIANT_COL);
         if (answerVariantId != 0)
-            formAnswer.setFormAnswerVariant(new FormAnswerVariantProxy(resultSet.getLong(ID_VARIANT_COL)));
-        formAnswer.setFormQuestion(new FormQuestionProxy(resultSet.getLong(ID_QUESTION_COL)));
+            formAnswer.setFormAnswerVariant(new FormAnswerVariant(resultSet.getLong(ID_VARIANT_COL)));
+        formAnswer.setFormQuestion(new FormQuestion(resultSet.getLong(ID_QUESTION_COL)));
         return formAnswer;
     };
 

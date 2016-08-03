@@ -4,13 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.netcracker.solutions.kpi.persistence.dto.StudentAnswerDto;
-import com.netcracker.solutions.kpi.persistence.model.ApplicationForm;
-import com.netcracker.solutions.kpi.persistence.model.FormAnswer;
-import com.netcracker.solutions.kpi.persistence.model.FormAnswerVariant;
-import com.netcracker.solutions.kpi.persistence.model.FormQuestion;
-import com.netcracker.solutions.kpi.persistence.model.Interview;
+import com.netcracker.solutions.kpi.persistence.model.*;
 import com.netcracker.solutions.kpi.persistence.model.enums.FormQuestionTypeEnum;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.FormAnswerImpl;
 import com.netcracker.solutions.kpi.service.FormAnswerVariantService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -59,7 +54,7 @@ public class FormAnswerProcessor {
 	}
 
 	private FormAnswer createFormAnswer() {
-		FormAnswer answer = new FormAnswerImpl();
+		FormAnswer answer = new FormAnswer();
 		answer.setApplicationForm(applicationForm);
 		answer.setInterview(interview);
 		answer.setFormQuestion(formQuestion);

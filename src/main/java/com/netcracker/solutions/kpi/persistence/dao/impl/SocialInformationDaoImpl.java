@@ -4,8 +4,6 @@ import com.netcracker.solutions.kpi.persistence.dao.SocialInformationDao;
 import com.netcracker.solutions.kpi.persistence.model.SocialInformation;
 import com.netcracker.solutions.kpi.persistence.model.SocialNetwork;
 import com.netcracker.solutions.kpi.persistence.model.User;
-import com.netcracker.solutions.kpi.persistence.model.impl.proxy.UserProxy;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.SocialInformationImpl;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +28,7 @@ public class SocialInformationDaoImpl implements SocialInformationDao {
     private ResultSetExtractor<SocialInformation> extractor = resultSet -> {
         long socialInformationId = resultSet.getLong("id");
         SocialInformation socialInformation;
-        socialInformation = new SocialInformationImpl(socialInformationId,
+        socialInformation = new SocialInformation(socialInformationId,
                 resultSet.getString("access_info"), new User(resultSet.getLong("id_user")),
                 new SocialNetwork(resultSet.getLong("id_social_network"), resultSet.getString("title")),resultSet.getLong("id_user_in_social_network"));
         return socialInformation;

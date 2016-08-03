@@ -7,9 +7,9 @@ import com.netcracker.solutions.kpi.persistence.dto.UserDto;
 import com.netcracker.solutions.kpi.persistence.dto.UserRateDto;
 import com.netcracker.solutions.kpi.persistence.model.EmailTemplate;
 import com.netcracker.solutions.kpi.persistence.model.Interview;
-import com.netcracker.solutions.kpi.persistence.model.enums.RoleEnum;
 import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.User;
+import com.netcracker.solutions.kpi.persistence.model.enums.RoleEnum;
 import com.netcracker.solutions.kpi.service.*;
 import com.netcracker.solutions.kpi.service.util.SenderService;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -56,7 +56,7 @@ public class AdminManagementStaffController {
     @Autowired
     private EmailTemplateService emailTemplateService;// = ServiceFactory.getEmailTemplateService();
 
-    private final static String NEED_MORE_SOFT  = "Need select more then 0 soft";
+    private final static String NEED_MORE_SOFT = "Need select more then 0 soft";
 
     private final static String NEED_MORE_TECH = "Need select more then 0 tech";
 
@@ -78,10 +78,10 @@ public class AdminManagementStaffController {
     @RequestMapping(value = "showFilteredEmployees", method = RequestMethod.POST)
     public List<com.netcracker.solutions.kpi.persistence.model.User> showFilteredEmployees(@RequestBody StaffFiltrationParamsDto staffFiltrationParamsDto) {
         List<Role> neededRoles = new ArrayList<>();
-        for(Long roleId: staffFiltrationParamsDto.getRolesId())
+        for (Long roleId : staffFiltrationParamsDto.getRolesId())
             neededRoles.add(roleService.getRoleById(roleId));
 
-        Long fromRow = calculateStartRow(staffFiltrationParamsDto.getPageNum(),staffFiltrationParamsDto.getRowsNum());
+        Long fromRow = calculateStartRow(staffFiltrationParamsDto.getPageNum(), staffFiltrationParamsDto.getRowsNum());
 
         return userService.getFilteredEmployees(fromRow, staffFiltrationParamsDto.getRowsNum(),
                 staffFiltrationParamsDto.getSortingCol(), staffFiltrationParamsDto.isIncrease(),
@@ -102,10 +102,10 @@ public class AdminManagementStaffController {
     @RequestMapping(value = "getCountOfEmployeeFiltered", method = RequestMethod.POST)
     public Long getCountOfEmployeeFiltered(@RequestBody StaffFiltrationParamsDto staffFiltrationParamsDto) {
         List<Role> neededRoles = new ArrayList<>();
-        for(Long roleId: staffFiltrationParamsDto.getRolesId())
+        for (Long roleId : staffFiltrationParamsDto.getRolesId())
             neededRoles.add(roleService.getRoleById(roleId));
 
-        Long fromRow = calculateStartRow(staffFiltrationParamsDto.getPageNum(),staffFiltrationParamsDto.getRowsNum());
+        Long fromRow = calculateStartRow(staffFiltrationParamsDto.getPageNum(), staffFiltrationParamsDto.getRowsNum());
 
         return userService.getAllEmployeeCountFiltered(fromRow, staffFiltrationParamsDto.getRowsNum(),
                 staffFiltrationParamsDto.getSortingCol(), staffFiltrationParamsDto.isIncrease(),
@@ -157,7 +157,7 @@ public class AdminManagementStaffController {
             userRoles.add(roleService.getRoleByTitle("ROLE_" + role.getRoleName()));
         }
         user.setRoles(userRoles);
-        if (userService.updateUserWithRole(user)){
+        if (userService.updateUserWithRole(user)) {
             return ResponseEntity.ok().body(null);
         } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(CAN_NOT_EDIT);

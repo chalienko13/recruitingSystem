@@ -24,10 +24,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
-    /*public UserServiceImpl(UserDao userDao) {
-        this.userDao = userDao;
-    }*/
-
     @Override
     public User getUserByUsername(String username) {
         return userDao.getByUsername(username);
@@ -61,15 +57,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int updateUser(User user) {
-        return userDao.updateUser(user);
+    public void updateUser(User user) {
+        userDao.update(user);
     }
 
     @Override
     public boolean updateUserWithRole(User user) {
         try (Connection connection = DataSourceSingleton.getInstance().getConnection()) {
             connection.setAutoCommit(false);
-            userDao.updateUser(user, connection);
+            userDao.update(user);
             userDao.deleteAllRoles(user, connection);
             for (Role role : user.getRoles())
                 userDao.addRole(user, role, connection);
@@ -103,8 +99,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int deleteUser(User user) {
-        return userDao.deleteUser(user);
+    public void deleteUser(User user) {
+        userDao.delete(user);
     }
 
     @Override
@@ -162,7 +158,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Set<User> getAll() {
-        return userDao.getAll();
+        return userDao.getAllUnique();
     }
 
     @Override

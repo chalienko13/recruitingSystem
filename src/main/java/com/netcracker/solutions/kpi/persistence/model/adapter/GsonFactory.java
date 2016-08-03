@@ -2,9 +2,9 @@ package com.netcracker.solutions.kpi.persistence.model.adapter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.ApplicationFormImpl;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.FormQuestionImpl;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.InterviewImpl;
+import com.netcracker.solutions.kpi.persistence.model.ApplicationForm;
+import com.netcracker.solutions.kpi.persistence.model.FormQuestion;
+import com.netcracker.solutions.kpi.persistence.model.Interview;
 
 /**
  * Created by Chalienko on 25.04.2016.
@@ -17,7 +17,7 @@ public class GsonFactory {
 
     public static Gson getApplicationFormGson() {
         if (applicationFormGson == null){
-            applicationFormGson = new GsonBuilder().registerTypeAdapter(ApplicationFormImpl.class,
+            applicationFormGson = new GsonBuilder().registerTypeAdapter(ApplicationForm.class,
                     new ApplicationFormAdapter())
                     .setPrettyPrinting()
                     .create();
@@ -27,7 +27,7 @@ public class GsonFactory {
 
     public static Gson getInterviewGson() {
         if (interviewGson == null){
-            interviewGson = new GsonBuilder().registerTypeAdapter(InterviewImpl.class, new InterviewAdapter())
+            interviewGson = new GsonBuilder().registerTypeAdapter(Interview.class, new InterviewAdapter())
                     .setPrettyPrinting()
                     .create();
         }
@@ -36,7 +36,7 @@ public class GsonFactory {
 
     public static Gson getFormQuestionGson() {
         if (formQuestionGson == null) {
-            formQuestionGson = new GsonBuilder().registerTypeAdapter(FormQuestionImpl.class, new FormQuestionAdapter())
+            formQuestionGson = new GsonBuilder().registerTypeAdapter(FormQuestion.class, new FormQuestionAdapter())
                     .setPrettyPrinting()
                     .create();
         }

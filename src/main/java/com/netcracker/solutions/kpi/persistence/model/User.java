@@ -13,10 +13,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Created by Chalienko on 13.04.2016.
- */
-
 @Entity
 @Table(name = "user")
 public class User implements UserDetails{

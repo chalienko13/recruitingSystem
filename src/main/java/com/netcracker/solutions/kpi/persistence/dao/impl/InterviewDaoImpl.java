@@ -2,11 +2,6 @@ package com.netcracker.solutions.kpi.persistence.dao.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.InterviewDao;
 import com.netcracker.solutions.kpi.persistence.model.*;
-import com.netcracker.solutions.kpi.persistence.model.impl.proxy.ApplicationFormProxy;
-import com.netcracker.solutions.kpi.persistence.model.impl.proxy.FormAnswerProxy;
-import com.netcracker.solutions.kpi.persistence.model.impl.proxy.RoleProxy;
-import com.netcracker.solutions.kpi.persistence.model.impl.proxy.UserProxy;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.InterviewImpl;
 import com.netcracker.solutions.kpi.persistence.util.JdbcTemplate;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
 import org.slf4j.Logger;
@@ -50,7 +45,7 @@ public class InterviewDaoImpl implements InterviewDao {
     }*/
 
     private ResultSetExtractor<Interview> extractor = resultSet -> {
-        Interview interview = new InterviewImpl();
+        Interview interview = new Interview();
         interview.setId(resultSet.getLong("id"));
         interview.setAdequateMark(resultSet.getBoolean("adequate_mark"));
         interview.setDate(resultSet.getTimestamp("date"));
@@ -59,7 +54,7 @@ public class InterviewDaoImpl implements InterviewDao {
             interview.setMark(null);
         }
         interview.setRole(new Role(resultSet.getLong("interviewer_role")));
-        interview.setApplicationForm(new ApplicationFormProxy(resultSet.getLong("id_application_form")));
+        interview.setApplicationForm(new ApplicationForm(resultSet.getLong("id_application_form")));
         interview.setInterviewer(new User(resultSet.getLong("id_interviewer")));
         interview.setAnswers(getAnswers(resultSet.getLong("id")));
         return interview;
@@ -145,7 +140,7 @@ public class InterviewDaoImpl implements InterviewDao {
 
     private List<FormAnswer> getAnswers(Long interviewId) {
         return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_ANSWERS, resultSet -> {
-            FormAnswer formAnswerProxy = new FormAnswerProxy(resultSet.getLong("id"));
+            FormAnswer formAnswerProxy = new FormAnswer(resultSet.getLong("id"));
             return formAnswerProxy;
         }, interviewId);
     }

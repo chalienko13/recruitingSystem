@@ -1,13 +1,8 @@
 package com.netcracker.solutions.kpi.persistence.dao.impl;
-
-
 import com.netcracker.solutions.kpi.persistence.dao.UserDao;
 import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
 import com.netcracker.solutions.kpi.persistence.model.SocialInformation;
-import com.netcracker.solutions.kpi.persistence.model.impl.proxy.RoleProxy;
-import com.netcracker.solutions.kpi.persistence.model.impl.proxy.ScheduleTimePointProxy;
-import com.netcracker.solutions.kpi.persistence.model.impl.proxy.SocialInformationProxy;
 import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
 import org.slf4j.Logger;
@@ -198,8 +193,8 @@ public class UserDaoImpl extends GenericHibernateDAO<User, Long> implements User
             "u.password, u.confirm_token, u.is_active, u.registration_date\n" +
             "from public.user u JOIN user_time_final uf on uf.id_user=u.id and uf.id_time_point IS NOT NULL";
 
-    public UserDaoImpl(Class<User> type) {
-        super(type);
+    public UserDaoImpl() {
+        super(User.class);
     }
 
     @Override
@@ -258,28 +253,28 @@ public class UserDaoImpl extends GenericHibernateDAO<User, Long> implements User
         }
         return jdbcDaoSupport.getJdbcTemplate().batchUpdate(SQL_UPDATE, objects);
     }
-
+/*
     @Override
     public int updateUser(com.netcracker.solutions.kpi.persistence.model.User user) {
         log.info("Update user with id = {}", user.getId());
         return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE, user.getEmail(), user.getFirstName(), user.getSecondName(),
                 user.getLastName(), user.getPassword(), user.getConfirmToken(), user.isActive(), user.getRegistrationDate(),
                 user.getId());
-    }
+    }*/
 
-    @Override
+   /* @Override
     public int updateUser(com.netcracker.solutions.kpi.persistence.model.User user, Connection connection) {
         log.info("Update user with id = {}", user.getId());
         return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE, connection, user.getEmail(), user.getFirstName(), user.getSecondName(),
                 user.getLastName(), user.getPassword(), user.getConfirmToken(), user.isActive(), user.getRegistrationDate(),
                 user.getId());
-    }
+    }*/
 
-    @Override
+   /* @Override
     public int deleteUser(com.netcracker.solutions.kpi.persistence.model.User user) {
         log.info("Delete user with id = {}", user.getId());
         return jdbcDaoSupport.getJdbcTemplate().update(SQL_DELETE, user.getId());
-    }
+    }*/
 
     @Override
     public boolean addRole(com.netcracker.solutions.kpi.persistence.model.User user, Role role) {
@@ -398,11 +393,11 @@ public class UserDaoImpl extends GenericHibernateDAO<User, Long> implements User
         return jdbcDaoSupport.getJdbcTemplate().queryForSet(SQL_GET_ALL_EMPLOYEES, extractor);
     }
 
-    @Override
+   /* @Override
     public Set<com.netcracker.solutions.kpi.persistence.model.User> getAll() {
         log.info("Get all Users");
         return jdbcDaoSupport.getJdbcTemplate().queryForSet(SQL_GET_ALL, extractor);
-    }
+    }*/
 
     private Set<Role> getRoles(Long userID) {
         return jdbcDaoSupport.getJdbcTemplate().queryWithParameters("SELECT ur.id_role, r.role \n" +
@@ -425,7 +420,7 @@ public class UserDaoImpl extends GenericHibernateDAO<User, Long> implements User
                 "WHERE si.id_user = ?;", resultSet -> {
             List<SocialInformation> set = new ArrayList<>();
             do {
-                set.add(new SocialInformationProxy(resultSet.getLong("id")));
+                set.add(new SocialInformation(resultSet.getLong("id")));
             } while (resultSet.next());
             return set;
         }, userID);
@@ -454,7 +449,7 @@ public class UserDaoImpl extends GenericHibernateDAO<User, Long> implements User
         return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_FINAL_TIME_POINT, resultSet -> {
             List<ScheduleTimePoint> list = new ArrayList<ScheduleTimePoint>();
             do {
-                list.add(new ScheduleTimePointProxy(resultSet.getLong("id")));
+                list.add(new ScheduleTimePoint(resultSet.getLong("id")));
             } while (resultSet.next());
             return list;
         }, timeID);

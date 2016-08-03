@@ -2,7 +2,6 @@ package com.netcracker.solutions.kpi.controller.auth;
 
 import com.netcracker.solutions.kpi.persistence.model.SocialInformation;
 import com.netcracker.solutions.kpi.persistence.model.SocialNetwork;
-import com.netcracker.solutions.kpi.persistence.model.impl.real.SocialInformationImpl;
 import com.netcracker.solutions.kpi.persistence.model.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,14 +17,14 @@ import java.util.LinkedHashSet;
 public class UserAuthentication implements Authentication {
 
 
-    private com.netcracker.solutions.kpi.persistence.model.User user;
+    private User user;
     private boolean authenticated = true;
     private Long idUserSocialNetwork;
     private Long idNetwork;
 
     public UserAuthentication(String email, SocialNetwork socialNetwork, String accessToken, Long userSocialId) {
         user = new User();
-        SocialInformation socialInformation = new SocialInformationImpl
+        SocialInformation socialInformation = new SocialInformation
                 (
                         socialNetwork, accessToken, new Timestamp(System.currentTimeMillis())
                 );
@@ -38,12 +37,12 @@ public class UserAuthentication implements Authentication {
         this.idNetwork = socialNetwork.getId();
     }
 
-    public UserAuthentication(com.netcracker.solutions.kpi.persistence.model.User user) {
+    public UserAuthentication(User user) {
         this.user = user;
-//        user.getRoles();
+//        user.getQuestionRoles();
     }
 
-    public UserAuthentication(com.netcracker.solutions.kpi.persistence.model.User user, Long idUserSocialNetwork, Long idNetwork) {
+    public UserAuthentication(User user, Long idUserSocialNetwork, Long idNetwork) {
         this.user = user;
         this.idUserSocialNetwork = idUserSocialNetwork;
         this.idNetwork = idNetwork;
@@ -65,7 +64,7 @@ public class UserAuthentication implements Authentication {
     }
 
     @Override
-    public com.netcracker.solutions.kpi.persistence.model.User getDetails() {
+    public User getDetails() {
         return user;
     }
 
