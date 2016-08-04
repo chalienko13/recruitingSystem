@@ -33,11 +33,11 @@ public interface ApplicationFormService {
 
     Long getCountApprovedAppForm();
 
-    int deleteApplicationForm(ApplicationForm applicationForm);
+    void deleteApplicationForm(ApplicationForm applicationForm);
 
     boolean insertApplicationForm(ApplicationForm applicationForm);
 
-    int updateApplicationForm(ApplicationForm applicationForm);
+    void updateApplicationForm(ApplicationForm applicationForm);
 
     List<ApplicationForm> getAll();
 

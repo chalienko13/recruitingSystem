@@ -6,7 +6,6 @@ import com.netcracker.solutions.kpi.persistence.model.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Chalienko on 13.04.2016.
@@ -20,19 +19,20 @@ public interface UserService {
 
     boolean isExist(String username);
 
-    User insertUser(User user, List<Role> roles);
+    void createUser(User user);
 
     void updateUser(User user);
     // // TODO: 03.08.2016
     boolean updateUserWithRole(User user);
 
-    boolean addRole(User user, Role role);
+    void addRole(User user, Role role);
 
-    int deleteRole(User user, Role role);
+    //Seems as NOT USED
+    //int deleteRole(User user, Role role);
 
     List<User> getAllNotScheduleStudents();
 
-    List<User> getActiveStaffByRole(Role role);
+    List getActiveStaffByRole(Role role);
 
     void deleteUser(User user);
 
@@ -42,15 +42,19 @@ public interface UserService {
 
     User getUserByToken(String token);
 
-    Set<User> getAssignedStudents(Long id);
+    //NOT USED
+    //Set<User> getAssignedStudents(Long id);
 
-    Set<User> getAllStudents();
+    //NOT USED
+    //Set<User> getAllStudents();
 
-    List<User> getStudentsFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase);
+    //NOT USED
+    //List<User> getStudentsFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase);
 
     List<User> getEmployeesFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase);
 
-    Set<User> getAllEmploees();
+    //NOT USED
+    //Set<User> getAllEmploees();
 
     List<User> getAll();
 
@@ -68,9 +72,10 @@ public interface UserService {
 
     List<User> getEmployeesByNameFromToRows(String name);
 
-    List<User> getStudentsByNameFromToRows(String lastName, Long fromRows, Long rowsNum);
+    ////NOT USED
+    //List<User> getStudentsByNameFromToRows(String lastName, Long fromRows, Long rowsNum);
 
-    int[] batchUpdate(List<User> users);
+    List<User> batchUpdate(List<User> users);
 
     List<User> getFilteredEmployees(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart, Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated);
 

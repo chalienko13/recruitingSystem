@@ -211,11 +211,11 @@ public class UserDaoImpl extends GenericHibernateDAO<User, Long> implements User
         return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_INTERVIEWS, extractor, role.getId());
     }
 
-    @Override
+  /*  @Override
     public List<User> getAllNotScheduleStudents() {
         log.info("Get all not schedule students");
         return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_ALL_NOT_SCHEDULE_STUDENTS, extractor);
-    }
+    }*/
 
    /*@Override
     public User getByID(Long id) {
@@ -283,7 +283,7 @@ public class UserDaoImpl extends GenericHibernateDAO<User, Long> implements User
         return jdbcDaoSupport.getJdbcTemplate().update(SQL_DELETE, user.getId());
     }*/
 
-    @Override
+   /* @Override
     public boolean addRole(com.netcracker.solutions.kpi.persistence.model.User user, Role role) {
         if (user.getId() == null) {
             log.warn(String.format("User: %s don`t have id", user.getEmail()));
@@ -291,19 +291,9 @@ public class UserDaoImpl extends GenericHibernateDAO<User, Long> implements User
         }
         return jdbcDaoSupport.getJdbcTemplate().insert("INSERT INTO \"user_role\"(id_user, id_role) VALUES (?,?)",
                 user.getId(), role.getId()) > 0;
-    }
+    }*/
 
-    @Override
-    public boolean addRole(com.netcracker.solutions.kpi.persistence.model.User user, Role role, Connection connection) {
-        if (user.getId() == null) {
-            log.warn("User: don`t have id", user.getEmail());
-            return false;
-        }
-        return jdbcDaoSupport.getJdbcTemplate().insert("INSERT INTO \"user_role\"(id_user, id_role) VALUES (?,?);", connection,
-                user.getId(), role.getId()) > 0;
-    }
-
-    @Override
+   /* @Override
     public int deleteRole(com.netcracker.solutions.kpi.persistence.model.User user, Role role) {
         if (user.getId() == null) {
             log.warn("User: don`t have id, {}", user.getEmail());
@@ -311,16 +301,7 @@ public class UserDaoImpl extends GenericHibernateDAO<User, Long> implements User
         }
         return jdbcDaoSupport.getJdbcTemplate().update("DELETE FROM \"user_role\" WHERE id_user= ? AND " +
                 "id_role = ?", user.getId(), role.getId());
-    }
-
-    @Override
-    public int deleteAllRoles(com.netcracker.solutions.kpi.persistence.model.User user, Connection connection) {
-        if (user.getId() == null) {
-            log.warn("User: don`t have id, {}", user.getEmail());
-            return 0;
-        }
-        return jdbcDaoSupport.getJdbcTemplate().update("DELETE FROM \"user_role\" WHERE id_user= ?", connection, user.getId());
-    }
+    }*/
 
     @Override
     public Long insertFinalTimePoint(com.netcracker.solutions.kpi.persistence.model.User user, ScheduleTimePoint scheduleTimePoint) {
@@ -334,11 +315,11 @@ public class UserDaoImpl extends GenericHibernateDAO<User, Long> implements User
         return jdbcDaoSupport.getJdbcTemplate().update(DELETE_FINAL_TIME_POINT, user.getId(), scheduleTimePoint.getId());
     }
 
-    @Override
+  /*  @Override
     public com.netcracker.solutions.kpi.persistence.model.User getUserByToken(String token) {
         log.info("Get users by token");
         return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_USERS_BY_TOKEN, extractor, token);
-    }
+    }*/
 
 
     @Override
@@ -347,11 +328,11 @@ public class UserDaoImpl extends GenericHibernateDAO<User, Long> implements User
         return jdbcDaoSupport.getJdbcTemplate().queryForSet(SQL_GET_ASSIGNED_STUDENTS_BY_EMP_ID, extractor, id);
     }
 
-    @Override
-    public Set<com.netcracker.solutions.kpi.persistence.model.User> getAllStudents() {
-        log.info("Get all Students");
-        return jdbcDaoSupport.getJdbcTemplate().queryForSet(SQL_GET_ALL_STUDENTS, extractor);
-    }
+//    @Override
+//    public Set<com.netcracker.solutions.kpi.persistence.model.User> getAllStudents() {
+//        log.info("Get all Students");
+//        return jdbcDaoSupport.getJdbcTemplate().queryForSet(SQL_GET_ALL_STUDENTS, extractor);
+//    }
 
     @Override
     public List<com.netcracker.solutions.kpi.persistence.model.User> getEmployeesFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase) {
@@ -372,7 +353,9 @@ public class UserDaoImpl extends GenericHibernateDAO<User, Long> implements User
     }
 
     @Override
-    public List<com.netcracker.solutions.kpi.persistence.model.User> getFilteredEmployees(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart, Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated) {
+    public List<User> getFilteredEmployees(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart,
+                                           Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer,
+                                           boolean notEvaluated) {
         log.info("Get Filtered Employees");
         String sql = SQL_GET_FILTERED_EMPLOYEES_FOR_ROWS;
         sql += sortingCol.toString();
@@ -516,7 +499,8 @@ public class UserDaoImpl extends GenericHibernateDAO<User, Long> implements User
     }
 
     @Override
-    public Long getEmployeeCountFiltered(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart, Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated) {
+    public Long getEmployeeCountFiltered(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart,
+                                         Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated) {
         String sql = SQL_GET_FILTERED_EMPLOYEES_FOR_ROWS_COUNT;
         StringBuilder sb = new StringBuilder();
         sb.append('{');
