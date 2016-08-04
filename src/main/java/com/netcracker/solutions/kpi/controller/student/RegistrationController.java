@@ -73,12 +73,12 @@ public class RegistrationController {
                     new Timestamp(System.currentTimeMillis()),
                     token);
             log.trace("Inserting user with email - {} in data base", userDto.getEmail());
-            userService.insertUser(user, new ArrayList<>(roles));
+            user.setRoles(roles);
+            userService.createUser(user);
 
             String url = String.format("%s://%s:%d/frontend/index.html#/registrationStudent/%s", request.getScheme(), request.getServerName(), request.getServerPort(), token);
 
             EmailTemplate emailTemplate = emailTemplateService.getById(EmailTemplateEnum.STUDENT_REGISTRATION.getId());
-
             String template = emailTemplateService.showTemplateParams(emailTemplate.getText(), user);
 
             String text = template + "\n" + url;

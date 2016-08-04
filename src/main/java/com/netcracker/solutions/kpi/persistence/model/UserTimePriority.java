@@ -24,12 +24,13 @@ public class UserTimePriority implements Serializable {
 	@JoinColumn(name = "id_user")
 	private User user;
 
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "id_time_point")
-	private ScheduleTimePoint scheduleTimePoint;
-
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_priority_type")
+	@JoinColumn(name = "id_time_point")
+	private ScheduleTimePoint scheduleTimePoint;
+	//
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "id_priority_type")
+	@Transient
 	private TimePriorityType timePriorityType;
 
 	public UserTimePriority() {

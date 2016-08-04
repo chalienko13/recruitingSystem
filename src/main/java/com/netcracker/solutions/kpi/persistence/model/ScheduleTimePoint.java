@@ -23,7 +23,7 @@ public class ScheduleTimePoint implements Serializable {
     //toDO change db_table??
     @Transient
     private Set<User> users;
-    @Transient
+    @OneToMany(mappedBy = "scheduleTimePoint")
     private Set<UserTimePriority> userTimePriorities;
 
     public ScheduleTimePoint() {
@@ -31,23 +31,6 @@ public class ScheduleTimePoint implements Serializable {
 
     public ScheduleTimePoint(Long id) {
         this.id = id;
-    }
-
-    public ScheduleTimePoint(Timestamp timePoint) {
-        this.timePoint = timePoint;
-    }
-
-
-    public ScheduleTimePoint(Timestamp timePoint, Set<User> users, Set<UserTimePriority> userTimePriorities) {
-        this.timePoint = timePoint;
-        this.users = users;
-        this.userTimePriorities = userTimePriorities;
-    }
-
-    public ScheduleTimePoint(Long id, Timestamp timePoint, Set<User> users) {
-        this.id = id;
-        this.timePoint = timePoint;
-        this.users = users;
     }
 
     public Long getId() {

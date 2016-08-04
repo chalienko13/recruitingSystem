@@ -8,46 +8,30 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Created by Chalienko on 13.04.2016.
- */
-public interface UserDao {
+public interface UserDao extends GenericDAO <User, Long> {
 
-    User getByUsername(String username);
+//    User getByUsername(String username);
+//
+//    boolean isExist(String username);
 
-    User getByID(Long id);
-
-    boolean isExist(String username);
-
-    int deleteUser(User user);
-
-    Long insertUser(User user, Connection connection);
-
-    List<User> getAllNotScheduleStudents();
+//    List<User> getAllNotScheduleStudents();
 
     int[] batchUpdate(List<User> users);
 
-    int updateUser(User user);
+    //boolean addRole(User user, Role role);
 
-    int updateUser(User user, Connection connection);
-
-    boolean addRole(User user, Role role);
-
-    boolean addRole(User user, Role role, Connection connection);
-
-    int deleteRole(User user, Role role);
-
-    int deleteAllRoles(User user, Connection connection);
+    //Seems as NOT USED
+    //int deleteRole(User user, Role role);
 
     Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
 
     int deleteFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
 
-    User getUserByToken(String token);
+    //User getUserByToken(String token);
 
     Set<User> getAssignedStudents(Long id);
 
-    Set<User> getAllStudents();
+//    Set<User> getAllStudents();
 
     List<User> getStudentsFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase);
 
@@ -60,8 +44,6 @@ public interface UserDao {
     List<Integer> getCountUsersOnInterviewDaysForRole(Role role);
 
     List<User> getActiveStaffByRole(Role role);
-
-    Set<User> getAll();
 
     Long getEmployeeCount();
 

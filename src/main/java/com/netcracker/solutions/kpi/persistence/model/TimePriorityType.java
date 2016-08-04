@@ -18,7 +18,8 @@ public class TimePriorityType implements Serializable {
 	private Long id;
 	@Column(name = "choice")
 	private String priority;
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "timePriorityType")
+	//	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "timePriorityType")
+	@Transient
 	private List<UserTimePriority> userTimePriorityList;
 
 	public TimePriorityType() {

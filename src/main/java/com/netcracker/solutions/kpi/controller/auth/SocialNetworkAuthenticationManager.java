@@ -86,7 +86,8 @@ public class SocialNetworkAuthenticationManager implements AuthenticationManager
         Facebook facebook = new FacebookTemplate(FaceBookUtils.getFaceBookAccessToken(socialInformation.getAccessInfo()));
         org.springframework.social.facebook.api.User profile = facebook.userOperations().getUserProfile();
         com.netcracker.solutions.kpi.persistence.model.User user = createNewUser(profile);
-        userService.insertUser(user, new ArrayList<>(Collections.singletonList(RoleEnum.getRole(RoleEnum.ROLE_STUDENT))));
+        user.setRoles(new HashSet<>(Collections.singletonList(RoleEnum.getRole(RoleEnum.ROLE_STUDENT))));
+        userService.createUser(user);
         socialInformation.setUser(user);
         socialInformationService.insertSocialInformation(socialInformation, user, socialInformation.getSocialNetwork());
         return new UserAuthentication(user, socialInformation.getIdUserInSocialNetwork(), socialInformation.getSocialNetwork().getId());

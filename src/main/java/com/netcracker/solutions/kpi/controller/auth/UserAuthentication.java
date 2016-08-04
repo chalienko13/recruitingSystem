@@ -17,7 +17,7 @@ import java.util.LinkedHashSet;
 public class UserAuthentication implements Authentication {
 
 
-    private com.netcracker.solutions.kpi.persistence.model.User user;
+    private User user;
     private boolean authenticated = true;
     private Long idUserSocialNetwork;
     private Long idNetwork;
@@ -37,12 +37,12 @@ public class UserAuthentication implements Authentication {
         this.idNetwork = socialNetwork.getId();
     }
 
-    public UserAuthentication(com.netcracker.solutions.kpi.persistence.model.User user) {
+    public UserAuthentication(User user) {
         this.user = user;
-//        user.getRoles();
+//        user.getQuestionRoles();
     }
 
-    public UserAuthentication(com.netcracker.solutions.kpi.persistence.model.User user, Long idUserSocialNetwork, Long idNetwork) {
+    public UserAuthentication(User user, Long idUserSocialNetwork, Long idNetwork) {
         this.user = user;
         this.idUserSocialNetwork = idUserSocialNetwork;
         this.idNetwork = idNetwork;
@@ -64,7 +64,7 @@ public class UserAuthentication implements Authentication {
     }
 
     @Override
-    public com.netcracker.solutions.kpi.persistence.model.User getDetails() {
+    public User getDetails() {
         return user;
     }
 

@@ -20,6 +20,11 @@ public class QuestionType implements Serializable {
     @Column(name = "type_title")
     private String typeTitle;
 
+    @OneToOne(mappedBy = "questionType")
+    private FormQuestion formQuestion;
+
+
+
     public QuestionType() {
     }
 
@@ -46,6 +51,14 @@ public class QuestionType implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public FormQuestion getFormQuestion() {
+        return formQuestion;
+    }
+
+    public void setFormQuestion(FormQuestion formQuestion) {
+        this.formQuestion = formQuestion;
     }
 
     @Override
