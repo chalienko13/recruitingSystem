@@ -3,7 +3,6 @@ package com.netcracker.solutions.kpi.persistence.dao.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.UserDao;
 import com.netcracker.solutions.kpi.persistence.model.Role;
-import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
 import com.netcracker.solutions.kpi.persistence.model.SocialInformation;
 import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
@@ -332,17 +331,17 @@ public class UserDaoImpl implements UserDao {
         return jdbcDaoSupport.getJdbcTemplate().update("DELETE FROM \"user_role\" WHERE id_user= ?", connection, user.getId());
     }
 
-    @Override
+    /*@Override
     public Long insertFinalTimePoint(com.netcracker.solutions.kpi.persistence.model.User user, ScheduleTimePoint scheduleTimePoint) {
         log.info("Insert Final Time Point");
         return jdbcDaoSupport.getJdbcTemplate().insert(INSERT_FINAL_TIME_POINT, user.getId(), scheduleTimePoint.getId());
-    }
+    }*/
 
-    @Override
+    /*@Override
     public int deleteFinalTimePoint(com.netcracker.solutions.kpi.persistence.model.User user, ScheduleTimePoint scheduleTimePoint) {
         log.info("Delete Final Time Point");
         return jdbcDaoSupport.getJdbcTemplate().update(DELETE_FINAL_TIME_POINT, user.getId(), scheduleTimePoint.getId());
-    }
+    }*/
 
     @Override
     public com.netcracker.solutions.kpi.persistence.model.User getUserByToken(String token) {
@@ -461,7 +460,7 @@ public class UserDaoImpl implements UserDao {
         return jdbcDaoSupport.getJdbcTemplate().update(SQL_DELETE_TOKEN, id);
     }
 
-    @Override
+   /* @Override
     public List<ScheduleTimePoint> getFinalTimePoints(Long timeID) {
         return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_FINAL_TIME_POINT, resultSet -> {
             List<ScheduleTimePoint> list = new ArrayList<ScheduleTimePoint>();
@@ -470,7 +469,7 @@ public class UserDaoImpl implements UserDao {
             } while (resultSet.next());
             return list;
         }, timeID);
-    }
+    }*/
 
     @Override
     public List<com.netcracker.solutions.kpi.persistence.model.User> getEmployeesByNameFromToRows(String lastName) {

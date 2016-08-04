@@ -3,7 +3,6 @@ package com.netcracker.solutions.kpi.service.impl;
 import com.netcracker.solutions.kpi.persistence.dao.DataSourceSingleton;
 import com.netcracker.solutions.kpi.persistence.dao.UserDao;
 import com.netcracker.solutions.kpi.persistence.model.Role;
-import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
 import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.service.UserService;
 import org.slf4j.Logger;
@@ -107,15 +106,11 @@ public class UserServiceImpl implements UserService {
         return userDao.deleteUser(user);
     }
 
-    @Override
+    //TODO rewrite (Olesia)
+    /*@Override
     public Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint) {
         return userDao.insertFinalTimePoint(user, scheduleTimePoint);
-    }
-
-    @Override
-    public int deleteFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint) {
-        return userDao.deleteFinalTimePoint(user, scheduleTimePoint);
-    }
+    }*/
 
     @Override
     public User getUserByToken(String token) {

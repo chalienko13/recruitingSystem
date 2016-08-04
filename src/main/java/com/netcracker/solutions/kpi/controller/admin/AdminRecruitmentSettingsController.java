@@ -64,7 +64,9 @@ public class AdminRecruitmentSettingsController {
         List<User> users = userService.getStudentsWithNotconnectedForms();
         for (User student : users) {
             String subject = newRecruitmentTemplate.getTitle();
-            String text = emailTemplateService.showTemplateParams(newRecruitmentTemplate.getText(), student);
+            //TODO FIX! because of new scheduling (Olesia)
+            //String text = emailTemplateService.showTemplateParams(newRecruitmentTemplate.getText(), student);
+            String text = "Sorry/ FIX it";
             senderService.send(student.getEmail(), subject, text);
         }
         deadlineController.setRegisteredDeadline(recruitment.getRegistrationDeadline());

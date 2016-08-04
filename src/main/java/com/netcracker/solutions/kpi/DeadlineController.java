@@ -35,7 +35,7 @@ public class DeadlineController {
     private SchedulingSettingsService scheduleSettingsService;// = ServiceFactory.getSchedulingSettingsService();
 
     @Autowired
-    private ScheduleTimePointService scheduleTimePointService;// = ServiceFactory.getScheduleTimePointService();
+    private ScheduleDayPointService scheduleDayPointService;// = ServiceFactory.getScheduleTimePointService();
 
     @PostConstruct
     public void init() {
@@ -99,9 +99,8 @@ public class DeadlineController {
         }
         userService.disableAllStaff();
         scheduleSettingsService.deleteAll();
-        scheduleTimePointService.deleteAll();
+        scheduleDayPointService.deleteAll();
     }
-
 
     private Long calculateDate(Timestamp date) {
         return date.getTime() - System.currentTimeMillis();

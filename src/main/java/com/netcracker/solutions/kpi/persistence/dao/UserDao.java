@@ -1,7 +1,6 @@
 package com.netcracker.solutions.kpi.persistence.dao;
 
 import com.netcracker.solutions.kpi.persistence.model.Role;
-import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
 import com.netcracker.solutions.kpi.persistence.model.User;
 
 import java.sql.Connection;
@@ -39,9 +38,11 @@ public interface UserDao {
 
     int deleteAllRoles(User user, Connection connection);
 
-    Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
+    //TODO rewrite (Olesia)
 
-    int deleteFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
+    /*Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
+
+    int deleteFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);*/
 
     User getUserByToken(String token);
 
@@ -69,7 +70,7 @@ public interface UserDao {
 
     int deleteToken(Long id);
 
-    List<ScheduleTimePoint> getFinalTimePoints(Long id);
+    //List<ScheduleTimePoint> getFinalTimePoints(Long id);
 
     List<User> getEmployeesByNameFromToRows(String name);
 

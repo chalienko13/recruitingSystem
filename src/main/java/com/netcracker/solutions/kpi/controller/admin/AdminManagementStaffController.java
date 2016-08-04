@@ -141,7 +141,9 @@ public class AdminManagementStaffController {
         userService.insertUser(user, userRoles);
         user.setPassword(password);
         EmailTemplate emailTemplate = emailTemplateService.getById(STAFF_REGISTRATION.getId());
-        String template = emailTemplateService.showTemplateParams(emailTemplate.getText(), user);
+        //TODO FIX! because of new scheduling (Olesia)
+        //String template = emailTemplateService.showTemplateParams(emailTemplate.getText(), user);
+        String template = "sorry";
         senderService.send(user.getEmail(), emailTemplate.getTitle(), template);
     }
 

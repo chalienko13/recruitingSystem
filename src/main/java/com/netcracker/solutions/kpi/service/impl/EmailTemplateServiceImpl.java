@@ -3,16 +3,9 @@ package com.netcracker.solutions.kpi.service.impl;
 import com.netcracker.solutions.kpi.persistence.dao.EmailTemplateDao;
 import com.netcracker.solutions.kpi.persistence.model.EmailTemplate;
 import com.netcracker.solutions.kpi.persistence.model.NotificationType;
-import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
-import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.service.EmailTemplateService;
-import com.netcracker.solutions.kpi.service.ScheduleTimePointService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Service
 public class EmailTemplateServiceImpl implements EmailTemplateService {
@@ -20,8 +13,8 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
     @Autowired
 	private EmailTemplateDao emailTemplateDao;
 
-    @Autowired
-	private ScheduleTimePointService scheduleTimePointService; //= ServiceFactory.getScheduleTimePointService();
+    /*@Autowired
+	private ScheduleTimePointService scheduleTimePointService; //= ServiceFactory.getScheduleTimePointService();*/
 
 	/*public EmailTemplateServiceImpl(EmailTemplateDao emailTemplateDao) {
 		this.emailTemplateDao = emailTemplateDao;
@@ -53,7 +46,7 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
 	}
 
 
-	//TODO rewrite with new schedule
+	//TODO rewrite with new schedule (Olesia)
 	/*@Override
 	public String showTemplateParams(String inputText, User user) {
 		List<ScheduleTimePoint> finalTimePoints = scheduleTimePointService.getFinalTimePointByUserId(user.getId());

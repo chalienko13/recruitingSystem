@@ -79,7 +79,9 @@ public class RegistrationController {
 
             EmailTemplate emailTemplate = emailTemplateService.getById(EmailTemplateEnum.STUDENT_REGISTRATION.getId());
 
-            String template = emailTemplateService.showTemplateParams(emailTemplate.getText(), user);
+            //TODO FIX! because of new scheduling (Olesia)
+            //String template = emailTemplateService.showTemplateParams(emailTemplate.getText(), user);
+            String template = "Sorry/ FIX it";
 
             String text = template + "\n" + url;
 

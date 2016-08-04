@@ -65,8 +65,9 @@ public class User implements UserDetails{
 //    @JoinTable(name = "user_role",
 //            joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id"),
 //            inverseJoinColumns = @JoinColumn(name = "id_role", referencedColumnName = "id"))
-    @Transient
-    private List<ScheduleTimePoint> scheduleTimePoint;
+    //TODO rewrite (Olesia)
+    /*@Transient
+    private List<ScheduleTimePoint> scheduleTimePoint;*/
     @Transient
     private Set<UserAuthority> userAuthorities;
 
@@ -138,13 +139,14 @@ public class User implements UserDetails{
         this.password = password;
     }
 
-    public List<ScheduleTimePoint> getScheduleTimePoint() {
+
+    /*public List<ScheduleTimePoint> getScheduleTimePoint() {
         return scheduleTimePoint;
     }
 
     public void setScheduleTimePoint(List<ScheduleTimePoint> scheduleTimePoint) {
         this.scheduleTimePoint = scheduleTimePoint;
-    }
+    }*/
 
 
     public Long getId() {

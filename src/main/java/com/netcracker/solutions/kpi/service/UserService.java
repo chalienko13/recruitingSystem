@@ -1,7 +1,6 @@
 package com.netcracker.solutions.kpi.service;
 
 import com.netcracker.solutions.kpi.persistence.model.Role;
-import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
 import com.netcracker.solutions.kpi.persistence.model.User;
 import org.springframework.stereotype.Service;
 
@@ -36,9 +35,10 @@ public interface UserService {
 
     int deleteUser(User user);
 
-    Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
+    //TODO rewrire (Olesia)
+    /*Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
 
-    int deleteFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
+    int deleteFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);*/
 
     User getUserByToken(String token);
 

@@ -48,8 +48,8 @@ public class AdminManagementStudentController {
     private InterviewService interviewService;// = ServiceFactory.getInterviewService();
     //@Autowired
     //private UserTimePriorityService userTimePriorityService;// = ServiceFactory.getUserTimePriorityService();
-    @Autowired
-    private ScheduleTimePointService scheduleTimePointService;// = ServiceFactory.getScheduleTimePointService();
+    /*@Autowired
+    private ScheduleTimePointService scheduleTimePointService;// = ServiceFactory.getScheduleTimePointService();*/
     @Autowired
     private DecisionService decisionService;
     ;// = ServiceFactory.getDecisionService();
@@ -260,8 +260,8 @@ public class AdminManagementStudentController {
         }
     }
 
-
-    @RequestMapping(value = "announceResults", method = RequestMethod.POST)
+    //TODO (Olesia)
+    /*@RequestMapping(value = "announceResults", method = RequestMethod.POST)
     public String announceResults() throws MessagingException {
         Gson gson = new Gson();
         Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
@@ -285,21 +285,21 @@ public class AdminManagementStudentController {
         }
 
         return gson.toJson(new MessageDto("Results were announced.", MessageDtoType.SUCCESS));
-    }
+    }*/
 
-    private void sendMessages(List<ApplicationForm> applicationForms, EmailTemplate emailTemplate) throws MessagingException {
+    /*private void sendMessages(List<ApplicationForm> applicationForms, EmailTemplate emailTemplate) throws MessagingException {
         for (ApplicationForm applicationForm : applicationForms) {
             User student = applicationForm.getUser();
             String subject = emailTemplate.getTitle();
             String text = emailTemplateService.showTemplateParams(emailTemplate.getText(), student);
             senderService.send(student.getEmail(), subject, text);
         }
-    }
+    }*/
 
-    @RequestMapping(value = "scheduleDatesExist", method = RequestMethod.GET)
+    /*@RequestMapping(value = "scheduleDatesExist", method = RequestMethod.GET)
     public boolean isScheduleDatesExist() {
         return scheduleTimePointService.isScheduleDatesExists();
-    }
+    }*/
 
     //TODO (Olesia)
     /*@RequestMapping(value = "confirmSelection", method = RequestMethod.POST)
@@ -338,13 +338,13 @@ public class AdminManagementStudentController {
         }
     }*/
 
-    private void processRejectedStudentsSelection(Recruitment recruitment) throws MessagingException {
+    /*private void processRejectedStudentsSelection(Recruitment recruitment) throws MessagingException {
         Status rejectedStatus = statusService.getStatusById(REJECTED.getId());
         EmailTemplate rejectedTemplate = emailTemplateService.getById(6L);
         List<ApplicationForm> rejectedForms = applicationFormService.getByStatusAndRecruitment(rejectedStatus,
                 recruitment);
         sendMessages(rejectedForms, rejectedTemplate);
-    }
+    }*/
 
 
     @RequestMapping(value = "searchStudent", method = RequestMethod.POST)
@@ -357,7 +357,7 @@ public class AdminManagementStudentController {
     }
 
     //TODO(Olesia)
-    /*@RequestMapping(value = "getRecruitmentStatus", method = RequestMethod.GET)
+   /* @RequestMapping(value = "getRecruitmentStatus", method = RequestMethod.GET)
     public String getRecruitmentStatus() {
         Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
         RecruitmentStatusDto recruitmentStatusDto = new RecruitmentStatusDto();
@@ -368,8 +368,8 @@ public class AdminManagementStudentController {
         return new Gson().toJson(recruitmentStatusDto);
     }*/
 
-    @RequestMapping(value = "getTimePoints", method = RequestMethod.GET)
+    /*@RequestMapping(value = "getTimePoints", method = RequestMethod.GET)
     public List<ScheduleTimePoint> getTimePoints() {
         return scheduleTimePointService.getAll();
-    }
+    }*/
 }
