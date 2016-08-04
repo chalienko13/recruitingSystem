@@ -149,9 +149,16 @@ public class UserServiceImpl implements UserService {
         return userRepository.getStudentsWithNotconnectedForms();
     }
 
+    // TODO: 04.08.2016
     @Override
     public List<User> getEmployeesByNameFromToRows(String name) {
-        return userRepository.getEmployeesByNameFromToRows(name);
+        Long id = null;
+        try {
+            id = Long.parseLong(name);
+        } catch (NumberFormatException e) {
+            log.info("Search. Search field don`t equals id");
+        }
+        return userRepository.getEmployeesByNameFromToRows("%" + name + "%",id);
     }
 
     @Override

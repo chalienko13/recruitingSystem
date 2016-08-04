@@ -16,8 +16,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User getByConfirmToken(String confirmToken);
 
-    @Query("select count(email) > 0 from User u where email = :email")
-    Boolean isExistByEmail(@Param("email") String username);
+    @Query(value = "select count(u.email) > 0 from \"user\" u where u.email = ?1", nativeQuery = true)
+    Boolean isExistByEmail(String username);
 
     @Query("SELECT u FROM User u INNER JOIN u.roles r WHERE r.id = :idRole AND u.isActive = TRUE")
     List<User> getActiveStaffByRole(@Param("idRole") Long idRole);
@@ -74,9 +74,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "Select * from (Select DISTINCT u.id, u.email, u.first_name, u.last_name, u.second_name, u.password," +
             "u.confirm_token, u.is_active, u.registration_date from \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
-            "WHERE (ur.id_role = 2 OR ur.id_role = 5 OR ur.id_role = 1) AND ((u.id = ?1) OR (u.last_name LIKE ?1))) as temp\n" +
+            "WHERE (ur.id_role = 2 OR ur.id_role = 5 OR ur.id_role = 1) AND ((u.id = ?2) OR (u.last_name LIKE ?1))) as temp\n" +
             " ORDER BY 2 OFFSET 0 LIMIT 10", nativeQuery = true)
-    List<User> getEmployeesByNameFromToRows(String lastName);
+    List<User> getEmployeesByNameFromToRows(String lastName, Long id);
 
     // TODO: 04.08.2016
     @Query(value = "select * from \"user\"", nativeQuery = true)

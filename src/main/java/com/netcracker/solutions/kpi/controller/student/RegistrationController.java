@@ -79,7 +79,6 @@ public class RegistrationController {
             String url = String.format("%s://%s:%d/frontend/index.html#/registrationStudent/%s", request.getScheme(), request.getServerName(), request.getServerPort(), token);
 
             EmailTemplate emailTemplate = emailTemplateService.getById(EmailTemplateEnum.STUDENT_REGISTRATION.getId());
-
             String template = emailTemplateService.showTemplateParams(emailTemplate.getText(), user);
 
             String text = template + "\n" + url;
