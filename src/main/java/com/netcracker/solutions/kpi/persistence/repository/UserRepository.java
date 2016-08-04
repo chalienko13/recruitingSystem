@@ -19,8 +19,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "select count(u.email) > 0 from \"user\" u where u.email = ?1", nativeQuery = true)
     Boolean isExistByEmail(String username);
 
-    @Query("SELECT u FROM User u INNER JOIN u.roles r WHERE r.id = :idRole AND u.isActive = TRUE")
-    List<User> getActiveStaffByRole(@Param("idRole") Long idRole);
+    @Query(value = "SELECT * FROM \"user\" u \n" +
+            "INNER JOIN user_role ur ON u.id = ur.id_user \n" +
+            "WHERE ur.id_role = ?1 AND u.is_active = TRUE;", nativeQuery = true)
+    List<User> getActiveStaffByRole(Long idRole);
 
     @Query("SELECT u FROM User u " +
             "JOIN ApplicationForm af " +

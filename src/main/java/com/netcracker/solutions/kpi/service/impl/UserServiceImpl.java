@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getAuthorizedUser() {
-        return ((User) SecurityContextHolder.getContext().getAuthentication().getDetails());
+        return (User) SecurityContextHolder.getContext().getAuthentication().getDetails();
     }
 
     @Override
