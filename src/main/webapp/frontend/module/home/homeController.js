@@ -4,4 +4,4 @@ function homeController($scope) {
 }
 
 angular.module('appHome')
-    .controller('homeController', ['$scope', homeController]);
+.controller('homeController', ['$scope', homeController]);

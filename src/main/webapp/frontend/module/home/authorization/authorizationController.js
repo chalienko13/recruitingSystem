@@ -1,6 +1,6 @@
 'use strict';
 
-function authorizationController($scope, TokenStorage, $http, $rootScope, $location) {
+function authorizationController($scope, TokenStorage, $http, $rootScope, $location, $window) {
 
     // $scope.authsuccess = false;
 
@@ -20,8 +20,10 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
                 $rootScope.username = data.username;
                 $rootScope.id = data.id;
                 $rootScope.role = data.role;
-                $location.path(data.redirectURL);
+/*              $location.url(data.redirectURL);*/
                 $scope.errorcredential = false;
+                //toDo this is crutch_oriented
+                window.location.replace("/frontend/index.html#" + data.redirectURL);
             }).error(function (data, status, headers) {
                 console.log(data);
                 if (status == 401) {
@@ -68,7 +70,7 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
                 } else {
                     console.log('User cancelled login or did not fully authorize.');
                 }
-            }, 
+            },
             {scope: 'public_profile, email, user_birthday, user_location'}
         );
     };
@@ -76,13 +78,13 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
     $scope.vkLogin = function () {
         $http({
             method: 'GET',
-            url : 'https://oauth.vk.com/authorize',
-            params : {
-                client_id : 5484909,
-                redirect_uri : 'http://localhost:8082/',
-                display : 'page',
-                response_type : 'token',
-                v : '5.52'
+            url: 'https://oauth.vk.com/authorize',
+            params: {
+                client_id: 5484909,
+                redirect_uri: 'http://localhost:8082/',
+                display: 'page',
+                response_type: 'token',
+                v: '5.52'
             }
         }).success(function (data, status, headers) {
             console.log(data);
