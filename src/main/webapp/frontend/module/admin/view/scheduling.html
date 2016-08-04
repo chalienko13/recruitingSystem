@@ -142,73 +142,73 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="timePoint in schedulePoints">
+                            <tr ng-repeat="dayPoint in schedulePoints">
                                 <td class="col-md-3">
-                                    {{timePoint.timePoint | date:"MM/dd/yyyy 'at' h:mma"  }}
+                                    {{dayPoint.dayPoint | date:"MM/dd/yyyy 'at' h:mma"  }}
                                 </td>
                                 <td class="col-md-3">
-                                    <a ng-model="collapsed[1][schedulePoints.indexOf(timePoint)]"
-                                       ng-click="collapsed[1][schedulePoints.indexOf(timePoint)]=!collapsed[1][schedulePoints.indexOf(timePoint)]; getSoft(timePoint.id);">
-                                        {{timePoint.amountOfSoft}}<span
+                                    <a ng-model="collapsed[1][schedulePoints.indexOf(dayPoint)]"
+                                       ng-click="collapsed[1][schedulePoints.indexOf(dayPoint)]=!collapsed[1][schedulePoints.indexOf(dayPoint)]; getSoft(dayPoint.id);">
+                                        {{dayPoint.amountOfSoft}}<span
                                             class="glyphicon glyphicon glyphicon-chevron-down"
                                             aria-hidden="true"></span>
                                     </a>
 
-                                    <div ng-show="collapsed[1][schedulePoints.indexOf(timePoint)]">
-                                        <div ng-repeat="soft in softMap[timePoint.id]">
+                                    <div ng-show="collapsed[1][schedulePoints.indexOf(dayPoint)]">
+                                        <div ng-repeat="soft in softMap[dayPoint.id]">
                                             <div class="col-md-8">id:{{soft.id}} {{soft.firstName}} {{soft.secondName}}
                                                 {{soft.lastName}}
                                             </div>
                                             <button class="btn btn-danger btn-xs search-element btn-left col-md-2" data-toggle="modal"
-                                                    data-target="#deleteSoft" ng-click="setCurrentSoft(soft, timePoint)">Delete
+                                                    data-target="#deleteSoft" ng-click="setCurrentSoft(soft, dayPoint)">Delete
                                             </button>
                                         </div>
                                         <button class="btn btn-info btn-xs search-element btn-left col-md-2"
-                                                ng-click='toggleModal(roleSoft,timePoint)'>Add
+                                                ng-click='toggleModal(roleSoft,dayPoint)'>Add
                                         </button>
                                     </div>
                                 </td>
                                 <td class="col-md-3">
-                                    <a ng-model="collapsed[2][schedulePoints.indexOf(timePoint)]"
-                                       ng-click="collapsed[2][schedulePoints.indexOf(timePoint)]=!collapsed[2][schedulePoints.indexOf(timePoint)]; getTech(timePoint.id)">
-                                        {{timePoint.amountOfTech}}<span
+                                    <a ng-model="collapsed[2][schedulePoints.indexOf(dayPoint)]"
+                                       ng-click="collapsed[2][schedulePoints.indexOf(dayPoint)]=!collapsed[2][schedulePoints.indexOf(dayPoint)]; getTech(dayPoint.id)">
+                                        {{dayPoint.amountOfTech}}<span
                                             class="glyphicon glyphicon glyphicon-chevron-down"
                                             aria-hidden="true"></span>
                                     </a>
 
-                                    <div ng-show="collapsed[2][schedulePoints.indexOf(timePoint)]">
-                                        <div ng-repeat="tech in techMap[timePoint.id]">
+                                    <div ng-show="collapsed[2][schedulePoints.indexOf(dayPoint)]">
+                                        <div ng-repeat="tech in techMap[dayPoint.id]">
                                             <div class="col-md-8">id:{{tech.id}} {{tech.firstName}} {{tech.secondName}}
                                                 {{tech.lastName}}
                                             </div>
                                             <button class="btn btn-danger btn-xs search-element btn-left col-md-2" data-toggle="modal"
-                                                    data-target="#deleteTech" ng-click="setCurrentTech(tech, timePoint)">Delete
+                                                    data-target="#deleteTech" ng-click="setCurrentTech(tech, dayPoint)">Delete
                                             </button>
                                         </div>
                                         <button class="btn btn-info btn-xs search-element btn-left col-md-2"
-                                                ng-click='toggleModal(roleTech,timePoint)'>Add
+                                                ng-click='toggleModal(roleTech,dayPoint)'>Add
                                         </button>
                                     </div>
                                 </td>
                                 <td class="col-md-3">
-                                    <a ng-model="collapsed[3][schedulePoints.indexOf(timePoint)]"
-                                       ng-click="collapsed[3][schedulePoints.indexOf(timePoint)]=!collapsed[3][schedulePoints.indexOf(timePoint)]; getStudent(timePoint.id)">
-                                        {{timePoint.amountOfStudents}}<span
+                                    <a ng-model="collapsed[3][schedulePoints.indexOf(dayPoint)]"
+                                       ng-click="collapsed[3][schedulePoints.indexOf(dayPoint)]=!collapsed[3][schedulePoints.indexOf(dayPoint)]; getStudent(dayPoint.id)">
+                                        {{dayPoint.amountOfStudents}}<span
                                             class="glyphicon glyphicon glyphicon-chevron-down"
                                             aria-hidden="true"></span>
                                     </a>
 
-                                    <div ng-show="collapsed[3][schedulePoints.indexOf(timePoint)]">
-                                        <div ng-repeat="student in studentMap[timePoint.id]">
+                                    <div ng-show="collapsed[3][schedulePoints.indexOf(dayPoint)]">
+                                        <div ng-repeat="student in studentMap[dayPoint.id]">
                                             <div class="col-md-8">id:{{student.id}} {{student.firstName}}
                                                 {{student.secondName}} {{student.lastName}}
                                             </div>
                                             <button class="btn btn-danger btn-xs search-element btn-left col-md-2" data-toggle="modal"
-                                                    data-target="#deleteStudent" ng-click="setCurrentStudent(student, timePoint)">Delete
+                                                    data-target="#deleteStudent" ng-click="setCurrentStudent(student, dayPoint)">Delete
                                             </button>
                                         </div>
                                         <button class="btn btn-info btn-xs search-element btn-left col-md-2"
-                                                ng-click='toggleModal(roleStudent,timePoint)'>Add
+                                                ng-click='toggleModal(roleStudent,dayPoint)'>Add
                                         </button>
                                     </div>
                                 </td>
@@ -228,7 +228,7 @@
     <modal-dialog show='modalShown' width='400px'>
         <h4>Add new user to interview timepoint</h4>
 
-        <p>{{timePointToChange.timePoint | date:"MM/dd/yyyy 'at' h:mma"}}</p>
+        <p>{{timePointToChange.dayPoint | date:"MM/dd/yyyy 'at' h:mma"}}</p>
         <table class="table table-condensed table-hover col-md-8">
             <thead>
             <tr>

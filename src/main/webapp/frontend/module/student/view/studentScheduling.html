@@ -9,7 +9,7 @@
             <form>
                 <div class="row" ng-repeat="priority in schedule.priorities">
                     <div class="col-md-3 day-point">
-                        <h5>{{priority.timePoint}}</h5>
+                        <h5>{{priority.dayPoint}}</h5>
                         <div ng-repeat="priorityType in schedule.priorityTypes">
 							<input type="radio" ng-model="priority.priority" ng-value="priorityType">{{priorityType}}</input>
 						</div>

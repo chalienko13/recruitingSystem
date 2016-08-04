@@ -184,7 +184,7 @@
 				 	<h3>You have chosen next time points in schedule:</h3>
 				 	<div style="padding-left:50px">
 				 	<ul>
-				 	<li  ng-repeat="timePoint in timePoints">{{timePoint.timePoint | date:'yyyy-MM-dd HH:mm'}}</li>
+				 	<li  ng-repeat="dayPoint in timePoints">{{dayPoint.dayPoint | date:'yyyy-MM-dd HH:mm'}}</li>
 				 	</ul></div>
 					<button type="button"
 						ng-disabled="!recruitmentStatus.recruitmentExists || recruitmentStatus.scheduleExists"

@@ -7,13 +7,13 @@
                 <div class="row">
                     <h4>Choose appropriate variant for each date.</h4>
                     <div class="col-md-3 day-point">
-                        <div ng-repeat="timePoint in timePoints" class="col-md-3 day-point">
+                        <div ng-repeat="dayPoint in timePoints" class="col-md-3 day-point">
                             <div>
-                                <h5>{{timePoint.timePoint | date : format : timezone}}</h5>
-                                <input type="radio" ng-model="timePoint.idPriorityType" ng-value="2"/>
+                                <h5>{{dayPoint.dayPoint | date : format : timezone}}</h5>
+                                <input type="radio" ng-model="dayPoint.idPriorityType" ng-value="2"/>
                                 Can
                                 <br>
-                                <input type="radio" ng-model="timePoint.idPriorityType" ng-value="3"/>
+                                <input type="radio" ng-model="dayPoint.idPriorityType" ng-value="3"/>
                                 Can not
                             </div>
                         </div>
