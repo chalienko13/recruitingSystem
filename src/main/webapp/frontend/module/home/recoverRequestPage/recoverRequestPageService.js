@@ -4,7 +4,7 @@
 
 'use strict';
 
-function recoverRequestPageService($http) {
+function recoverRequestPageService($http, $timeout) {
     var service = {};
 
     return service;
