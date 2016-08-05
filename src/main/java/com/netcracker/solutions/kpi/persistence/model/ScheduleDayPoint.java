@@ -29,6 +29,9 @@ public class ScheduleDayPoint implements Serializable{
     @OneToMany(mappedBy = "dayPoint", fetch = FetchType.LAZY)
     private Set<ScheduleTimePoint> timePoints;
 
+    @OneToMany(mappedBy = "dayPoint", fetch = FetchType.LAZY)
+    private Set<UserTime> userTimes;
+
     public ScheduleDayPoint() {
     }
 
@@ -67,6 +70,13 @@ public class ScheduleDayPoint implements Serializable{
     }
     public void setTimePoints(Set<ScheduleTimePoint> timePoints) {
         this.timePoints = timePoints;
+    }
+
+    public Set<UserTime> getUserTimes() {
+        return userTimes;
+    }
+    public void setUserTimes(Set<UserTime> userTimes) {
+        this.userTimes = userTimes;
     }
 
     @Override

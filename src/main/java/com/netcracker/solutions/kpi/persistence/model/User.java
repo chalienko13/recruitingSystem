@@ -45,6 +45,9 @@ public class User implements UserDetails{
             inverseJoinColumns = @JoinColumn(name = "id_role", referencedColumnName = "id"))
     private Set<Role> roles;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<UserTime> userTimes;
+
     @Column(name = "confirm_token")
     private String confirmToken;
 
@@ -65,9 +68,6 @@ public class User implements UserDetails{
 //    @JoinTable(name = "user_role",
 //            joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id"),
 //            inverseJoinColumns = @JoinColumn(name = "id_role", referencedColumnName = "id"))
-    //TODO rewrite (Olesia)
-    /*@Transient
-    private List<ScheduleTimePoint> scheduleTimePoint;*/
     @Transient
     private Set<UserAuthority> userAuthorities;
 
@@ -245,6 +245,13 @@ public class User implements UserDetails{
 
     public void setExpireDate(Long expireDate) {
         this.expireDate = expireDate;
+    }
+
+    public Set<UserTime> getUserTimes() {
+        return userTimes;
+    }
+    public void setUserTimes(Set<UserTime> userTimes) {
+        this.userTimes = userTimes;
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
