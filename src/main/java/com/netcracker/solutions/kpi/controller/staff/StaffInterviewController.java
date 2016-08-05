@@ -107,7 +107,7 @@ public class StaffInterviewController {
         }
     }
 
-    @RequestMapping(value = "getRoles/{applicationFormId}", method = RequestMethod.GET)
+    @RequestMapping(value = "getQuestionRoles/{applicationFormId}", method = RequestMethod.GET)
     public Set<Role> getRoles(@PathVariable Long applicationFormId) {
         User interviwer = userService.getAuthorizedUser();
         List<Interview> interviews = new ArrayList<>();

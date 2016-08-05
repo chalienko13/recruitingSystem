@@ -13,7 +13,9 @@ function headerController($scope, $location,$rootScope, TokenStorage) {
     $scope.logOut = function () {
         $rootScope.authenticated = false;
         TokenStorage.clear();
-        $location.path('/home');
+/*        $location.path('/home');*/
+        //toDo this is crutch_oriented
+        window.location.replace("/");
     };
 }
 

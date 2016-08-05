@@ -2,6 +2,7 @@ package com.netcracker.solutions.kpi.service.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.StatusDao;
 import com.netcracker.solutions.kpi.persistence.model.Status;
+import com.netcracker.solutions.kpi.persistence.repository.StatusRepository;
 import com.netcracker.solutions.kpi.service.StatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,16 +15,15 @@ public class StatusServiceImpl implements StatusService {
     @Autowired
     private StatusDao statusDao;
 
-    /*public StatusServiceImpl(StatusDao statusDao) {
-        this.statusDao = statusDao;
-    }*/
+    @Autowired
+    private StatusRepository statusRepository;
 
     @Override
     public Status getStatusById(Long id) {
-        return statusDao.getById(id);
+        return statusRepository.getOne(id);
     }
 
-    @Override
+   /* @Override
     public int insertStatus(Status status) {
         return statusDao.insertStatus(status);
     }
@@ -36,15 +36,15 @@ public class StatusServiceImpl implements StatusService {
     @Override
     public int deleteStatus(Status status) {
         return statusDao.deleteStatus(status);
-    }
+    }*/
 
     @Override
     public List<Status> getAllStatuses() {
-        return statusDao.getAllStatuses();
+        return statusRepository.findAll();
     }
 
     @Override
     public Status getByName(String name) {
-        return statusDao.getByName(name);
+        return statusRepository.getByTitle(name);
     }
 }

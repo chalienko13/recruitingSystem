@@ -1,6 +1,5 @@
 package com.netcracker.solutions.kpi.persistence.dao.impl;
 
-
 import com.netcracker.solutions.kpi.persistence.dao.UserDao;
 import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.SocialInformation;
@@ -11,8 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,14 +17,11 @@ import java.util.List;
 import java.util.Set;
 
 @Repository
-public class UserDaoImpl implements UserDao {
+public class UserDaoImpl extends GenericHibernateDAO<User, Long> implements UserDao {
     private static Logger log = LoggerFactory.getLogger(UserDaoImpl.class.getName());
 
     @Autowired
     private JdbcDaoSupport jdbcDaoSupport;
-
-    @Autowired
-    private EntityManagerFactory entityManager;
 
     private static final int ROLE_STUDENT = 3;
     private static final int APPROVED_STATUS = 3;
@@ -48,15 +42,10 @@ public class UserDaoImpl implements UserDao {
         return user;
     };
 
-  /*  public UserDaoImpl(DataSource dataSource) {
-        this.jdbcDaoSupport = new JdbcDaoSupport();
-        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
-    }*/
-
-    private static final String SQL_GET_BY_ID = "SELECT u.id, u.email, u.first_name,u.last_name, u.second_name, " +
+   /* private static final String SQL_GET_BY_ID = "SELECT u.id, u.email, u.first_name,u.last_name, u.second_name, " +
             "u.password, u.confirm_token, u.is_active, u.registration_date\n" +
             "FROM \"user\" u\n" +
-            "WHERE u.id = ?;";
+            "WHERE u.id = ?;";*/
 
     private static final String SQL_GET_ALL_NOT_SCHEDULE_STUDENTS = "SELECT u.id, u.email, u.first_name,u.last_name, u.second_name,\n" +
             "u.password, u.confirm_token, u.is_active, u.registration_date FROM \"user\" u\n" +
@@ -204,6 +193,10 @@ public class UserDaoImpl implements UserDao {
             "u.password, u.confirm_token, u.is_active, u.registration_date\n" +
             "from public.user u JOIN user_time_final uf on uf.id_user=u.id and uf.id_time_point IS NOT NULL";
 
+    public UserDaoImpl() {
+        super(User.class);
+    }
+
     @Override
     public List<Integer> getCountUsersOnInterviewDaysForRole(Role role) {
         log.info("Get count users on interview days for role {}", role.getId());
@@ -217,44 +210,41 @@ public class UserDaoImpl implements UserDao {
         return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_INTERVIEWS, extractor, role.getId());
     }
 
-    @Override
+  /*  @Override
     public List<User> getAllNotScheduleStudents() {
         log.info("Get all not schedule students");
         return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_ALL_NOT_SCHEDULE_STUDENTS, extractor);
-    }
+    }*/
 
-    @Override
+   /*@Override
     public User getByID(Long id) {
-        System.out.println("Get by id");
-        EntityManager entityManager1 = entityManager.createEntityManager();
-        System.out.println(entityManager1);
-        entityManager1.getTransaction().begin();
-        User result = entityManager1.find(User.class, id);
-        entityManager1.getTransaction().commit();
-        entityManager1.close();
         log.info("Looking for user with id = {}", id);
-        System.out.println("close");
-        return result;
-        //return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
-    }
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_ID, extractor, id);
+    }*/
 
-    @Override
-    public User getByUsername(String email) {
-        log.info("Looking for user with email = {}", email);
-        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_EMAIL, extractor, email);
-    }
+//    @Override
+//    public com.netcracker.solutions.kpi.persistence.model.User getByUsername(String email) {
+//        log.info("Looking for user with email = {}", email);
+//        List list = getHibernateTemplate().find("from User where email = ?", email);
+//        if (list.size() != 0) {
+//            return (User) list.get(0);
+//        } else {
+//            return new User();
+//        }
+////        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_BY_EMAIL, extractor, email);
+//    }
 
-    @Override
-    public boolean isExist(String email) {
-        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_EXIST, resultSet -> resultSet.getBoolean(1), email);
-    }
+//    @Override
+//    public boolean isExist(String email) {
+//        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_EXIST, resultSet -> resultSet.getBoolean(1), email);
+//    }
 
-    @Override
-    public Long insertUser(com.netcracker.solutions.kpi.persistence.model.User user, Connection connection) {
-        log.info("Insert user with email = {}", user.getEmail());
-        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_INSERT, connection, user.getEmail(), user.getFirstName(), user.getSecondName(),
-                user.getLastName(), user.getPassword(), user.getConfirmToken(), user.isActive(), user.getRegistrationDate());
-    }
+//    @Override
+//    public Long insertUser(User user, Connection connection) {
+//        log.info("Insert user with email = {}", user.getEmail());
+//        return jdbcDaoSupport.getJdbcTemplate().insert(SQL_INSERT, connection, user.getEmail(), user.getFirstName(), user.getSecondName(),
+//                user.getLastName(), user.getPassword(), user.getConfirmToken(), user.isActive(), user.getRegistrationDate());
+//    }
 
     @Override
     public int[] batchUpdate(List<com.netcracker.solutions.kpi.persistence.model.User> users) {
@@ -269,30 +259,30 @@ public class UserDaoImpl implements UserDao {
         }
         return jdbcDaoSupport.getJdbcTemplate().batchUpdate(SQL_UPDATE, objects);
     }
-
+/*
     @Override
     public int updateUser(com.netcracker.solutions.kpi.persistence.model.User user) {
         log.info("Update user with id = {}", user.getId());
         return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE, user.getEmail(), user.getFirstName(), user.getSecondName(),
                 user.getLastName(), user.getPassword(), user.getConfirmToken(), user.isActive(), user.getRegistrationDate(),
                 user.getId());
-    }
+    }*/
 
-    @Override
+   /* @Override
     public int updateUser(com.netcracker.solutions.kpi.persistence.model.User user, Connection connection) {
         log.info("Update user with id = {}", user.getId());
         return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE, connection, user.getEmail(), user.getFirstName(), user.getSecondName(),
                 user.getLastName(), user.getPassword(), user.getConfirmToken(), user.isActive(), user.getRegistrationDate(),
                 user.getId());
-    }
+    }*/
 
-    @Override
+   /* @Override
     public int deleteUser(com.netcracker.solutions.kpi.persistence.model.User user) {
         log.info("Delete user with id = {}", user.getId());
         return jdbcDaoSupport.getJdbcTemplate().update(SQL_DELETE, user.getId());
-    }
+    }*/
 
-    @Override
+   /* @Override
     public boolean addRole(com.netcracker.solutions.kpi.persistence.model.User user, Role role) {
         if (user.getId() == null) {
             log.warn(String.format("User: %s don`t have id", user.getEmail()));
@@ -300,19 +290,9 @@ public class UserDaoImpl implements UserDao {
         }
         return jdbcDaoSupport.getJdbcTemplate().insert("INSERT INTO \"user_role\"(id_user, id_role) VALUES (?,?)",
                 user.getId(), role.getId()) > 0;
-    }
+    }*/
 
-    @Override
-    public boolean addRole(com.netcracker.solutions.kpi.persistence.model.User user, Role role, Connection connection) {
-        if (user.getId() == null) {
-            log.warn("User: don`t have id", user.getEmail());
-            return false;
-        }
-        return jdbcDaoSupport.getJdbcTemplate().insert("INSERT INTO \"user_role\"(id_user, id_role) VALUES (?,?);", connection,
-                user.getId(), role.getId()) > 0;
-    }
-
-    @Override
+   /* @Override
     public int deleteRole(com.netcracker.solutions.kpi.persistence.model.User user, Role role) {
         if (user.getId() == null) {
             log.warn("User: don`t have id, {}", user.getEmail());
@@ -320,16 +300,7 @@ public class UserDaoImpl implements UserDao {
         }
         return jdbcDaoSupport.getJdbcTemplate().update("DELETE FROM \"user_role\" WHERE id_user= ? AND " +
                 "id_role = ?", user.getId(), role.getId());
-    }
-
-    @Override
-    public int deleteAllRoles(com.netcracker.solutions.kpi.persistence.model.User user, Connection connection) {
-        if (user.getId() == null) {
-            log.warn("User: don`t have id, {}", user.getEmail());
-            return 0;
-        }
-        return jdbcDaoSupport.getJdbcTemplate().update("DELETE FROM \"user_role\" WHERE id_user= ?", connection, user.getId());
-    }
+    }*/
 
     /*@Override
     public Long insertFinalTimePoint(com.netcracker.solutions.kpi.persistence.model.User user, ScheduleTimePoint scheduleTimePoint) {
@@ -343,11 +314,11 @@ public class UserDaoImpl implements UserDao {
         return jdbcDaoSupport.getJdbcTemplate().update(DELETE_FINAL_TIME_POINT, user.getId(), scheduleTimePoint.getId());
     }*/
 
-    @Override
+  /*  @Override
     public com.netcracker.solutions.kpi.persistence.model.User getUserByToken(String token) {
         log.info("Get users by token");
         return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_USERS_BY_TOKEN, extractor, token);
-    }
+    }*/
 
 
     @Override
@@ -356,11 +327,11 @@ public class UserDaoImpl implements UserDao {
         return jdbcDaoSupport.getJdbcTemplate().queryForSet(SQL_GET_ASSIGNED_STUDENTS_BY_EMP_ID, extractor, id);
     }
 
-    @Override
-    public Set<com.netcracker.solutions.kpi.persistence.model.User> getAllStudents() {
-        log.info("Get all Students");
-        return jdbcDaoSupport.getJdbcTemplate().queryForSet(SQL_GET_ALL_STUDENTS, extractor);
-    }
+//    @Override
+//    public Set<com.netcracker.solutions.kpi.persistence.model.User> getAllStudents() {
+//        log.info("Get all Students");
+//        return jdbcDaoSupport.getJdbcTemplate().queryForSet(SQL_GET_ALL_STUDENTS, extractor);
+//    }
 
     @Override
     public List<com.netcracker.solutions.kpi.persistence.model.User> getEmployeesFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase) {
@@ -381,7 +352,9 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<com.netcracker.solutions.kpi.persistence.model.User> getFilteredEmployees(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart, Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated) {
+    public List<User> getFilteredEmployees(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart,
+                                           Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer,
+                                           boolean notEvaluated) {
         log.info("Get Filtered Employees");
         String sql = SQL_GET_FILTERED_EMPLOYEES_FOR_ROWS;
         sql += sortingCol.toString();
@@ -409,11 +382,11 @@ public class UserDaoImpl implements UserDao {
         return jdbcDaoSupport.getJdbcTemplate().queryForSet(SQL_GET_ALL_EMPLOYEES, extractor);
     }
 
-    @Override
+   /* @Override
     public Set<com.netcracker.solutions.kpi.persistence.model.User> getAll() {
         log.info("Get all Users");
         return jdbcDaoSupport.getJdbcTemplate().queryForSet(SQL_GET_ALL, extractor);
-    }
+    }*/
 
     private Set<Role> getRoles(Long userID) {
         return jdbcDaoSupport.getJdbcTemplate().queryWithParameters("SELECT ur.id_role, r.role \n" +
@@ -525,7 +498,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Long getEmployeeCountFiltered(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart, Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated) {
+    public Long getEmployeeCountFiltered(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart,
+                                         Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated) {
         String sql = SQL_GET_FILTERED_EMPLOYEES_FOR_ROWS_COUNT;
         StringBuilder sb = new StringBuilder();
         sb.append('{');

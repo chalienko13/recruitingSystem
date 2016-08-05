@@ -4,6 +4,7 @@ import com.netcracker.solutions.kpi.persistence.dao.ApplicationFormDao;
 import com.netcracker.solutions.kpi.persistence.dao.DataSourceSingleton;
 import com.netcracker.solutions.kpi.persistence.dao.FormAnswerDao;
 import com.netcracker.solutions.kpi.persistence.model.*;
+import com.netcracker.solutions.kpi.persistence.repository.ApplicationFormRepository;
 import com.netcracker.solutions.kpi.service.ApplicationFormService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,15 +24,14 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 	private ApplicationFormDao applicationFormDao;
 
     @Autowired
-    private FormAnswerDao formAnswerDao;// = DaoFactory.getFormAnswerDao();
+    private ApplicationFormRepository applicationFormRepository;
 
-	/*public ApplicationFormServiceImpl(ApplicationFormDao applicationFormDao) {
-		this.applicationFormDao = applicationFormDao;
-	}*/
+    @Autowired
+    private FormAnswerDao formAnswerDao;
 
 	@Override
 	public ApplicationForm getApplicationFormById(Long id) {
-		return applicationFormDao.getById(id);
+		return applicationFormRepository.findOne(id);
 	}
 
 	@Override
@@ -70,8 +70,8 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 	}
 
 	@Override
-	public int deleteApplicationForm(ApplicationForm applicationForm) {
-		return applicationFormDao.deleteApplicationForm(applicationForm);
+	public void deleteApplicationForm(ApplicationForm applicationForm) {
+        applicationFormRepository.delete(applicationForm);
 	}
 
 	@Override
@@ -96,12 +96,12 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 
 	@Override
 	public List<ApplicationForm> getAll() {
-		return applicationFormDao.getAll();
+		return applicationFormRepository.findAll();
 	}
 
 	@Override
-	public int updateApplicationForm(ApplicationForm applicationForm) {
-		return applicationFormDao.updateApplicationForm(applicationForm);
+	public void updateApplicationForm(ApplicationForm applicationForm) {
+        applicationFormRepository.save(applicationForm);
 	}
 
 	@Override

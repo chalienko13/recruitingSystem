@@ -7,10 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.io.Serializable;
 
-/**
- * @author Korzh
- */
-
 public class Message implements Serializable {
 
     private static final long serialVersionUID = -1827405242957243162L;

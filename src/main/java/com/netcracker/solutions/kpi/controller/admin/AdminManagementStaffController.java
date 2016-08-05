@@ -124,7 +124,7 @@ public class AdminManagementStaffController {
     @RequestMapping(value = "addEmployee", method = RequestMethod.POST)
     public void addEmployee(@RequestBody UserDto userDto) throws MessagingException {
         List<Role> roles = userDto.getRoleList();
-        List<Role> userRoles = new ArrayList<>();
+        Set<Role> userRoles = new HashSet<>();
         for (Role role : roles) {
             userRoles.add(roleService.getRoleByTitle(role.getRoleName()));
         }
@@ -138,7 +138,8 @@ public class AdminManagementStaffController {
         user.setPassword(passwordEncoderGeneratorService.encode(password));
         user.setActive(true);
         user.setRegistrationDate(new Timestamp(date.getTime()));
-        userService.insertUser(user, userRoles);
+        user.setRoles(userRoles);
+        userService.createUser(user);
         user.setPassword(password);
         EmailTemplate emailTemplate = emailTemplateService.getById(STAFF_REGISTRATION.getId());
         //TODO FIX! because of new scheduling (Olesia)

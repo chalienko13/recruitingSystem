@@ -8,40 +8,25 @@ import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
 import java.util.Set;
 
-/**
- * Created by Chalienko on 13.04.2016.
- */
-
 @Entity
-@Table(name = "user")
+@Table(name = "role")
 public class Role implements GrantedAuthority {
 
     private static final long serialVersionUID = -3446275256614511482L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "role")
     private String roleName;
 
-    @ManyToMany(mappedBy="roles")
+    @ManyToMany(mappedBy = "roles")
     private Set<User> users;
-
-    public Role(Long id, String roleName, Set<User> users ) {
-        this.roleName = roleName;
-        this.id = id;
-        this.users = users;
-    }
 
     public Role(Long id, String roleName) {
         this.id = id;
         this.roleName = roleName;
-    }
-
-    public Role(String roleName, Set<User> users) {
-        this.roleName = roleName;
-        this.users = users;
     }
 
     public Role() {
@@ -75,7 +60,7 @@ public class Role implements GrantedAuthority {
         this.users = users;
     }
 
-    @Override
+      @Override
     public boolean equals(Object o) {
         if (this == o) return true;
 

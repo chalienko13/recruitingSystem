@@ -25,7 +25,7 @@ public class RoleDaoImpl implements RoleDao {
         long roleId = resultSet.getLong("id");
         role.setId(roleId);
         role.setRoleName(resultSet.getString("role"));
-        role.setUsers(getUsers(roleId));
+        /*role.setUsers(getUsers(roleId));*/
         return role;
     };
 

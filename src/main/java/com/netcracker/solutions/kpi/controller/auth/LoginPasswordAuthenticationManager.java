@@ -17,6 +17,7 @@ public class LoginPasswordAuthenticationManager implements AuthenticationManager
 
     @Autowired
     private UserAuthServiceLoginPassword userAuthServiceLoginPassword;
+
     @Autowired
     private PasswordEncoderGeneratorService passwordEncoderGeneratorService;
 

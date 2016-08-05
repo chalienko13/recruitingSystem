@@ -25,13 +25,16 @@ import java.util.Objects;
 public class StaffStudentManagementController {
 
     @Autowired
-	private InterviewService interviewService;// = ServiceFactory.getInterviewService();
+	private InterviewService interviewService;
+
     @Autowired
-	private ApplicationFormService applicationFormService;// = ServiceFactory.getApplicationFormService();
+	private ApplicationFormService applicationFormService;
+
     @Autowired
-	private UserService userService;// = ServiceFactory.getUserService();
+	private UserService userService;
+
     @Autowired
-	private RoleService roleService;// = ServiceFactory.getRoleService();
+	private RoleService roleService;
 
 	private static Gson gson = new Gson();
 

@@ -28,7 +28,7 @@ public class FormQuestionDaoImpl implements FormQuestionDao {
         formQuestion.setEnable(resultSet.getBoolean(ENABLE_COL));
         formQuestion.setMandatory(resultSet.getBoolean(MANDATORY_COL));
         formQuestion.setOrder(resultSet.getInt(ORDER_COL));
-        formQuestion.setRoles(getRoles(resultSet.getLong(ID_COL)));
+//        formQuestion.setRoles(getRoles(resultSet.getLong(ID_COL)));
         formQuestion.setTitle(resultSet.getString(TITLE_COL));
         formQuestion.setQuestionType(new QuestionType(resultSet.getLong(ID_QUESTION_TYPE_COL),
                 resultSet.getString(QuestionTypeDaoImpl.TYPE_TITLE_COL)));
