@@ -220,18 +220,6 @@ public class UserServiceImpl implements UserService {
         return userDao.getCountUsersOnInterviewDaysForRole(role);
     }
 
-    @Override
-    public Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint) {
-        return userDao.insertFinalTimePoint(user, scheduleTimePoint);
-    }
-
-    @Override
-    public int deleteFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint) {
-        return userDao.deleteFinalTimePoint(user, scheduleTimePoint);
-    }
-    /////---------------------------------------------------------------------------
-
-
     //NOT USED
    /* @Override
     public Set<User> getAssignedStudents(Long id) {
