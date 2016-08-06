@@ -24,8 +24,8 @@ public class TimePriorityTypeServiceImpl implements TimePriorityTypeService {
         return timePriorityTypeDao.getByPriority(priority);
     }
 
-	@Override
-	public List<TimePriorityType> getAll() {
-		return timePriorityTypeDao.getAll();
-	}
+    @Override
+    public List<TimePriorityType> getAll() {
+        return timePriorityTypeDao.getAll();
+    }
 }

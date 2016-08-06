@@ -31,10 +31,10 @@ public class AdminAppFormInterviewController {
     private static Logger log = LoggerFactory.getLogger(AdminAppFormInterviewController.class.getName());
 
     @Autowired
-    private InterviewService interviewService; //= ServiceFactory.getInterviewService();
+    private InterviewService interviewService;
 
     @Autowired
-    private ApplicationFormService applicationFormService; //= ServiceFactory.getApplicationFormService();
+    private ApplicationFormService applicationFormService;
 
     @RequestMapping(value = "getApplicationForm/{studentId}", method = RequestMethod.POST)
     public String getApplicationForm(@PathVariable Long studentId) {

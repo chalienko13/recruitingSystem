@@ -5,7 +5,7 @@ package com.netcracker.solutions.kpi.persistence.dto;
  */
 public class QuestionVariantDto {
 
-    private  long id;
+    private long id;
     private String variant;
 
     public QuestionVariantDto() {

@@ -5,18 +5,15 @@ import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.User;
 
 import java.util.List;
-import java.util.Set;
 
 public interface RoleService {
-	Role getRoleById(Long id);
+    Role getRoleById(Long id);
 
-	Role getRoleByTitle(String title);
+    Role getRoleByTitle(String title);
 
-	List<Role> getAll();
+    List<Role> getAll();
 
-	void deleteRole(Role role);
+    public boolean isInterviewerRole(Role role);
 
-	public boolean isInterviewerRole(Role role);
-	
-	List<Role> getPossibleInterviewsRoles(ApplicationForm applicationForm, User interviewer);
+    List<Role> getPossibleInterviewsRoles(ApplicationForm applicationForm, User interviewer);
 }

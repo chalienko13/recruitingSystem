@@ -17,11 +17,11 @@ public class AuthenticationController {
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public CurrentAuthUser getCurrentUser() {
         log.info("Looking authorized user");
-        if (SecurityContextHolder.getContext().getAuthentication() instanceof UserAuthentication){
+        if (SecurityContextHolder.getContext().getAuthentication() instanceof UserAuthentication) {
             User user = ((UserAuthentication) SecurityContextHolder.getContext().getAuthentication()).getDetails();
             log.info("Authorized user found - {}", user.getEmail());
-            return new  CurrentAuthUser(user.getId(), user.getFirstName(), user.getRoles());
-        }else {
+            return new CurrentAuthUser(user.getId(), user.getFirstName(), user.getRoles());
+        } else {
             log.info("Authorized user not found");
             return null;
         }

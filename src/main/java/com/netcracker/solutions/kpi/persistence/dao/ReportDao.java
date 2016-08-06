@@ -12,19 +12,19 @@ import java.util.Set;
  * Created by Nikita on 24.04.2016.
  */
 public interface ReportDao {
-	ReportInfo getByID(Long id);
+    ReportInfo getByID(Long id);
 
-	ReportInfo getByTitle(String title);
+    ReportInfo getByTitle(String title);
 
-	Set<ReportInfo> getAll();
+    Set<ReportInfo> getAll();
 
-	Long insertReport(ReportInfo report);
+    Long insertReport(ReportInfo report);
 
-	int updateReport(ReportInfo report);
+    int updateReport(ReportInfo report);
 
-	int deleteReport(ReportInfo report);
+    int deleteReport(ReportInfo report);
 
-	List<Line> extractWithMetaData(ReportInfo reportInfo);
+    List<Line> extractWithMetaData(ReportInfo reportInfo);
 
-	Line getAnswerVariantLine(ReportInfo reportInfo, FormQuestion question, FormAnswerVariant formAnswerVariant);
+    Line getAnswerVariantLine(ReportInfo reportInfo, FormQuestion question, FormAnswerVariant formAnswerVariant);
 }

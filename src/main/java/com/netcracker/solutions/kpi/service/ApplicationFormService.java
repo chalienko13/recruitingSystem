@@ -1,6 +1,7 @@
 package com.netcracker.solutions.kpi.service;
 
 import com.netcracker.solutions.kpi.persistence.model.*;
+import com.netcracker.solutions.kpi.persistence.model.enums.StatusEnum;
 
 import java.util.List;
 
@@ -17,12 +18,6 @@ public interface ApplicationFormService {
 
     ApplicationForm getLastApplicationFormByUserId(Long id);
 
-    List<ApplicationForm> getByUserId(Long id);
-
-    List<ApplicationForm> getByStatus(String status);
-
-    List<ApplicationForm> getByState(boolean state);
-
     Long getCountRejectedAppForm();
 
     Long getCountToWorkAppForm();
@@ -32,8 +27,6 @@ public interface ApplicationFormService {
     Long getCountAdvancedAppForm();
 
     Long getCountApprovedAppForm();
-
-    void deleteApplicationForm(ApplicationForm applicationForm);
 
     boolean insertApplicationForm(ApplicationForm applicationForm);
 
@@ -51,8 +44,6 @@ public interface ApplicationFormService {
 
     Long getCountApprovedStudentsByRecruitmentId(Long id);
 
-    List<ApplicationForm> getCurrentsApplicationForms(Long fromRow, Long rowsNum, Long sortingCol, boolean increase);
-
     List<ApplicationForm> getApplicationFormsSorted(Long fromRow, Long rowsNum, Long sortingCol, boolean increase);
 
     List<ApplicationForm> getSearchAppFormByNameFromToRows(String lastName, Long fromRows, Long rowsNum);
@@ -63,13 +54,11 @@ public interface ApplicationFormService {
 
     Long getCountInReviewAppForm();
 
-    List<ApplicationForm> getCurrentApplicationForms();
-
     List<ApplicationForm> getByStatusAndRecruitment(Status status, Recruitment recruitment);
 
     List<ApplicationForm> getByRecruitment(Recruitment recruitment);
 
-    List<ApplicationForm> getRejectedAfterInterview(Recruitment recruitment);
+    boolean updateApplicationFormWithAnswers(ApplicationForm applicationForm);
 
-	boolean updateApplicationFormWithAnswers(ApplicationForm applicationForm);
+    void calculateStatuses(Recruitment recruitment);
 }

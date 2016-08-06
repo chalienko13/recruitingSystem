@@ -24,16 +24,9 @@ public class UserTimePriorityServiceImpl implements UserTimePriorityService {
     private UserTimePriorityDao userTimePriorityDao;
 
     @Autowired
-    private ScheduleTimePointService timePointService;// = ServiceFactory.getScheduleTimePointService();
-
+    private ScheduleTimePointService timePointService;
     @Autowired
-    private TimePriorityTypeService priorityTypeService;// = ServiceFactory.getTimePriorityTypeService();
-
-/*    private TimePriorityType defaultPriorityType = priorityTypeService.getByID(TimePriorityTypeEnum.CAN.getId());*/
-
-    /*public UserTimePriorityServiceImpl(UserTimePriorityDao userTimePriorityDao) {
-        this.userTimePriorityDao = userTimePriorityDao;
-    }*/
+    private TimePriorityTypeService priorityTypeService;
 
     @Override
     public UserTimePriority getByUserTime(User user, ScheduleTimePoint scheduleTimePoint) {

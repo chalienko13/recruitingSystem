@@ -4,11 +4,8 @@ import com.google.gson.Gson;
 import com.netcracker.solutions.kpi.persistence.dto.*;
 import com.netcracker.solutions.kpi.persistence.model.*;
 import com.netcracker.solutions.kpi.persistence.model.adapter.GsonFactory;
-import com.netcracker.solutions.kpi.persistence.model.enums.EmailTemplateEnum;
 import com.netcracker.solutions.kpi.persistence.model.enums.RoleEnum;
-import com.netcracker.solutions.kpi.persistence.model.enums.StatusEnum;
 import com.netcracker.solutions.kpi.service.*;
-import com.netcracker.solutions.kpi.service.util.SenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,41 +15,37 @@ import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.netcracker.solutions.kpi.persistence.model.enums.EmailTemplateEnum.*;
 import static com.netcracker.solutions.kpi.persistence.model.enums.StatusEnum.*;
-import static com.netcracker.solutions.kpi.persistence.model.enums.StatusEnum.valueOf;
 
 @RestController
 @RequestMapping("/admin")
 public class AdminManagementStudentController {
 
     @Autowired
-    private ApplicationFormService applicationFormService;// = ServiceFactory.getApplicationFormService();
+    private ApplicationFormService applicationFormService;
     @Autowired
-    private UserService userService;// = ServiceFactory.getUserService();
+    private UserService userService;
     @Autowired
-    private FormAnswerService formAnswerService;// = ServiceFactory.getFormAnswerService();
+    private FormAnswerService formAnswerService;
     @Autowired
-    private FormQuestionService formQuestionService;// = ServiceFactory.getFormQuestionService();
+    private FormQuestionService formQuestionService;
     @Autowired
-    private StatusService statusService;// = ServiceFactory.getStatusService();
+    private StatusService statusService;
     @Autowired
-    private RoleService roleService;// = ServiceFactory.getRoleService();
+    private RoleService roleService;
     @Autowired
-    private EmailTemplateService emailTemplateService;// = ServiceFactory.getEmailTemplateService();
+    private RecruitmentService recruitmentService;
     @Autowired
-    private SenderService senderService;// = SenderServiceImpl.getInstance();
+    private InterviewService interviewService;
     @Autowired
-    private RecruitmentService recruitmentService;// = ServiceFactory.getRecruitmentService();
+    private UserTimePriorityService userTimePriorityService;
     @Autowired
-    private InterviewService interviewService;// = ServiceFactory.getInterviewService();
-    @Autowired
-    private UserTimePriorityService userTimePriorityService;// = ServiceFactory.getUserTimePriorityService();
-    @Autowired
-    private ScheduleTimePointService scheduleTimePointService;// = ServiceFactory.getScheduleTimePointService();
+    private ScheduleTimePointService scheduleTimePointService;
     @Autowired
     private DecisionService decisionService;
-    ;// = ServiceFactory.getDecisionService();
+
+    @Autowired
+    private EmailService emailService;
 
 
     @RequestMapping(value = "showAllStudents", method = RequestMethod.GET)
@@ -237,63 +230,15 @@ public class AdminManagementStudentController {
 
     @RequestMapping(value = "calculateStatuses", method = RequestMethod.POST)
     public void calculateStatuses() {
-        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
-        Status approvedStatus = statusService.getStatusById(APPROVED.getId());
-        List<ApplicationForm> approvedForms = applicationFormService.getByStatusAndRecruitment(approvedStatus, recruitment);
-
-        for (ApplicationForm applicationForm : approvedForms) {
-            Interview interviewSoft = interviewService.getByApplicationFormAndInterviewerRoleId(applicationForm,
-                    RoleEnum.ROLE_SOFT.getId());
-            Interview interviewTech = interviewService.getByApplicationFormAndInterviewerRoleId(applicationForm,
-                    RoleEnum.ROLE_TECH.getId());
-            if (interviewSoft != null && interviewSoft.getMark() != null && interviewTech != null
-                    && interviewTech.getMark() != null) {
-                Integer softMark = interviewSoft.getMark();
-                Integer techMark = interviewTech.getMark();
-                int finalMark = decisionService.getByMarks(softMark, techMark).getFinalMark();
-                if (finalMark > 0) {
-                    Status finalStatus = decisionService.getStatusByFinalMark(finalMark);
-                    applicationForm.setStatus(finalStatus);
-                    applicationFormService.updateApplicationForm(applicationForm);
-                }
-            }
-        }
+        applicationFormService.calculateStatuses(recruitmentService.getCurrentRecruitmnet());
     }
 
 
     @RequestMapping(value = "announceResults", method = RequestMethod.POST)
     public String announceResults() throws MessagingException {
-        Gson gson = new Gson();
-        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+        emailService.sendInterviewResults(recruitmentService.getCurrentRecruitmnet());
 
-        EmailTemplate rejectedTemplate = emailTemplateService.getById(INTERVIEW_RESULT_REJECTED.getId());
-        List<ApplicationForm> rejectedForms = applicationFormService.getRejectedAfterInterview(recruitment);
-        sendMessages(rejectedForms, rejectedTemplate);
-
-        StatusEnum[] statusEnums = {APPROVED_TO_JOB, APPROVED_TO_ADVANCED_COURSES, APPROVED_TO_GENERAL_COURSES};
-        EmailTemplateEnum[] emailTemplateEnums = {INTERVIEW_RESULT_APPROVED_JOB, INTERVIEW_RESULT_APPROVED_ADVANCED,
-                INTERVIEW_RESULT_APPROVED};
-
-        for (int i = 0; i < statusEnums.length; i++) {
-            StatusEnum statusEnum = statusEnums[i];
-            Status status = statusService.getStatusById(statusEnum.getId());
-            List<ApplicationForm> formsWithThisStatus = applicationFormService.getByStatusAndRecruitment(status,
-                    recruitment);
-            EmailTemplateEnum emailTemplateEnum = emailTemplateEnums[i];
-            EmailTemplate emailTemplate = emailTemplateService.getById(emailTemplateEnum.getId());
-            sendMessages(formsWithThisStatus, emailTemplate);
-        }
-
-        return gson.toJson(new MessageDto("Results were announced.", MessageDtoType.SUCCESS));
-    }
-
-    private void sendMessages(List<ApplicationForm> applicationForms, EmailTemplate emailTemplate) throws MessagingException {
-        for (ApplicationForm applicationForm : applicationForms) {
-            User student = applicationForm.getUser();
-            String subject = emailTemplate.getTitle();
-            String text = emailTemplateService.showTemplateParams(emailTemplate.getText(), student);
-            senderService.send(student.getEmail(), subject, text);
-        }
+        return new Gson().toJson(new MessageDto("Results were announced.", MessageDtoType.SUCCESS));
     }
 
     @RequestMapping(value = "scheduleDatesExist", method = RequestMethod.GET)
@@ -319,29 +264,18 @@ public class AdminManagementStudentController {
         }
         Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
         processApprovedStudents(recruitment);
-        processRejectedStudentsSelection(recruitment);
+        emailService.sendInterviewInvitation(recruitment);
         return gson.toJson(new MessageDto("Selection confirmed.",
                 MessageDtoType.SUCCESS));
     }
 
     private void processApprovedStudents(Recruitment recruitment) throws MessagingException {
-        Status approvedStatus = statusService.getStatusById(APPROVED.getId());
-        EmailTemplate approvedTemplate = emailTemplateService.getById(5L);
-        List<ApplicationForm> approvedForms = applicationFormService.getByStatusAndRecruitment(approvedStatus,
-                recruitment);
-        sendMessages(approvedForms, approvedTemplate);
+        List<ApplicationForm> approvedForms = applicationFormService
+                .getByStatusAndRecruitment(APPROVED.getStatus(), recruitment);
         for (ApplicationForm applicationForm : approvedForms) {
             User student = applicationForm.getUser();
             userTimePriorityService.createStudentTimePriotities(student);
         }
-    }
-
-    private void processRejectedStudentsSelection(Recruitment recruitment) throws MessagingException {
-        Status rejectedStatus = statusService.getStatusById(REJECTED.getId());
-        EmailTemplate rejectedTemplate = emailTemplateService.getById(6L);
-        List<ApplicationForm> rejectedForms = applicationFormService.getByStatusAndRecruitment(rejectedStatus,
-                recruitment);
-        sendMessages(rejectedForms, rejectedTemplate);
     }
 
 

@@ -10,35 +10,29 @@ import java.util.Set;
 
 public interface FormQuestionService {
 
-	public boolean insertFormQuestion(FormQuestion formQuestion, Role role);
+    int updateFormQuestion(FormQuestion formQuestion);
 
-	int updateFormQuestion(FormQuestion formQuestion);
+    boolean updateQuestions(FormQuestion formQuestion, List<FormAnswerVariant> formAnswerVariants);
 
-	boolean updateQuestions (FormQuestion formQuestion,  List<FormAnswerVariant> formAnswerVariants);
+    boolean insertFormQuestion(FormQuestion formQuestion, Role role, List<FormAnswerVariant> formAnswerVariants);
 
-	boolean insertFormQuestion(FormQuestion formQuestion, Role role, List<FormAnswerVariant> formAnswerVariants);
+    int deleteFormQuestion(FormQuestion formQuestion);
 
-	int deleteFormQuestion(FormQuestion formQuestion);
+    FormQuestion getById(Long id);
 
-	boolean addRole(FormQuestion formQuestion, Role role);
+    List<FormQuestion> getByRole(Role role);
 
-	int deleteRole(FormQuestion formQuestion, Role role);
+    List<FormQuestion> getByRoleNonText(Role role);
 
-	FormQuestion getById(Long id);
+    List<FormQuestion> getAll();
 
-	List<FormQuestion> getByRole(Role role);
+    List<FormQuestion> getEnableByRole(Role role);
 
-	List<FormQuestion> getByRoleNonText(Role role);
+    Set<FormQuestion> getByEnableRoleAsSet(Role role);
 
-	List<FormQuestion> getAll();
-	
-	List<FormQuestion> getEnableByRole(Role role);
-	
-	Set<FormQuestion> getByEnableRoleAsSet(Role role);
-	
-	Set<FormQuestion> getByApplicationFormAsSet(ApplicationForm applicationForm);
-	
-	List<FormQuestion> getEnableUnconnectedQuestion(ApplicationForm applicationForm);
-	
-	List<FormQuestion> getWithVariantsByRole(Role role);
+    Set<FormQuestion> getByApplicationFormAsSet(ApplicationForm applicationForm);
+
+    List<FormQuestion> getEnableUnconnectedQuestion(ApplicationForm applicationForm);
+
+    List<FormQuestion> getWithVariantsByRole(Role role);
 }

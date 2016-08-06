@@ -1,6 +1,5 @@
 package com.netcracker.solutions.kpi.config;
 
-import com.netcracker.solutions.kpi.service.util.SendMessageJob;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +17,6 @@ public class QuartzConfiguration {
     @Bean
     public JobDetailFactoryBean jobDetailResendMessage() {
         JobDetailFactoryBean factory = new JobDetailFactoryBean();
-        factory.setJobClass(SendMessageJob.class);
         Map<String, Object> map = new HashMap<>();
         map.put("name", "ResendJob");
         factory.setJobDataAsMap(map);
@@ -38,7 +36,7 @@ public class QuartzConfiguration {
         return stFactory;
     }
 
-    
+
     @Bean
     public SchedulerFactoryBean schedulerResendMessage() {
         SchedulerFactoryBean scheduler = new SchedulerFactoryBean();

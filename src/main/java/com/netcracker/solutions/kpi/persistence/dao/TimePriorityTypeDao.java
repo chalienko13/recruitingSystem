@@ -12,5 +12,5 @@ public interface TimePriorityTypeDao {
 
     TimePriorityType getByPriority(String priority);
 
-	List<TimePriorityType> getAll();
+    List<TimePriorityType> getAll();
 }

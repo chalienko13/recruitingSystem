@@ -16,7 +16,7 @@ public class GsonFactory {
     private static Gson interviewGson;
 
     public static Gson getApplicationFormGson() {
-        if (applicationFormGson == null){
+        if (applicationFormGson == null) {
             applicationFormGson = new GsonBuilder().registerTypeAdapter(ApplicationForm.class,
                     new ApplicationFormAdapter())
                     .setPrettyPrinting()
@@ -26,7 +26,7 @@ public class GsonFactory {
     }
 
     public static Gson getInterviewGson() {
-        if (interviewGson == null){
+        if (interviewGson == null) {
             interviewGson = new GsonBuilder().registerTypeAdapter(Interview.class, new InterviewAdapter())
                     .setPrettyPrinting()
                     .create();

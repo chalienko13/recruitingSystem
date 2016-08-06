@@ -20,29 +20,9 @@ public class DecisionServiceImpl implements DecisionService {
     @Autowired
     private StatusService statusService;
 
-    /*public DecisionServiceImpl(DecisionDao decisionDao) {
-        this.decisionDao = decisionDao;
-        statusService = ServiceFactory.getStatusService();
-    }*/
-
     @Override
     public Decision getByMarks(int softMark, int techMark) {
         return decisionDao.getByMarks(softMark, techMark);
-    }
-
-    @Override
-    public Long insertDecision(Decision decision) {
-        return decisionDao.insertDecision(decision);
-    }
-
-    @Override
-    public int updateDecision(Decision decision) {
-        return decisionDao.updateDecision(decision);
-    }
-
-    @Override
-    public int deleteDecision(Decision decision) {
-        return decisionDao.deleteDecision(decision);
     }
 
     @Override
@@ -54,11 +34,11 @@ public class DecisionServiceImpl implements DecisionService {
     public Status getStatusByFinalMark(int finalMark) {
         switch (finalMark) {
             case 3:
-                return statusService.getStatusById(StatusEnum.APPROVED_TO_JOB.getId());
+                return StatusEnum.APPROVED_TO_JOB.getStatus();
             case 2:
-                return statusService.getStatusById(StatusEnum.APPROVED_TO_GENERAL_COURSES.getId());
+                return StatusEnum.APPROVED_TO_GENERAL_COURSES.getStatus();
             case 1:
-                return statusService.getStatusById(StatusEnum.REJECTED.getId());
+                return StatusEnum.REJECTED.getStatus();
         }
         return null;
     }

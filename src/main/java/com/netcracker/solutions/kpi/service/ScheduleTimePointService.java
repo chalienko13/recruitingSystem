@@ -20,23 +20,17 @@ public interface ScheduleTimePointService {
 
     List<ScheduleTimePoint> getFinalTimePointByUserId(Long id);
 
-    Long insertScheduleTimePoint(ScheduleTimePoint scheduleTimePoint);
-
-    int updateScheduleTimePoint(ScheduleTimePoint scheduleTimePoint);
-
-    int deleteScheduleTimePoint(ScheduleTimePoint scheduleTimePoint);
-
     int deleteUserTimeFinal(User user, ScheduleTimePoint scheduleTimePoint);
 
-	ScheduleTimePoint getScheduleTimePointByTimepoint(Timestamp timestamp);
+    ScheduleTimePoint getScheduleTimePointByTimepoint(Timestamp timestamp);
 
-	List<ScheduleTimePoint> getAll();
+    List<ScheduleTimePoint> getAll();
 
-	boolean isScheduleDatesExists();
-	
-	boolean isScheduleExists();
+    boolean isScheduleDatesExists();
 
-    Map<Long,Long> getUsersNumberInFinalTimePoint(Timestamp timePoint);
+    boolean isScheduleExists();
+
+    Map<Long, Long> getUsersNumberInFinalTimePoint(Timestamp timePoint);
 
     Long addUserToTimepoint(User user, ScheduleTimePoint timePoint);
 }

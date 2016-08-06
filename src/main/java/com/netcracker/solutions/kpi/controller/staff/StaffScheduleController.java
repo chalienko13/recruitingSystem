@@ -30,13 +30,13 @@ import java.util.stream.IntStream;
 public class StaffScheduleController {
 
     @Autowired
-    private UserTimePriorityService userTimePriorityService;// = ServiceFactory.getUserTimePriorityService();
+    private UserTimePriorityService userTimePriorityService;
     @Autowired
-    private UserService userService;// = ServiceFactory.getUserService();
+    private UserService userService;
     @Autowired
-    private ScheduleTimePointService scheduleTimePointService;// = ServiceFactory.getScheduleTimePointService();
+    private ScheduleTimePointService scheduleTimePointService;
     @Autowired
-    private RecruitmentService recruitmentService;// = ServiceFactory.getRecruitmentService();
+    private RecruitmentService recruitmentService;
 
     @RequestMapping(value = "getUserTimePriorities", method = RequestMethod.POST)
     public List<UserTimePriorityDto> getUserTimePriorities() {

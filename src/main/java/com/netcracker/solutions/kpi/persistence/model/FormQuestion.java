@@ -21,7 +21,7 @@ public class FormQuestion implements Serializable {
     @Column(name = "title")
     private String title;
 
-    @OneToOne(fetch =  FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_question_type")
     private QuestionType questionType;
 
@@ -55,7 +55,7 @@ public class FormQuestion implements Serializable {
         this.formAnswerVariants = formAnswerVariants;
     }
 
-    public FormQuestion(String title, QuestionType questionType, boolean enable, boolean mandatory,List<FormAnswerVariant> formAnswerVariants, int order) {// List<Role> questionRoles,
+    public FormQuestion(String title, QuestionType questionType, boolean enable, boolean mandatory, List<FormAnswerVariant> formAnswerVariants, int order) {// List<Role> questionRoles,
         this.title = title;
         this.questionType = questionType;
         this.enable = enable;

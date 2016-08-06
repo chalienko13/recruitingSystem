@@ -14,10 +14,6 @@ public class NotificationTypeServiceImpl implements NotificationTypeService {
     @Autowired
     private NotificationTypeDao notificationTypeDao;
 
-    /*public NotificationTypeServiceImpl(NotificationTypeDao notificationTypeDao) {
-        this.notificationTypeDao = notificationTypeDao;
-    }*/
-
     @Override
     public NotificationType getById(Long id) {
         return notificationTypeDao.getById(id);
@@ -26,16 +22,6 @@ public class NotificationTypeServiceImpl implements NotificationTypeService {
     @Override
     public NotificationType getByTitle(String title) {
         return notificationTypeDao.getByTitle(title);
-    }
-
-    @Override
-    public int updateNotificationType(NotificationType notificationType) {
-        return notificationTypeDao.updateNotificationType(notificationType);
-    }
-
-    @Override
-    public int deleteNotificationType(NotificationType notificationType) {
-        return notificationTypeDao.deleteNotificationType(notificationType);
     }
 
     @Override

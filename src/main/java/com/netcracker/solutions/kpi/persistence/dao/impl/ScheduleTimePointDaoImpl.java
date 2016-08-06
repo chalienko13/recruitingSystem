@@ -16,11 +16,32 @@ import java.util.*;
 
 @Repository
 public class ScheduleTimePointDaoImpl implements ScheduleTimePointDao {
-    private static Logger log = LoggerFactory.getLogger(ScheduleTimePointDaoImpl.class.getName());
+    private static final String GET_BY_ID = "SELECT s.id, s.time_point tp FROM public.schedule_time_point s WHERE s.id = ?;";
+    private static final String GET_BY_TIMEPOINT = "SELECT s.id, s.time_point tp FROM public.schedule_time_point s WHERE s.time_point = ?;";
+    private static final String GET_ALL = "SELECT s.id, s.time_point tp FROM public.schedule_time_point s ORDER BY s.time_point";
 
+    private static final String USERS_FINAL_TIME_QUERY = "SELECT u.id, u.email, u.first_name,u.last_name,u.second_name,"
+            + " u.password, u.confirm_token, u.is_active, u.registration_date "
+            + "FROM public.user u join public.user_time_final f on u.id=f.id_user join public.schedule_time_point s on  f.id_time_point= s.id Where s.id=?;";
+    private static final String USER_TIME_PRIORITY = "select  utp.id_user, utp.id_time_point, utp.id_priority_type, "
+            + "tpt.choice  from user_time_priority utp inner join time_priority_type tpt on tpt.id = utp.id_priority_type "
+            + "where utp.id_time_point = ?;";
+    private static final String FINAL_TIME_POINT_BY_USER_ID = "SELECT s.id, s.time_point tp FROM public.user u "
+            + "join public.user_time_final f on u.id=f.id_user join public.schedule_time_point s on  f.id_time_point= s.id Where u.id=?;";
+    private static final String INSERT_SCHEDULE_TIME_POINT = "INSERT INTO schedule_time_point ( time_point) VALUES (?);";
+    private static final String UPDATE_SCHEDULE_TIME_POINT = "UPDATE schedule_time_point set time_point = ? WHERE id = ?;";
+    private static final String DELETE_SCHEDULE_TIME_POINT = "DELETE FROM schedule_time_point WHERE id = ?";
+    private static final String SQL_IS_SCHEDULE_DATES_EXIST = "SELECT EXISTS (SELECT 1 FROM schedule_time_point stp)";
+    private static final String SQL_IS_SCHEDULE_EXISTS = "SELECT EXISTS (SELECT 1 FROM user_time_final utf)";
+    private static final String USERS_COUNT_IN_FINAL_TIME = "SELECT sel.num as number, sel.role FROM ( SELECT ur.id_role as role, count(ur.id_role) as num FROM \"user\" u INNER JOIN user_role ur\n" +
+            "    on ur.id_user=u.id INNER JOIN user_time_final f on u.id=f.id_user INNER JOIN schedule_time_point s \n" +
+            "    on s.id = f.id_time_point WHERE s.time_point = ? GROUP BY ur.id_role) sel;";
+    private static final String DELETE_USER_TIME_FINAL = "DELETE FROM user_time_final where id_user = ? and id_time_point=?";
+    private static final String INSERT_USER_TIME_FINAL = "INSERT INTO \"user_time_final\"(id_user, id_time_point) VALUES (?,?)";
+    private static final String DELETE_ALL = "DELETE FROM schedule_time_point";
+    private static Logger log = LoggerFactory.getLogger(ScheduleTimePointDaoImpl.class.getName());
     @Autowired
     private JdbcDaoSupport jdbcDaoSupport;
-
     private ResultSetExtractor<ScheduleTimePoint> extractor = resultSet -> {
         ScheduleTimePoint scheduleTimePoint = new ScheduleTimePoint();
         scheduleTimePoint.setId(resultSet.getLong("id"));
@@ -29,45 +50,6 @@ public class ScheduleTimePointDaoImpl implements ScheduleTimePointDao {
         scheduleTimePoint.setUsers(getUsersFinalInTimePoint(resultSet.getLong("id")));
         return scheduleTimePoint;
     };
-
- /*   public ScheduleTimePointDaoImpl(DataSource dataSource) {
-        this.jdbcDaoSupport = new JdbcDaoSupport();
-        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
-    }*/
-
-    private static final String GET_BY_ID = "SELECT s.id, s.time_point tp FROM public.schedule_time_point s WHERE s.id = ?;";
-    private static final String GET_BY_TIMEPOINT = "SELECT s.id, s.time_point tp FROM public.schedule_time_point s WHERE s.time_point = ?;";
-    private static final String GET_ALL = "SELECT s.id, s.time_point tp FROM public.schedule_time_point s ORDER BY s.time_point";
-    private static final String USERS_FINAL_TIME_QUERY = "SELECT u.id, u.email, u.first_name,u.last_name,u.second_name,"
-            + " u.password, u.confirm_token, u.is_active, u.registration_date "
-            + "FROM public.user u join public.user_time_final f on u.id=f.id_user join public.schedule_time_point s on  f.id_time_point= s.id Where s.id=?;";
-
-    private static final String USER_TIME_PRIORITY = "select  utp.id_user, utp.id_time_point, utp.id_priority_type, "
-            + "tpt.choice  from user_time_priority utp inner join time_priority_type tpt on tpt.id = utp.id_priority_type "
-            + "where utp.id_time_point = ?;";
-
-    private static final String FINAL_TIME_POINT_BY_USER_ID = "SELECT s.id, s.time_point tp FROM public.user u "
-            + "join public.user_time_final f on u.id=f.id_user join public.schedule_time_point s on  f.id_time_point= s.id Where u.id=?;";
-
-    private static final String INSERT_SCHEDULE_TIME_POINT = "INSERT INTO schedule_time_point ( time_point) VALUES (?);";
-
-    private static final String UPDATE_SCHEDULE_TIME_POINT = "UPDATE schedule_time_point set time_point = ? WHERE id = ?;";
-
-    private static final String DELETE_SCHEDULE_TIME_POINT = "DELETE FROM schedule_time_point WHERE id = ?";
-
-    private static final String SQL_IS_SCHEDULE_DATES_EXIST = "SELECT EXISTS (SELECT 1 FROM schedule_time_point stp)";
-
-    private static final String SQL_IS_SCHEDULE_EXISTS = "SELECT EXISTS (SELECT 1 FROM user_time_final utf)";
-
-    private static final String USERS_COUNT_IN_FINAL_TIME = "SELECT sel.num as number, sel.role FROM ( SELECT ur.id_role as role, count(ur.id_role) as num FROM \"user\" u INNER JOIN user_role ur\n" +
-            "    on ur.id_user=u.id INNER JOIN user_time_final f on u.id=f.id_user INNER JOIN schedule_time_point s \n" +
-            "    on s.id = f.id_time_point WHERE s.time_point = ? GROUP BY ur.id_role) sel;";
-
-    private static final String DELETE_USER_TIME_FINAL = "DELETE FROM user_time_final where id_user = ? and id_time_point=?";
-
-    private static final String INSERT_USER_TIME_FINAL = "INSERT INTO \"user_time_final\"(id_user, id_time_point) VALUES (?,?)";
-
-    private static final String DELETE_ALL = "DELETE FROM schedule_time_point";
 
     @Override
     public int[] batchInsert(List<Timestamp> timestaps) {

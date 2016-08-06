@@ -20,4 +20,4 @@ public interface SchedulingSettingsDao {
     int deleteTimeRange(Long id);
 
     List<SchedulingSettings> getAll();
- }
+}

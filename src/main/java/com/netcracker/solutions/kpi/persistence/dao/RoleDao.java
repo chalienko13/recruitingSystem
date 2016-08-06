@@ -11,17 +11,17 @@ import java.util.Set;
  * Created by Chalienko on 13.04.2016.
  */
 public interface RoleDao {
-	Role getByID(Long id);
+    Role getByID(Long id);
 
-	Role getByTitle(String title);
-	
-	Set<Role> getAll();
+    Role getByTitle(String title);
 
-	Long insertRole(Role role);
+    Set<Role> getAll();
 
-	int updateRole(Role role);
+    Long insertRole(Role role);
 
-	int deleteRole(Role role);
+    int updateRole(Role role);
 
-	List<Role> getPossibleInterviewsRoles(ApplicationForm applicationForm, User interviewer);
+    int deleteRole(Role role);
+
+    List<Role> getPossibleInterviewsRoles(ApplicationForm applicationForm, User interviewer);
 }

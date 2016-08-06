@@ -20,16 +20,16 @@ import java.util.List;
 public class AdminFormSettingsController {
 
     @Autowired
-    private DecisionService decisionService;// = ServiceFactory.getDecisionService();
+    private DecisionService decisionService;
 
     @Autowired
-    private FormQuestionService formQuestionService;// = ServiceFactory.getFormQuestionService();
+    private FormQuestionService formQuestionService;
 
     @Autowired
-    private RoleService roleService;// = ServiceFactory.getRoleService();
+    private RoleService roleService;
 
     @Autowired
-    private QuestionTypeService questionTypeService;// = ServiceFactory.getQuestionTypeService();
+    private QuestionTypeService questionTypeService;
 
 
     @RequestMapping(value = "getQuestions", method = RequestMethod.GET)

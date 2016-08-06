@@ -29,10 +29,10 @@ public interface UserTimePriorityService {
 
     void createStudentTimePriotities(User student);
 
-    public int[] createStaffTimePriorities(Set<User> staffList) ;
+    public int[] createStaffTimePriorities(Set<User> staffList);
 
     boolean isSchedulePrioritiesExistStaff();
-    
+
     boolean isSchedulePrioritiesExistStudent();
 
     List<UserTimePriorityDto> getAllTimePriorityForUserById(Long userId);

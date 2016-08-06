@@ -21,13 +21,13 @@ public class StudentFeedbackController {
     private static Logger log = LoggerFactory.getLogger(RegistrationController.class.getName());
 
     @Autowired
-    private ApplicationFormService applicationFormService;// = ServiceFactory.getApplicationFormService();
+    private ApplicationFormService applicationFormService;
     @Autowired
-    private UserService userService;// = ServiceFactory.getUserService();
+    private UserService userService;
 
 
     @RequestMapping(value = "saveFeedBack", method = RequestMethod.POST)
-    public void getFeedback(@RequestParam String feedBack){
+    public void getFeedback(@RequestParam String feedBack) {
         log.info("Getting last application form");
         ApplicationForm applicationForm = applicationFormService.getLastApplicationFormByUserId(
                 ((UserAuthentication) SecurityContextHolder.getContext().getAuthentication()).getDetails().getId());
@@ -37,11 +37,11 @@ public class StudentFeedbackController {
     }
 
     @RequestMapping(value = "getFeedBack", method = RequestMethod.GET)
-    public ApplicationFormDto getFeedBack(@RequestParam String id){
+    public ApplicationFormDto getFeedBack(@RequestParam String id) {
         User user = userService.getUserByID(Long.parseLong(id));
-        if (null != user){
+        if (null != user) {
             return new ApplicationFormDto(applicationFormService.getLastApplicationFormByUserId(user.getId()).getFeedback());
-        }else {
+        } else {
             return null;
         }
     }

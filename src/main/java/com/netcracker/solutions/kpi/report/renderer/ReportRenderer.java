@@ -6,6 +6,6 @@ import java.io.OutputStream;
 
 public interface ReportRenderer {
 
-	public void render(Report report, OutputStream out);
+    public void render(Report report, OutputStream out);
 
 }

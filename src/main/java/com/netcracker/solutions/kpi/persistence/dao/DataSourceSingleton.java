@@ -36,12 +36,6 @@ public class DataSourceSingleton {
         }
     }
 
-    private static class DataSourceSingletonHolder{
-        public static final DataSourceSingleton HOLDER_INSTANCE = new DataSourceSingleton();
-        private DataSourceSingletonHolder() {
-        }
-    }
-
     public static DataSource getInstance() {
         return DataSourceSingletonHolder.HOLDER_INSTANCE.getDataSource();
     }
@@ -57,8 +51,15 @@ public class DataSourceSingleton {
         return pgDataSource;
     }
 
-    private DataSource getDataSource(){
+    private DataSource getDataSource() {
         return dataSource;
+    }
+
+    private static class DataSourceSingletonHolder {
+        public static final DataSourceSingleton HOLDER_INSTANCE = new DataSourceSingleton();
+
+        private DataSourceSingletonHolder() {
+        }
     }
 }
 

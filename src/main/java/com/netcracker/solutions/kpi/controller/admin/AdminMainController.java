@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminMainController {
 
     @Autowired
-    private RecruitmentService recruitmentService;// = ServiceFactory.getRecruitmentService();
+    private RecruitmentService recruitmentService;
 
     @Autowired
-    private ApplicationFormService applicationFormService;// = ServiceFactory.getApplicationFormService();
+    private ApplicationFormService applicationFormService;
 
     @RequestMapping(value = "recruitment", method = RequestMethod.POST)
     public Recruitment getRecruitmentData() {
-        if(null == recruitmentService.getCurrentRecruitmnet()){
+        if (null == recruitmentService.getCurrentRecruitmnet()) {
             return recruitmentService.getLastRecruitment();
         }
         return recruitmentService.getCurrentRecruitmnet();

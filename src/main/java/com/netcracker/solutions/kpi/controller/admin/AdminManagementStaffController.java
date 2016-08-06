@@ -1,18 +1,17 @@
 package com.netcracker.solutions.kpi.controller.admin;
 
-import com.netcracker.solutions.kpi.controller.auth.PasswordEncoderGeneratorService;
 import com.netcracker.solutions.kpi.persistence.dto.MessageDto;
 import com.netcracker.solutions.kpi.persistence.dto.StaffFiltrationParamsDto;
 import com.netcracker.solutions.kpi.persistence.dto.UserDto;
 import com.netcracker.solutions.kpi.persistence.dto.UserRateDto;
-import com.netcracker.solutions.kpi.persistence.model.EmailTemplate;
 import com.netcracker.solutions.kpi.persistence.model.Interview;
 import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.persistence.model.enums.RoleEnum;
-import com.netcracker.solutions.kpi.service.*;
-import com.netcracker.solutions.kpi.service.util.SenderService;
-import org.apache.commons.lang3.RandomStringUtils;
+import com.netcracker.solutions.kpi.service.InterviewService;
+import com.netcracker.solutions.kpi.service.RoleService;
+import com.netcracker.solutions.kpi.service.UserService;
+import com.netcracker.solutions.kpi.service.UserTimePriorityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,53 +20,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
-import java.sql.Timestamp;
 import java.util.*;
-
-import static com.netcracker.solutions.kpi.persistence.model.enums.EmailTemplateEnum.STAFF_INTERVIEW_SELECT;
-import static com.netcracker.solutions.kpi.persistence.model.enums.EmailTemplateEnum.STAFF_REGISTRATION;
 
 @RestController
 @RequestMapping("/admin")
 public class AdminManagementStaffController {
-    private static Logger log = LoggerFactory.getLogger(AdminManagementStaffController.class);
-
-    @Autowired
-    private UserService userService;// = ServiceFactory.getUserService();
-
-    @Autowired
-    private RoleService roleService;// = ServiceFactory.getRoleService();
-
-    @Autowired
-    private InterviewService interviewService;// = ServiceFactory.getInterviewService();
-
-    @Autowired
-    private SenderService senderService;// = SenderServiceImpl.getInstance();
-
-    @Autowired
-    private PasswordEncoderGeneratorService passwordEncoderGeneratorService;// = PasswordEncoderGeneratorService.getInstance();
-
-    @Autowired
-    private UserTimePriorityService userTimePriorityService;// = ServiceFactory.getUserTimePriorityService();
-
-    @Autowired
-    private RecruitmentService recruitmentService;// = ServiceFactory.getRecruitmentService();
-
-    @Autowired
-    private EmailTemplateService emailTemplateService;// = ServiceFactory.getEmailTemplateService();
-
     private final static String NEED_MORE_SOFT = "Need select more then 0 soft";
-
     private final static String NEED_MORE_TECH = "Need select more then 0 tech";
-
     private final static String NEED_MORE_TECH_SOFT = "Need select more then 0 then and soft";
-
     private final static String TIME_PRIORITY_ALREADY_EXIST = "Time priority already exist";
-
     private final static String CAN_NOT_DELETE = "Can't remove assignet user";
-
     private final static String CAN_NOT_EDIT = "Cannot edit employee.";
-
+    private static Logger log = LoggerFactory.getLogger(AdminManagementStaffController.class);
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private InterviewService interviewService;
+    @Autowired
+    private UserTimePriorityService userTimePriorityService;
 
     @RequestMapping(value = "showAllEmployees", method = RequestMethod.GET)
     public List<com.netcracker.solutions.kpi.persistence.model.User> showEmployees(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,
@@ -122,27 +94,13 @@ public class AdminManagementStaffController {
 
     @RequestMapping(value = "addEmployee", method = RequestMethod.POST)
     public void addEmployee(@RequestBody UserDto userDto) throws MessagingException {
-        List<Role> roles = userDto.getRoleList();
-        Set<Role> userRoles = new HashSet<>();
-        for (Role role : roles) {
-            userRoles.add(roleService.getRoleByTitle(role.getRoleName()));
-        }
-        Date date = new Date();
-        String password = RandomStringUtils.randomAlphabetic(10);
-        com.netcracker.solutions.kpi.persistence.model.User user = new User();
-        user.setEmail(userDto.getEmail());
-        user.setFirstName(userDto.getFirstName());
-        user.setSecondName(userDto.getSecondName());
-        user.setLastName(userDto.getLastName());
-        user.setPassword(passwordEncoderGeneratorService.encode(password));
-        user.setActive(true);
-        user.setRegistrationDate(new Timestamp(date.getTime()));
-        user.setRoles(userRoles);
-        userService.createUser(user);
-        user.setPassword(password);
-        EmailTemplate emailTemplate = emailTemplateService.getById(STAFF_REGISTRATION.getId());
-        String template = emailTemplateService.showTemplateParams(emailTemplate.getText(), user);
-        senderService.send(user.getEmail(), emailTemplate.getTitle(), template);
+        userService.createUser(userDto.getEmail(),
+                userDto.getFirstName(),
+                userDto.getSecondName(),
+                userDto.getLastName(),
+                userDto.getPassword(),
+                userDto.getRoleList(),
+                true); //isActive
     }
 
 
@@ -247,17 +205,8 @@ public class AdminManagementStaffController {
             } else if (techList.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(NEED_MORE_TECH));
             } else {
-                Set<com.netcracker.solutions.kpi.persistence.model.User> staff = new LinkedHashSet<>(softList);
+                Set<User> staff = new LinkedHashSet<>(softList);
                 staff.addAll(techList);
-                EmailTemplate emailTemplate = emailTemplateService.getById(STAFF_INTERVIEW_SELECT.getId());
-                for (com.netcracker.solutions.kpi.persistence.model.User user : staff) {
-                    String template = emailTemplateService.showTemplateParams(emailTemplate.getText(), user);
-                    try {
-                        senderService.send(user.getEmail(), emailTemplate.getTitle(), template);
-                    } catch (MessagingException e) {
-                        log.error("Cannot send email {}", e);
-                    }
-                }
                 userTimePriorityService.createStaffTimePriorities(staff);
                 return ResponseEntity.ok(null);
             }

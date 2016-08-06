@@ -15,27 +15,23 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class DeadlineController {
-
-  /*  private static class DeadlineControllerHolder{
-        static DeadlineController HOLDER_INSTANCE = new DeadlineController();
-    }*/
     private static final ScheduledExecutorService registeredStatusDeadline = Executors.newScheduledThreadPool(1);
     private static final ScheduledExecutorService endOfRecruitingDeadLine = Executors.newScheduledThreadPool(1);
 
     @Autowired
-    private ApplicationFormService applicationFormService;// = ServiceFactory.getApplicationFormService();
+    private ApplicationFormService applicationFormService;
 
     @Autowired
-    private RecruitmentService recruitmentService;// = ServiceFactory.getRecruitmentService();
+    private RecruitmentService recruitmentService;
 
     @Autowired
-    private UserService userService;// = ServiceFactory.getUserService();
+    private UserService userService;
 
     @Autowired
-    private SchedulingSettingsService scheduleSettingsService;// = ServiceFactory.getSchedulingSettingsService();
+    private SchedulingSettingsService scheduleSettingsService;
 
     @Autowired
-    private ScheduleTimePointService scheduleTimePointService;// = ServiceFactory.getScheduleTimePointService();
+    private ScheduleTimePointService scheduleTimePointService;
 
     @PostConstruct
     public void init() {
@@ -46,14 +42,9 @@ public class DeadlineController {
         }
     }
 
-  /*  public static DeadlineController getInstance(){
-        return DeadlineControllerHolder.HOLDER_INSTANCE;
-    }*/
-
     public void setRegisteredDeadline(Timestamp date) {
         registeredStatusDeadline.schedule(() -> {
             actionForRegisteredDeadline();
-            //   registeredStatusDeadline.shutdown();
         }, calculateDate(date), TimeUnit.MILLISECONDS);
     }
 

@@ -1,15 +1,15 @@
 package com.netcracker.solutions.kpi.persistence.model.enums;
 
 public enum ReportTypeEnum {
-	APPROVED(1L), ANSWERS(2L);
+    APPROVED(1L), ANSWERS(2L);
 
-	ReportTypeEnum(Long id) {
-		this.id = id;
-	}
+    private Long id;
 
-	private Long id;
+    ReportTypeEnum(Long id) {
+        this.id = id;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 }

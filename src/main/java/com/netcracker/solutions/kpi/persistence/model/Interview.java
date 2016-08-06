@@ -113,10 +113,6 @@ public class Interview implements Serializable {
         return adequateMark;
     }
 
-    public void setAdequateMark(Boolean adequateMark) {
-        this.adequateMark = adequateMark;
-    }
-
     public ApplicationForm getApplicationForm() {
         return applicationForm;
     }
@@ -135,6 +131,10 @@ public class Interview implements Serializable {
 
     public Boolean getAdequateMark() {
         return adequateMark;
+    }
+
+    public void setAdequateMark(Boolean adequateMark) {
+        this.adequateMark = adequateMark;
     }
 
     public List<FormAnswer> getAnswers() {
@@ -183,7 +183,6 @@ public class Interview implements Serializable {
         result = 31 * result + (applicationForm != null ? applicationForm.hashCode() : 0);
         return result;
     }
-
 
 
     @Override

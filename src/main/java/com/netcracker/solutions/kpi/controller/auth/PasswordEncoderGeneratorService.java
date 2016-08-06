@@ -14,8 +14,8 @@ public class PasswordEncoderGeneratorService {
 
     private BCryptPasswordEncoder passwordEncoder;
 
-    public PasswordEncoderGeneratorService(){
-            passwordEncoder = new BCryptPasswordEncoder(-1,new SecureRandom());
+    public PasswordEncoderGeneratorService() {
+        passwordEncoder = new BCryptPasswordEncoder(-1, new SecureRandom());
     }
 
     /*public static PasswordEncoderGeneratorService getInstance(){
@@ -26,7 +26,7 @@ public class PasswordEncoderGeneratorService {
         return passwordEncoder.encode(password);
     }
 
-    public boolean matches(String hashPassword, String password){
+    public boolean matches(String hashPassword, String password) {
         return passwordEncoder.matches(password, hashPassword);
     }
 

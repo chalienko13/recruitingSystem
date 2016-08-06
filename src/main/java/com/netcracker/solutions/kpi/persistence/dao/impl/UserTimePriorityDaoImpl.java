@@ -16,36 +16,15 @@ import java.util.List;
 
 @Repository
 public class UserTimePriorityDaoImpl implements UserTimePriorityDao {
-    private static Logger log = LoggerFactory.getLogger(UserTimePriorityDaoImpl.class.getName());
-
-    @Autowired
-    private JdbcDaoSupport jdbcDaoSupport;
+    private static final String GET_BY_USER_ID_TIME_POINT_ID = "SELECT p.id_user, p.id_time_point, p.id_priority_type, pt.choice " +
+            "FROM public.user_time_priority p join public.time_priority_type pt on (p.id_priority_type= pt.id) " +
+            "WHERE p.id_user= ? and  p.id_time_point=? ;";
+    private static final String INSERT_USER_TIME_PRIORITY = "INSERT INTO user_time_priority (id_user, id_time_point, id_priority_type) VALUES (?,?,?);";
 
    /* public UserTimePriorityDaoImpl(DataSource dataSource) {
         this.jdbcDaoSupport = new JdbcDaoSupport();
         jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }*/
-
-    private ResultSetExtractor<UserTimePriority> extractor = resultSet -> {
-        UserTimePriority userTimePriority = new UserTimePriority();
-        userTimePriority.setUser(new User(resultSet.getLong("id_user")));
-        userTimePriority.setScheduleTimePoint(new ScheduleTimePoint(resultSet.getLong("id_time_point")));
-        userTimePriority.setTimePriorityType(new TimePriorityType(resultSet.getLong("id_priority_type"), resultSet.getString("choice")));
-        return userTimePriority;
-    };
-
-    private ResultSetExtractor<UserTimePriorityDto> extractorDto = resultSet -> {
-        UserTimePriorityDto userTimePriorityDto = new UserTimePriorityDto();
-        userTimePriorityDto.setTimePoint(resultSet.getTimestamp("time_point"));
-        userTimePriorityDto.setTimeStampId(resultSet.getLong("id_time_point"));
-        userTimePriorityDto.setIdPriorityType(resultSet.getLong("id_priority_type"));
-        return userTimePriorityDto;
-    };
-
-    private static final String GET_BY_USER_ID_TIME_POINT_ID = "SELECT p.id_user, p.id_time_point, p.id_priority_type, pt.choice " +
-            "FROM public.user_time_priority p join public.time_priority_type pt on (p.id_priority_type= pt.id) " +
-            "WHERE p.id_user= ? and  p.id_time_point=? ;";
-    private static final String INSERT_USER_TIME_PRIORITY = "INSERT INTO user_time_priority (id_user, id_time_point, id_priority_type) VALUES (?,?,?);";
     private static final String UPDATE_USER_TIME_PRIORITY = "UPDATE user_time_priority p set id_priority_type = ? WHERE p.id_user = ? and p.id_time_point = ?;";
     private static final String DELETE_USER_TIME_PRIORITY = "DELETE FROM public.user_time_priority p WHERE p.id_user = ? and p.id_time_point = ?;";
     private static final String GET_ALL_USER_TIME_PRIORITY = "SELECT p.id_user, p.id_time_point, p.id_priority_type, pt.choice "
@@ -62,7 +41,6 @@ public class UserTimePriorityDaoImpl implements UserTimePriorityDao {
             "JOIN \"user\" u on utp.id_user = u.id\n" +
             "JOIN user_role ur ON u.id = ur.id_user\n" +
             "WHERE ur.id_role = 3);";
-
     private static final String GET_ALL_TIME_PRIORITY_FOR_USER_BY_ID = "SELECT\n" +
             "  p.id_priority_type,\n" +
             "  p.id_time_point," +
@@ -70,6 +48,23 @@ public class UserTimePriorityDaoImpl implements UserTimePriorityDao {
             "FROM public.user_time_priority p join public.time_priority_type pt\n" +
             "    on (p.id_priority_type= pt.id) JOIN schedule_time_point stp ON  " +
             "(stp.id = p.id_time_point) Where p.id_user = ? ORDER BY stp.time_point";
+    private static Logger log = LoggerFactory.getLogger(UserTimePriorityDaoImpl.class.getName());
+    @Autowired
+    private JdbcDaoSupport jdbcDaoSupport;
+    private ResultSetExtractor<UserTimePriority> extractor = resultSet -> {
+        UserTimePriority userTimePriority = new UserTimePriority();
+        userTimePriority.setUser(new User(resultSet.getLong("id_user")));
+        userTimePriority.setScheduleTimePoint(new ScheduleTimePoint(resultSet.getLong("id_time_point")));
+        userTimePriority.setTimePriorityType(new TimePriorityType(resultSet.getLong("id_priority_type"), resultSet.getString("choice")));
+        return userTimePriority;
+    };
+    private ResultSetExtractor<UserTimePriorityDto> extractorDto = resultSet -> {
+        UserTimePriorityDto userTimePriorityDto = new UserTimePriorityDto();
+        userTimePriorityDto.setTimePoint(resultSet.getTimestamp("time_point"));
+        userTimePriorityDto.setTimeStampId(resultSet.getLong("id_time_point"));
+        userTimePriorityDto.setIdPriorityType(resultSet.getLong("id_priority_type"));
+        return userTimePriorityDto;
+    };
 
     @Override
     public UserTimePriority getByUserTime(User user, ScheduleTimePoint scheduleTimePoint) {

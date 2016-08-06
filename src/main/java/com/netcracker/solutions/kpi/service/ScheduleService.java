@@ -1,10 +1,6 @@
 package com.netcracker.solutions.kpi.service;
 
-import com.netcracker.solutions.kpi.persistence.model.Recruitment;
-import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
-import com.netcracker.solutions.kpi.persistence.model.UserTimePriority;
-import com.netcracker.solutions.kpi.persistence.model.Role;
-import com.netcracker.solutions.kpi.persistence.model.User;
+import com.netcracker.solutions.kpi.persistence.model.*;
 import com.netcracker.solutions.kpi.util.scheduling.CreatingOfAllSchedules;
 import com.netcracker.solutions.kpi.util.scheduling.StudentsScheduleCell;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,23 +13,19 @@ import java.util.List;
 
 @Service
 public class ScheduleService {
-    private CreatingOfAllSchedules creatingOfAllSchedules;
-
     private static final String CAN_TIME_PRIORITY = "Can";
-
-    @Autowired
-    private UserService userService;// = ServiceFactory.getUserService();
-    @Autowired
-    private RecruitmentService recruitmentService;// = ServiceFactory.getRecruitmentService();
-    @Autowired
-    private ScheduleTimePointService scheduleTimePointService;// = ServiceFactory.getScheduleTimePointService();
-    @Autowired
-    private UserTimePriorityService userTimePriorityService;// = ServiceFactory.getUserTimePriorityService();
-
     private static final Role TECH_ROLE = new Role(2L);
     private static final Role SOFT_ROLE = new Role(5L);
+    private CreatingOfAllSchedules creatingOfAllSchedules;
 
-
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private RecruitmentService recruitmentService;
+    @Autowired
+    private ScheduleTimePointService scheduleTimePointService;
+    @Autowired
+    private UserTimePriorityService userTimePriorityService;
     private List<com.netcracker.solutions.kpi.util.scheduling.User> undistributedStudents = new ArrayList<>();
     private List<Timestamp> datesAndTimesList = new ArrayList<>();
     private int durationOfLongIntervInMinutes;

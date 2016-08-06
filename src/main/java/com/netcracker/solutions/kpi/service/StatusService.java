@@ -8,12 +8,12 @@ public interface StatusService {
 
     Status getStatusById(Long id);
 
-   /* int insertStatus(Status status);
+    /* int insertStatus(Status status);
 
-    int updateStatus(Status status);
+     int updateStatus(Status status);
 
-    int deleteStatus(Status status);
-*/
+     int deleteStatus(Status status);
+ */
     List<Status> getAllStatuses();
 
     Status getByName(String name);

@@ -7,10 +7,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 import java.util.Date;
 
-
-/**
- * Created by IO on 23.04.2016.
- */
 public abstract class TokenHandler {
 
     protected Long epriretime;

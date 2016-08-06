@@ -2,7 +2,6 @@ package com.netcracker.solutions.kpi.persistence.model;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.hibernate.annotations.ManyToAny;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -60,7 +59,7 @@ public class Role implements GrantedAuthority {
         this.users = users;
     }
 
-      @Override
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
 

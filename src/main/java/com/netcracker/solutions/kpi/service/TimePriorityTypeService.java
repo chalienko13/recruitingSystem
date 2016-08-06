@@ -12,5 +12,5 @@ public interface TimePriorityTypeService {
 
     TimePriorityType getByPriority(String priority);
 
-	List<TimePriorityType> getAll();
+    List<TimePriorityType> getAll();
 }

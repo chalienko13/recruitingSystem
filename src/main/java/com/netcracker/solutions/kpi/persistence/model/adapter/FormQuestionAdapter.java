@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by Chalienko on 03.05.2016.
  */
-public class FormQuestionAdapter implements JsonSerializer<FormQuestion>,JsonDeserializer<FormQuestion> {
+public class FormQuestionAdapter implements JsonSerializer<FormQuestion>, JsonDeserializer<FormQuestion> {
     @Override
     public JsonElement serialize(FormQuestion formQuestion, Type type, JsonSerializationContext jsonSerializationContext) {
         JsonObject jsonObject = new JsonObject();
@@ -44,8 +44,8 @@ public class FormQuestionAdapter implements JsonSerializer<FormQuestion>,JsonDes
         formQuestion.setMandatory(jsonObject.get("mandatory").getAsBoolean());
         formQuestion.setEnable(jsonObject.get("enable").getAsBoolean());
         List<FormAnswerVariant> formAnswerVariantList = new ArrayList<>();
-        for(JsonElement arrayElement: jsonObject.get("variants").getAsJsonArray()) {
-                JsonObject jsonVariant = (JsonObject) arrayElement;
+        for (JsonElement arrayElement : jsonObject.get("variants").getAsJsonArray()) {
+            JsonObject jsonVariant = (JsonObject) arrayElement;
             if (!jsonVariant.get("variant").getAsString().isEmpty()) {
                 formAnswerVariantList.add(new FormAnswerVariant(jsonVariant.get("variant").getAsString()));
             }

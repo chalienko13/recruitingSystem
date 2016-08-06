@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChangePasswordController {
 
     @Autowired
-    private UserService userService;// = ServiceFactory.getUserService();
+    private UserService userService;
 
     @Autowired
-    private PasswordEncoderGeneratorService passwordEncoderGeneratorService;// = PasswordEncoderGeneratorService.getInstance();
+    private PasswordEncoderGeneratorService passwordEncoderGeneratorService;
 
 
     @RequestMapping(value = "changepassword", method = RequestMethod.POST)
@@ -27,7 +27,7 @@ public class ChangePasswordController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName();
         User user = userService.getUserByUsername(name);
-        if (passwordEncoderGeneratorService.matches(user.getPassword(),oldPassword)) {
+        if (passwordEncoderGeneratorService.matches(user.getPassword(), oldPassword)) {
             user.setPassword(passwordEncoderGeneratorService.encode(newPassword));
             userService.updateUser(user);
         }

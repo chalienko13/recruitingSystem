@@ -4,9 +4,6 @@ import com.netcracker.solutions.kpi.persistence.model.SchedulingSettings;
 
 import java.util.List;
 
-/**
- * @author Korzh
- */
 public interface SchedulingSettingsService {
 
     SchedulingSettings getById(Long id);

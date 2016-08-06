@@ -5,13 +5,6 @@ import com.netcracker.solutions.kpi.persistence.model.User;
 public enum UserRole {
     USER, ADMIN, STUDENT;
 
-    public UserAuthority asAuthorityFor(final User user) {
-        final UserAuthority authority = new UserAuthority();
-        authority.setAuthority("ROLE_" + toString());
-        authority.setUser(user);
-        return authority;
-    }
-
     public static UserRole valueOf(final UserAuthority authority) {
         switch (authority.getAuthority()) {
             case "ROLE_USER":
@@ -22,5 +15,12 @@ public enum UserRole {
                 return STUDENT;
         }
         throw new IllegalArgumentException("No role defined for authority: " + authority.getAuthority());
+    }
+
+    public UserAuthority asAuthorityFor(final User user) {
+        final UserAuthority authority = new UserAuthority();
+        authority.setAuthority("ROLE_" + toString());
+        authority.setUser(user);
+        return authority;
     }
 }

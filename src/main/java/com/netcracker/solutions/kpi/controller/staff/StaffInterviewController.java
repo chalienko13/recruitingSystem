@@ -26,6 +26,11 @@ import java.util.Set;
 @RequestMapping("/staff")
 public class StaffInterviewController {
 
+    private static final Gson gson = new Gson();
+    private static final String INTERVIEW_UPDATED_MESSAGE = gson.toJson(new MessageDto(
+            "Interview was updated.", MessageDtoType.SUCCESS));
+    private static final String NOT_ASSIGNED_MESSAGE = gson.toJson(new MessageDto(
+            "This student is not assigned to you.", MessageDtoType.ERROR));
     @Autowired
     private FormAnswerService formAnswerService;
     @Autowired
@@ -35,25 +40,7 @@ public class StaffInterviewController {
     @Autowired
     private FormQuestionService formQuestionService;
     @Autowired
-    private FormAnswerVariantService formAnswerVariantService;
-    @Autowired
     private InterviewService interviewService;
-
-    private static final Gson gson = new Gson();
-
-    private static final String INTERVIEW_UPDATED_MESSAGE = gson.toJson(new MessageDto(
-            "Interview was updated.", MessageDtoType.SUCCESS));
-    private static final String NOT_ASSIGNED_MESSAGE = gson.toJson(new MessageDto(
-            "This student is not assigned to you.", MessageDtoType.ERROR));
-
-	/*public StaffInterviewController() {
-		formAnswerService = ServiceFactory.getFormAnswerService();
-		applicationFormService = ServiceFactory.getApplicationFormService();
-		userService = ServiceFactory.getUserService();
-		formQuestionService = ServiceFactory.getFormQuestionService();
-		formAnswerVariantService = ServiceFactory.getFormAnswerVariantService();
-		interviewService = ServiceFactory.getInterviewService();
-	}*/
 
     @RequestMapping(value = "getApplicationForm/{applicationFormId}", method = RequestMethod.POST)
     public String getApplicationForm(@PathVariable Long applicationFormId) {

@@ -42,21 +42,21 @@ public class LoginPasswordAuthenticationManager implements AuthenticationManager
         log.info("Looking user - {} in data base", username);
         User user = userAuthServiceLoginPassword.loadUserByUsername(username);
 
-        if(user == null) {
+        if (user == null) {
             throw new BadCredentialsException("User is not active");
         }
 
-        if (!user.isActive()){
+        if (!user.isActive()) {
             log.info("User - {} is not active", username);
             throw new BadCredentialsException("User is not active");
         }
 
-        if (!user.getUsername().equalsIgnoreCase(username)){
+        if (!user.getUsername().equalsIgnoreCase(username)) {
             log.info("User - {} not found", username);
             throw new BadCredentialsException("Username not found");
         }
 
-        if (!passwordEncoderGeneratorService.matches(user.getPassword(), password )){
+        if (!passwordEncoderGeneratorService.matches(user.getPassword(), password)) {
             log.info("User - {} have wrong password", username);
             throw new BadCredentialsException("Password wrong");
         }

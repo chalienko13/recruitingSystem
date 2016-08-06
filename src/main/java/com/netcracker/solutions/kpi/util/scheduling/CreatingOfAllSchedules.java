@@ -54,7 +54,7 @@ public class CreatingOfAllSchedules {
         // створюю список годин (вважаю, що в кожний день доступні однакові годині)
         int firstDay = datesAndTimesList.get(0).getDay();
         for (int i = 0; i < datesAndTimesList.size(); i++) {
-            if(datesAndTimesList.get(i).getDay() == firstDay){ // якщо дивлюся дані саме першого дня (головне щоб одного й того ж)
+            if (datesAndTimesList.get(i).getDay() == firstDay) { // якщо дивлюся дані саме першого дня (головне щоб одного й того ж)
                 timesList.add(datesAndTimesList.get(i).getHours()); // витягую годину інтерв'ю
             }
         }
@@ -63,8 +63,8 @@ public class CreatingOfAllSchedules {
         // К-сть годин інтерв'ю в день
         ArrayList<Integer> tmp = new ArrayList<>(); // список днів інтерв'ю (без повторень)
         this.numbOfAllDaysForInterviewing = 1;
-        for (Timestamp dateAndTime: datesAndTimesList) {
-            if(!tmp.contains(dateAndTime.getDay())){
+        for (Timestamp dateAndTime : datesAndTimesList) {
+            if (!tmp.contains(dateAndTime.getDay())) {
                 tmp.add(dateAndTime.getDay());
             }
         }
@@ -94,7 +94,7 @@ public class CreatingOfAllSchedules {
 
     // todo Така перевірка неправильна, якщо адмін вирішив сам дознайти викладачів (якщо цей функціонла буде додано). Тоді треба перевіряти в БД, чи був такий запис.
     // Перевірка достатньості к-сті викладачів
-    private boolean checkAdequacyOfNumberOfTeachers(){
+    private boolean checkAdequacyOfNumberOfTeachers() {
         double mainPercent = AllActivityAboutFindingTeachers.getTotalPercentageOfAvailableIntervByRegisteredTeachers(numbOfStudents,
                 durationOfLongIntervInMinutes, durationOfShortIntervInMinutes, numbOfAllDaysForInterviewing,
                 numbOfHoursForIntervForDay, totalNumbOfRegisteredTeachersWithLongerInterv,
@@ -104,8 +104,8 @@ public class CreatingOfAllSchedules {
     }
 
     // Складання розкладу для студентів
-    private boolean calcucateStudentsSchedule(){
-        if(!checkAdequacyOfNumberOfTeachers()){
+    private boolean calcucateStudentsSchedule() {
+        if (!checkAdequacyOfNumberOfTeachers()) {
             return false;
         }
 
@@ -114,7 +114,7 @@ public class CreatingOfAllSchedules {
         int iter = 0;
         for (Timestamp datesAndTimes : datesAndTimesList) {
 
-            if(datesAndTimes.getDay() != currentDay){ // якщо перейшли на наступний день
+            if (datesAndTimes.getDay() != currentDay) { // якщо перейшли на наступний день
                 iter++;
                 currentDay = datesAndTimes.getDay();
             }
@@ -129,11 +129,11 @@ public class CreatingOfAllSchedules {
         }
 
         // Цикл 1:
-        for (Timestamp curTimestamp :datesAndTimesList) { // ми проходимося по кожній годині (для кожного дня)
+        for (Timestamp curTimestamp : datesAndTimesList) { // ми проходимося по кожній годині (для кожного дня)
 
             ArrayList<User> willingStudents = new ArrayList<>(); // студенти, що вибрали цю поточну годину
-            for (User curStudent :undistributedStudents) { // шукаємо всіх студентів із «Список нерозподілених студентів», що вказали її як бажану
-                if(curStudent.getTimesAndDates().contains(curTimestamp)){
+            for (User curStudent : undistributedStudents) { // шукаємо всіх студентів із «Список нерозподілених студентів», що вказали її як бажану
+                if (curStudent.getTimesAndDates().contains(curTimestamp)) {
                     willingStudents.add(curStudent); // записую цього студента в список
                 }
             }
@@ -142,9 +142,9 @@ public class CreatingOfAllSchedules {
             // Шукаю цей же час й день в розкладі, щоб витягнути навантеженість
             for (int i = 0; i < studentsSchedule.size(); i++) {
                 Timestamp curTimestampFromSchedule = studentsSchedule.get(i).getDateAndHour();
-                if(curTimestampFromSchedule.equals(curTimestamp)){ // якщо поточний час в розкладі той самий, з яким ми працюємо в глобальному циклі
-                    if(willingStudents.size() <= studentsSchedule.get(i).getNumberOfFreePlace()){ // Якщо на цю, конкретну годину, "К-сть студентів, що згодні на поточну годину" <= Відповідне значення з" Список. Реальна к-сть співбесід в кожний день, що можуть відбутися "/”К-сть вільних місць на цю годину”(для цього дня)
-                        if(willingStudents.size() != 0){ // якщо є такі студенти
+                if (curTimestampFromSchedule.equals(curTimestamp)) { // якщо поточний час в розкладі той самий, з яким ми працюємо в глобальному циклі
+                    if (willingStudents.size() <= studentsSchedule.get(i).getNumberOfFreePlace()) { // Якщо на цю, конкретну годину, "К-сть студентів, що згодні на поточну годину" <= Відповідне значення з" Список. Реальна к-сть співбесід в кожний день, що можуть відбутися "/”К-сть вільних місць на цю годину”(для цього дня)
+                        if (willingStudents.size() != 0) { // якщо є такі студенти
                             // записуємо цих студентів в список «Розклад для студентів» на поточну дату й час
                             studentsSchedule.get(i).setStudents(willingStudents);
                             // віднімаємо від значення поля «К-сть вільних місць на цю годину» списку «Розклад для студентів» значення «К-сть студентів, що згодні на поточну годину»,
@@ -152,7 +152,7 @@ public class CreatingOfAllSchedules {
                             // збільшуємо значення поля «К-сть студентів, кого розклад задовільнив» на довжину списку «Студенти, що вибрали цю поточну годину»
                             numbOfSatisfiedStudents += willingStudents.size();
                             // видаляємо цих студентів зі «Список нерозподілених студентів»
-                            for (User curStudent: willingStudents){
+                            for (User curStudent : willingStudents) {
                                 undistributedStudents.remove(undistributedStudents.indexOf(curStudent));
                             }
                         }
@@ -168,13 +168,13 @@ public class CreatingOfAllSchedules {
         tmpStudListForSecondLoop.addAll(undistributedStudents);
 
         // Цикл 2:
-        while(tmpStudListForSecondLoop.size() > 0){ // поки в тимчасовому списку ще є елементи
+        while (tmpStudListForSecondLoop.size() > 0) { // поки в тимчасовому списку ще є елементи
             User curStudent = tmpStudListForSecondLoop.get(0); // поточний студент
             int minNumbOfVariants = tmpStudListForSecondLoop.get(0).getTimesAndDates().size(); // к-сть варіантів, що він вибрав
 
-            if(tmpStudListForSecondLoop.size() > 1){ // якщо ще є студенти, то шукаємо того, в кого найменша к-сть варіантів (він в пріоритеті)
+            if (tmpStudListForSecondLoop.size() > 1) { // якщо ще є студенти, то шукаємо того, в кого найменша к-сть варіантів (він в пріоритеті)
                 for (int i = 1; i < tmpStudListForSecondLoop.size(); i++) {
-                    if(tmpStudListForSecondLoop.get(i).getTimesAndDates().size() < minNumbOfVariants){
+                    if (tmpStudListForSecondLoop.get(i).getTimesAndDates().size() < minNumbOfVariants) {
                         minNumbOfVariants = tmpStudListForSecondLoop.get(i).getTimesAndDates().size();
                         curStudent = tmpStudListForSecondLoop.get(i);
                     }
@@ -191,7 +191,7 @@ public class CreatingOfAllSchedules {
                 // Якщо для поточного об’єкту з цього списку значення в полі «К-сть вільних місця на цю годину» більша
                 // за нуль і якщо в списку «Список днів й годин, які поточний студент вибрав» є таке ж значення поля
                 // «Дата» й «Година», як і значення полів  «Дата» й «Година» в поточного об’єкта списку «Розклад для студентів»
-                if(studentsSchedule.get(i).getNumberOfFreePlace() > 0 && curStudent.getTimesAndDates().contains(studentsSchedule.get(i).getDateAndHour())) {
+                if (studentsSchedule.get(i).getNumberOfFreePlace() > 0 && curStudent.getTimesAndDates().contains(studentsSchedule.get(i).getDateAndHour())) {
                     foundAppropriatePlace = true;
                     // записуємо цього студента в список «Розклад для студентів» на поточну дату й час
                     studentsSchedule.get(i).getStudents().add(curStudent);
@@ -207,14 +207,14 @@ public class CreatingOfAllSchedules {
 
             }
             // якщо такого часу не знайшли, то також видаляємо цього поточного студента з тимчасового списку
-            if(!foundAppropriatePlace){
+            if (!foundAppropriatePlace) {
                 // видаляємо цього студента зі списку «Тимчасовий список студентів для 2-го циклу
                 tmpStudListForSecondLoop.remove(tmpStudListForSecondLoop.indexOf(curStudent));
             }
         }
 
         // Цикл 3:
-        for (int iter1 = 0; iter1 < timesList.size()-1; iter1++) { // проходжуся по всім циклам звдигу на «+Х» годин
+        for (int iter1 = 0; iter1 < timesList.size() - 1; iter1++) { // проходжуся по всім циклам звдигу на «+Х» годин
 
             // Створюємо список «Тимчасовий список студентів для 3-го циклу» зі «Список нерозподілених студентів»
             ArrayList<User> tmpStudListForThirdLoop = new ArrayList<>();
@@ -223,12 +223,12 @@ public class CreatingOfAllSchedules {
             ArrayList<Integer> inappropriateHours = new ArrayList<>(); // Список. Непідходящі години
 
             // заповнюю список, які години не підходять для здвигу в поточному циклі
-            for (int iter2 = timesList.size(); iter2 > timesList.size() - iter1-1; iter2--) {
-                inappropriateHours.add(timesList.get(iter2-1));
+            for (int iter2 = timesList.size(); iter2 > timesList.size() - iter1 - 1; iter2--) {
+                inappropriateHours.add(timesList.get(iter2 - 1));
             }
 
             // Проходимося по списку «Список нерозподілених студентів» й витягуємо з поточного об’єкта список «Список днів й годин, які поточний студент вибрав»
-            while (tmpStudListForThirdLoop.size() > 0){
+            while (tmpStudListForThirdLoop.size() > 0) {
 
                 boolean foundAppropriatePlace = false;
                 List<Timestamp> curTimestamp = tmpStudListForThirdLoop.get(0).getTimesAndDates();
@@ -236,7 +236,7 @@ public class CreatingOfAllSchedules {
                 for (int j = 0; j < curTimestamp.size(); j++) {
 
                     // Якщо в полі «Година» стоїть значення, якого немає в списку «Список. Непідходящі години»
-                    if(!inappropriateHours.contains(curTimestamp.get(j).getHours()) && !foundAppropriatePlace){
+                    if (!inappropriateHours.contains(curTimestamp.get(j).getHours()) && !foundAppropriatePlace) {
                         // Проходимося по списку «Розклад для студентів»
                         for (int k = 0; k < studentsSchedule.size(); k++) {
                             // Знаходимо всі об’єкти зі списку «Розклад для студентів», в яких
@@ -244,16 +244,16 @@ public class CreatingOfAllSchedules {
                             // а в полі «Година» - стоїть те значення, що й в списку «Список. Перелік годин, з яких студенти вибирали собі підходящі» на iter1 позицій вище.
                             // І якщо для поточного об’єкту зі списку «Розклад для студентів» значення в полі «К-сть вільних місць на цю годину» більша за нуль
                             int tmp = timesList.indexOf(curTimestamp.get(j).getHours());// поточна позиція вибраного студентом часу в списку всіх можливих годин
-                            if(studentsSchedule.get(k).getDateAndHour().getDate() == curTimestamp.get(j).getDate() &&
-                                    studentsSchedule.get(k).getDateAndHour().getHours() == timesList.get(tmp + iter1 +1) &&
-                                    studentsSchedule.get(k).getNumberOfFreePlace() > 0){
+                            if (studentsSchedule.get(k).getDateAndHour().getDate() == curTimestamp.get(j).getDate() &&
+                                    studentsSchedule.get(k).getDateAndHour().getHours() == timesList.get(tmp + iter1 + 1) &&
+                                    studentsSchedule.get(k).getNumberOfFreePlace() > 0) {
 
                                 // записуємо цього студента (поточного зі списку «Список нерозподілених студентів») в список «Розклад для студентів» на поточну «Дата» й «Час»
                                 // (що взяті зі списку «Список днів й годин, які поточний студент вибрав» (ЧАС на iter1 більший))
                                 studentsSchedule.get(k).getStudents().add(tmpStudListForThirdLoop.get(0));
 
                                 // віднімаємо від значення поля «К-сть вільних місць на цю годину» поточного об’єкту списку «Розклад для студентів» одиницю,
-                                studentsSchedule.get(k).setNumberOfFreePlace(studentsSchedule.get(k).getNumberOfFreePlace() -1);
+                                studentsSchedule.get(k).setNumberOfFreePlace(studentsSchedule.get(k).getNumberOfFreePlace() - 1);
 
                                 // збільшуємо значення поля «К-сть студентів, кого розклад не задовільнив, бо час співбесіди зсунувся на кілька годин ВПЕРЕД від бажаного» на одиницю,
                                 numbOfStudWithScheduleOnAFewHourLater++;
@@ -269,7 +269,7 @@ public class CreatingOfAllSchedules {
                         }
                     }
                 }
-                if(!foundAppropriatePlace){ // якщо перебрали всі варіанти, але так і не знайшли підходящого
+                if (!foundAppropriatePlace) { // якщо перебрали всі варіанти, але так і не знайшли підходящого
                     // видаляємо цього студента з тимчасового списку для цього циклу
                     tmpStudListForThirdLoop.remove(0);
                 }
@@ -281,7 +281,7 @@ public class CreatingOfAllSchedules {
         tmpStudListFor4thLoop.addAll(undistributedStudents);
 
         // Цикл 4:
-        while(tmpStudListFor4thLoop.size() > 1) { // Проходимося по тимчасовому списку студентів
+        while (tmpStudListFor4thLoop.size() > 1) { // Проходимося по тимчасовому списку студентів
             boolean foundAppropriatePlace = false;
 
             List<Timestamp> curTimeAndDate = tmpStudListFor4thLoop.get(0).getTimesAndDates(); // й витягуємо з поточного об’єкта список «Список днів й годин, які поточний студент вибрав»
@@ -309,7 +309,7 @@ public class CreatingOfAllSchedules {
                     }
                 }
 
-                if(foundAppropriatePlace){
+                if (foundAppropriatePlace) {
                     break;
                 } else {
                     tmpStudListFor4thLoop.remove(0); // видаляю студента з тимчасового списку, бо ми його вже обробили, хоча й не знайли місця
@@ -321,21 +321,21 @@ public class CreatingOfAllSchedules {
         // що не можуть взагалі. Далі вже дорозкидуємо просто на всі місця, що залишилися.
 
         // Цикл 5:
-        while(undistributedStudents.size()>0){ // Проходимося по списку "Список нерозподілених студентів"
+        while (undistributedStudents.size() > 0) { // Проходимося по списку "Список нерозподілених студентів"
             boolean foundAppropriatePlace = false;
 
             for (int j = 0; j < studentsSchedule.size(); j++) { // Проходимося по списку «Розклад для студентів»
                 // Якщо для поточного об’єкту з цього списку значення в полі «К-сть вільних місця на цю годину» більша за нуль
-                if(studentsSchedule.get(j).getNumberOfFreePlace() > 0){
+                if (studentsSchedule.get(j).getNumberOfFreePlace() > 0) {
                     foundAppropriatePlace = true;
                     studentsSchedule.get(j).getStudents().add(undistributedStudents.get(0));
-                    studentsSchedule.get(j).setNumberOfFreePlace(studentsSchedule.get(j).getNumberOfFreePlace() -1);
+                    studentsSchedule.get(j).setNumberOfFreePlace(studentsSchedule.get(j).getNumberOfFreePlace() - 1);
                     undistributedStudents.remove(0);
                     numbOfStudWithScheduleOnAnotherDay++;
                     break;
                 }
             }
-            if(!foundAppropriatePlace){
+            if (!foundAppropriatePlace) {
                 return false; // значить в розкладі вже немає вільних місць
             }
         }
@@ -344,9 +344,9 @@ public class CreatingOfAllSchedules {
         return true;
     }
 
-    private boolean calculateTeachersSchedule(){
-        if(!studentsScheduleIsAlreadyCreated){ // якщо розклад для студентів ще не створений, то створюємо його
-            if(!calcucateStudentsSchedule()){ // створюємо його й перевіряємо булівський результат
+    private boolean calculateTeachersSchedule() {
+        if (!studentsScheduleIsAlreadyCreated) { // якщо розклад для студентів ще не створений, то створюємо його
+            if (!calcucateStudentsSchedule()) { // створюємо його й перевіряємо булівський результат
                 return false;
             }
         }
@@ -357,7 +357,7 @@ public class CreatingOfAllSchedules {
         teachersScheduleCell.setDate(datesAndTimesList.get(0));
         teachersSchedule.add(teachersScheduleCell);
         for (Timestamp datesAndTimes : datesAndTimesList) {
-            if(datesAndTimes.getDay() != currentDay){ // якщо перейшли на наступний день
+            if (datesAndTimes.getDay() != currentDay) { // якщо перейшли на наступний день
                 TeachersScheduleCell teachersScheduleCellNew = new TeachersScheduleCell();
                 teachersScheduleCellNew.setDate(datesAndTimes);
                 teachersSchedule.add(teachersScheduleCellNew);
@@ -370,7 +370,7 @@ public class CreatingOfAllSchedules {
         int curDay = studentsSchedule.get(0).getDateAndHour().getDay();
         int numbOfInterv = 0;
         for (int i = 1; i < studentsSchedule.size(); i++) {
-            if(studentsSchedule.get(i).getDateAndHour().getDay() != curDay){
+            if (studentsSchedule.get(i).getDateAndHour().getDay() != curDay) {
                 realNumbOfIntervFromStudentsScheduleForEachDay.add(numbOfInterv);
                 curDay = studentsSchedule.get(i).getDateAndHour().getDay();
                 numbOfInterv = 0;
@@ -389,7 +389,7 @@ public class CreatingOfAllSchedules {
         // Рахую необхідну к-сть груп викладачів (округлити до більшого) на кожний день:
         ArrayList<Integer> necessaryNumbOfGroupOfTeacherForEachDay = new ArrayList<>();
         for (int i = 0; i < realNumbOfIntervFromStudentsScheduleForEachDay.size(); i++) {
-            necessaryNumbOfGroupOfTeacherForEachDay.add((int) Math.ceil(realNumbOfIntervFromStudentsScheduleForEachDay.get(i) * 1.0 /  numbOfIntervByGroupOfTeacherPerDay));
+            necessaryNumbOfGroupOfTeacherForEachDay.add((int) Math.ceil(realNumbOfIntervFromStudentsScheduleForEachDay.get(i) * 1.0 / numbOfIntervByGroupOfTeacherPerDay));
         }
 
         // відношення викладачів в групі
@@ -416,16 +416,16 @@ public class CreatingOfAllSchedules {
                 List<Timestamp> timestampsCurTeacher = tmpLongTeachersList.get(i).getTimesAndDates();
                 for (int j = 0; j < timestampsCurTeacher.size(); j++) {
 
-                    if(timestampsCurTeacher.get(j).getYear() == teachersSchedule.get(k).getDate().getYear() &&
+                    if (timestampsCurTeacher.get(j).getYear() == teachersSchedule.get(k).getDate().getYear() &&
                             timestampsCurTeacher.get(j).getMonth() == teachersSchedule.get(k).getDate().getMonth() &&
-                            timestampsCurTeacher.get(j).getDay() == teachersSchedule.get(k).getDate().getDay()){
+                            timestampsCurTeacher.get(j).getDay() == teachersSchedule.get(k).getDate().getDay()) {
 
                         // і якщо в цей день ще потрібні викладачі
-                        if(necessaryNumbOfLongTeacherForEachday.get(k) > 0){
+                        if (necessaryNumbOfLongTeacherForEachday.get(k) > 0) {
                             // записую викладача в розклад
                             teachersSchedule.get(k).getTeachers().add(tmpLongTeachersList.get(i));
                             // зменшую к-сть необхідних викладачів в день
-                            necessaryNumbOfLongTeacherForEachday.set(k, necessaryNumbOfLongTeacherForEachday.get(k) -1);
+                            necessaryNumbOfLongTeacherForEachday.set(k, necessaryNumbOfLongTeacherForEachday.get(k) - 1);
                         }
 
                         // видаляю з тимчасового списку цей вибір викладача, бо якщо ми сюди дійшли, то вже перевірили його
@@ -449,16 +449,16 @@ public class CreatingOfAllSchedules {
 
                 for (int j = 0; j < timestampsCurTeacher.size(); j++) {
 
-                    if(timestampsCurTeacher.get(j).getYear() == teachersSchedule.get(k).getDate().getYear() &&
+                    if (timestampsCurTeacher.get(j).getYear() == teachersSchedule.get(k).getDate().getYear() &&
                             timestampsCurTeacher.get(j).getMonth() == teachersSchedule.get(k).getDate().getMonth() &&
-                            timestampsCurTeacher.get(j).getDay() == teachersSchedule.get(k).getDate().getDay()){
+                            timestampsCurTeacher.get(j).getDay() == teachersSchedule.get(k).getDate().getDay()) {
 
                         // і якщо в цей день ще потрібні викладачі
-                        if(necessaryNumbOfShortTeacherForEachday.get(k) > 0){
+                        if (necessaryNumbOfShortTeacherForEachday.get(k) > 0) {
                             // записую викладача в розклад
                             teachersSchedule.get(k).getTeachers().add(tmpShortTeachersList.get(i));
                             // зменшую к-сть необхідних викладачів в день
-                            necessaryNumbOfShortTeacherForEachday.set(k, necessaryNumbOfShortTeacherForEachday.get(k) -1);
+                            necessaryNumbOfShortTeacherForEachday.set(k, necessaryNumbOfShortTeacherForEachday.get(k) - 1);
                         }
 
                         // видаляю з тимчасового списку цей вибір викладача, бо якщо ми сюди дійшли, то вже перевірили його
@@ -476,8 +476,8 @@ public class CreatingOfAllSchedules {
     }
 
     public List<StudentsScheduleCell> getStudentsSchedule() {
-        if(!studentsScheduleIsAlreadyCreated){ // якщо розклад для студентів ще не створений
-            if(!calcucateStudentsSchedule()){ // створюємо його й перевіряємо булівський результат
+        if (!studentsScheduleIsAlreadyCreated) { // якщо розклад для студентів ще не створений
+            if (!calcucateStudentsSchedule()) { // створюємо його й перевіряємо булівський результат
                 return null;
             }
         }
@@ -501,8 +501,8 @@ public class CreatingOfAllSchedules {
     }
 
     public List<TeachersScheduleCell> getTeachersSchedule() {
-        if(!teachersScheduleIsAlreadyCreated){ // якщо розклад для викладачів ще не створений
-            if(!calculateTeachersSchedule()){ // створюємо його й перевіряємо булівський результат
+        if (!teachersScheduleIsAlreadyCreated) { // якщо розклад для викладачів ще не створений
+            if (!calculateTeachersSchedule()) { // створюємо його й перевіряємо булівський результат
                 return null;
             }
         }

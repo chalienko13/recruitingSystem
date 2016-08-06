@@ -8,9 +8,6 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
-/**
- * Created by Алексей on 21.04.2016.
- */
 @Entity
 @Table(name = "application_form")
 public class ApplicationForm implements Serializable {

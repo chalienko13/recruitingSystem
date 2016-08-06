@@ -11,84 +11,84 @@ import java.io.Serializable;
 @Table(name = "user_time_priority")
 public class UserTimePriority implements Serializable {
 
-	private static final long serialVersionUID = 4644874842084608413L;
+    private static final long serialVersionUID = 4644874842084608413L;
 
-	@Id
-	@AttributeOverrides({
-			@AttributeOverride(name = "user", column = @Column(name="id_user")),
-			@AttributeOverride(name = "scheduleTimePoint", column = @Column(name="id_time_point")),
-			@AttributeOverride(name = "timePriorityType", column = @Column(name="id_priority_type"))
-	})
+    @Id
+    @AttributeOverrides({
+            @AttributeOverride(name = "user", column = @Column(name = "id_user")),
+            @AttributeOverride(name = "scheduleTimePoint", column = @Column(name = "id_time_point")),
+            @AttributeOverride(name = "timePriorityType", column = @Column(name = "id_priority_type"))
+    })
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_user")
-	private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_user")
+    private User user;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_time_point")
-	private ScheduleTimePoint scheduleTimePoint;
-	//
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_time_point")
+    private ScheduleTimePoint scheduleTimePoint;
+    //
 //	@ManyToOne(fetch = FetchType.LAZY)
 //	@JoinColumn(name = "id_priority_type")
-	@Transient
-	private TimePriorityType timePriorityType;
+    @Transient
+    private TimePriorityType timePriorityType;
 
-	public UserTimePriority() {
-	}
+    public UserTimePriority() {
+    }
 
-	public UserTimePriority(User user, ScheduleTimePoint scheduleTimePoint, TimePriorityType timePriorityType) {
-		this.user = user;
-		this.scheduleTimePoint = scheduleTimePoint;
-		this.timePriorityType = timePriorityType;
-	}
+    public UserTimePriority(User user, ScheduleTimePoint scheduleTimePoint, TimePriorityType timePriorityType) {
+        this.user = user;
+        this.scheduleTimePoint = scheduleTimePoint;
+        this.timePriorityType = timePriorityType;
+    }
 
-	public User getUser() {
-		return user;
-	}
+    public User getUser() {
+        return user;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-	@JsonIgnore
-	public ScheduleTimePoint getScheduleTimePoint() {
-		return scheduleTimePoint;
-	}
+    @JsonIgnore
+    public ScheduleTimePoint getScheduleTimePoint() {
+        return scheduleTimePoint;
+    }
 
-	public void setScheduleTimePoint(ScheduleTimePoint scheduleTimePoint) {
-		this.scheduleTimePoint = scheduleTimePoint;
-	}
+    public void setScheduleTimePoint(ScheduleTimePoint scheduleTimePoint) {
+        this.scheduleTimePoint = scheduleTimePoint;
+    }
 
-	public TimePriorityType getTimePriorityType() {
-		return timePriorityType;
-	}
+    public TimePriorityType getTimePriorityType() {
+        return timePriorityType;
+    }
 
-	public void setTimePriorityType(TimePriorityType timePriorityType) {
-		this.timePriorityType = timePriorityType;
-	}
+    public void setTimePriorityType(TimePriorityType timePriorityType) {
+        this.timePriorityType = timePriorityType;
+    }
 
-	@Override
-	public String toString() {
-		return "UserTimePriority [user=" + user + ", scheduleTimePoint=" + scheduleTimePoint + ", timePriorityType="
-				+ timePriorityType + "]";
-	}
+    @Override
+    public String toString() {
+        return "UserTimePriority [user=" + user + ", scheduleTimePoint=" + scheduleTimePoint + ", timePriorityType="
+                + timePriorityType + "]";
+    }
 
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder(17, 37).append(scheduleTimePoint).append(user).toHashCode();
-	}
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(scheduleTimePoint).append(user).toHashCode();
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		UserTimePriority other = (UserTimePriority) obj;
-		return new EqualsBuilder().append(scheduleTimePoint, other.scheduleTimePoint).append(user, other.user)
-				.isEquals();
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        UserTimePriority other = (UserTimePriority) obj;
+        return new EqualsBuilder().append(scheduleTimePoint, other.scheduleTimePoint).append(user, other.user)
+                .isEquals();
+    }
 
 }

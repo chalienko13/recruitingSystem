@@ -123,7 +123,7 @@ public class JdbcTemplate {
     public int[] batchUpdate(String sql, Object[][] objects) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-           int rowNum = 1;
+            int rowNum = 1;
             for (Object[] objectsForSql : objects) {
                 for (Object object : objectsForSql) {
                     statement.setObject(rowNum++, object);

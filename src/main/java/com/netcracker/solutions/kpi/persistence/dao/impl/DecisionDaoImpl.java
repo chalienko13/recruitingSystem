@@ -2,34 +2,41 @@ package com.netcracker.solutions.kpi.persistence.dao.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.DecisionDao;
 import com.netcracker.solutions.kpi.persistence.model.Decision;
-import com.netcracker.solutions.kpi.persistence.util.JdbcTemplate;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
 public class DecisionDaoImpl implements DecisionDao {
-    private static Logger log = LoggerFactory.getLogger(DecisionDaoImpl.class.getName());
-
-    @Autowired
-    private JdbcDaoSupport jdbcDaoSupport;
+    static final String TABLE_NAME = "decision_matrix";
+    static final String SOFT_MARK_COL = "soft_mark";
 
    /* public DecisionDaoImpl(DataSource dataSource) {
         this.jdbcDaoSupport = new JdbcDaoSupport();
         jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }*/
-
-    static final String TABLE_NAME = "decision_matrix";
-    static final String SOFT_MARK_COL = "soft_mark";
     static final String TECH_MARK_COL = "tech_mark";
     static final String FINAL_MARK_COL = "final_mark";
     static final String SCALE_COL = "scale";
-
+    private static final String SQL_GET = "SELECT " + SOFT_MARK_COL + ", " + TECH_MARK_COL + ", " + FINAL_MARK_COL + ", " +
+            SCALE_COL + " FROM " + TABLE_NAME;
+    private static final String SQL_GET_ALL = SQL_GET + " ORDER BY " + TECH_MARK_COL + ", " + SOFT_MARK_COL;
+    private static final String SQL_GET_BY_IDS = SQL_GET + " WHERE " + SOFT_MARK_COL + " = ? and " + TECH_MARK_COL
+            + " = ?;";
+    private static final String SQL_INSERT = "INSERT INTO " + TABLE_NAME + " (" + SOFT_MARK_COL + ", " + TECH_MARK_COL
+            + ", " + FINAL_MARK_COL + ", " + SCALE_COL + ") VALUES (?,?,?,?)";
+    private static final String SQL_UPDATE = "UPDATE " + TABLE_NAME + " SET " + FINAL_MARK_COL + " = ? WHERE "
+            + SOFT_MARK_COL + " = ? AND " + TECH_MARK_COL + " = ?";
+    private static final String SQL_DELETE = "DELETE FROM " + TABLE_NAME + " WHERE " + SOFT_MARK_COL + " = ? AND "
+            + TECH_MARK_COL + " = ? AND " + FINAL_MARK_COL + " = ?;";
+    private static final String SQL_TRUNCATE = "TRUNCATE TABLE " + TABLE_NAME;
+    private static Logger log = LoggerFactory.getLogger(DecisionDaoImpl.class.getName());
+    @Autowired
+    private JdbcDaoSupport jdbcDaoSupport;
     private ResultSetExtractor<Decision> extractor = resultSet -> {
         Decision decision = new Decision();
         decision.setSoftMark(resultSet.getInt(SOFT_MARK_COL));
@@ -37,25 +44,6 @@ public class DecisionDaoImpl implements DecisionDao {
         decision.setFinalMark(resultSet.getInt(FINAL_MARK_COL));
         return decision;
     };
-
-    private static final String SQL_GET = "SELECT " + SOFT_MARK_COL + ", " + TECH_MARK_COL + ", " + FINAL_MARK_COL + ", " +
-            SCALE_COL + " FROM " + TABLE_NAME;
-
-    private static final String SQL_GET_ALL = SQL_GET + " ORDER BY " + TECH_MARK_COL + ", " + SOFT_MARK_COL;
-
-    private static final String SQL_GET_BY_IDS = SQL_GET + " WHERE " + SOFT_MARK_COL + " = ? and " + TECH_MARK_COL
-            + " = ?;";
-
-    private static final String SQL_INSERT = "INSERT INTO " + TABLE_NAME + " (" + SOFT_MARK_COL + ", " + TECH_MARK_COL
-            + ", " + FINAL_MARK_COL + ", " + SCALE_COL + ") VALUES (?,?,?,?)";
-
-    private static final String SQL_UPDATE = "UPDATE " + TABLE_NAME + " SET " + FINAL_MARK_COL + " = ? WHERE "
-            + SOFT_MARK_COL + " = ? AND " + TECH_MARK_COL + " = ?";
-
-    private static final String SQL_DELETE = "DELETE FROM " + TABLE_NAME + " WHERE " + SOFT_MARK_COL + " = ? AND "
-            + TECH_MARK_COL + " = ? AND " + FINAL_MARK_COL + " = ?;";
-
-    private static final String SQL_TRUNCATE = "TRUNCATE TABLE " + TABLE_NAME;
 
     @Override
     public Decision getByMarks(int softMark, int techMark) {

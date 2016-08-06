@@ -2,28 +2,19 @@ package com.netcracker.solutions.kpi.persistence.dao.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.NotificationTypeDao;
 import com.netcracker.solutions.kpi.persistence.model.NotificationType;
-import com.netcracker.solutions.kpi.persistence.util.JdbcTemplate;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.util.Set;
 
 @Repository
 public class NotificationTypeDaoImpl implements NotificationTypeDao {
-    private static Logger log = LoggerFactory.getLogger(NotificationTypeDaoImpl.class.getName());
-
-    @Autowired
-    private JdbcDaoSupport jdbcDaoSupport;
-
     private static final String ID_COL = "id";
     private static final String TITLE_COL = "n_title";
-
     private static final String TABLE_NAME = "notification_type";
-
     private static final String SQL_GET = "SELECT n." + ID_COL + ", n." + TITLE_COL + " FROM public." + TABLE_NAME
             + "  n ";
     private static final String SQL_GET_BY_ID = SQL_GET + " WHERE n." + ID_COL + " = ?;";
@@ -32,18 +23,15 @@ public class NotificationTypeDaoImpl implements NotificationTypeDao {
             + " = ? " + "WHERE " + TABLE_NAME + "." + ID_COL + " = ?;";
     private static final String SQL_DELETE_NOTIFICATION_TYPE = "DELETE FROM public." + TABLE_NAME + " WHERE " + ID_COL
             + " = ?;";
-
+    private static Logger log = LoggerFactory.getLogger(NotificationTypeDaoImpl.class.getName());
+    @Autowired
+    private JdbcDaoSupport jdbcDaoSupport;
     private ResultSetExtractor<NotificationType> extractor = resultSet -> {
         NotificationType notificationType = new NotificationType();
         notificationType.setId(resultSet.getLong(ID_COL));
         notificationType.setTitle(resultSet.getString(TITLE_COL));
         return notificationType;
     };
-
-  /*  public NotificationTypeDaoImpl(DataSource dataSource) {
-        this.jdbcDaoSupport = new JdbcDaoSupport();
-        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
-    }*/
 
     @Override
     public NotificationType getById(Long id) {

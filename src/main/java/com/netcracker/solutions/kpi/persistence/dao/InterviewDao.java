@@ -18,7 +18,7 @@ public interface InterviewDao {
 
     List<Interview> getByApplicationForm(ApplicationForm applicationForm);
 
-    Interview getByApplicationFormAndInterviewerRoleId(ApplicationForm applicationForm, Long interviewerRoleId );
+    Interview getByApplicationFormAndInterviewerRoleId(ApplicationForm applicationForm, Long interviewerRoleId);
 
     Long insertInterview(Interview interview, ApplicationForm applicationForm, User interviewer, Role role);
 
@@ -32,9 +32,9 @@ public interface InterviewDao {
 
     boolean haveNonAdequateMark(Long applicationFormID, Long interviewerId);
 
-    boolean haveNonAdequateMarkForAdmin (Long applicationFormID);
+    boolean haveNonAdequateMarkForAdmin(Long applicationFormID);
 
-	boolean isFormAssigned(ApplicationForm applicationForm, User interviewer);
+    boolean isFormAssigned(ApplicationForm applicationForm, User interviewer);
 
-	int updateInterview(Interview interview, Connection connection);
+    int updateInterview(Interview interview, Connection connection);
 }

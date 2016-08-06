@@ -3,29 +3,25 @@ package com.netcracker.solutions.kpi.persistence.dao.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.StatusDao;
 import com.netcracker.solutions.kpi.persistence.model.Status;
-import com.netcracker.solutions.kpi.persistence.util.JdbcTemplate;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
 public class StatusDaoImpl implements StatusDao {
 
+    private static Logger log = LoggerFactory.getLogger(StatusDaoImpl.class.getName());
     @Autowired
     private JdbcDaoSupport jdbcDaoSupport;
-
-    private static Logger log = LoggerFactory.getLogger(StatusDaoImpl.class.getName());
 
    /* public StatusDaoImpl(DataSource dataSource) {
         this.jdbcDaoSupport = new JdbcDaoSupport();
         jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }*/
-
     private ResultSetExtractor<Status> extractor = resultSet -> {
         Status status = new Status();
         status.setId(resultSet.getLong("id"));

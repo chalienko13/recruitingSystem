@@ -3,23 +3,18 @@ package com.netcracker.solutions.kpi.persistence.dao.impl;
 import com.netcracker.solutions.kpi.persistence.dao.ApplicationFormDao;
 import com.netcracker.solutions.kpi.persistence.model.*;
 import com.netcracker.solutions.kpi.persistence.model.enums.StatusEnum;
-import com.netcracker.solutions.kpi.persistence.util.JdbcTemplate;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class ApplicationFormDaoImpl implements ApplicationFormDao {
-
-    @Autowired
-    private JdbcDaoSupport jdbcDaoSupport;
 
     private static final String ID_COL = "id";
     private static final String ID_STATUS_COL = "id_status";
@@ -29,29 +24,7 @@ public class ApplicationFormDaoImpl implements ApplicationFormDao {
     private static final String ID_USER_COL = "id_user";
     private static final String DATE_CREATE_COL = "date_create";
     private static final String FEEDBACK = "feedback";
-
     private static final String TABLE_NAME = "application_form";
-
-    private ResultSetExtractor<ApplicationForm> extractor = resultSet -> {
-        ApplicationForm applicationForm = new ApplicationForm();
-        long id = resultSet.getLong(ID_COL);
-        applicationForm.setActive(resultSet.getBoolean(IS_ACTIVE_COL));
-        applicationForm.setAnswers(getAnswers(id));
-        applicationForm.setDateCreate(resultSet.getTimestamp(DATE_CREATE_COL));
-        applicationForm.setFeedback(resultSet.getString(FEEDBACK));
-        applicationForm.setId(id);
-        applicationForm.setRecruitment(new Recruitment(resultSet.getLong(ID_RECRUITMENT_COL)));
-        if (resultSet.wasNull()) {
-            applicationForm.setRecruitment(null);
-        }
-        applicationForm.setInterviews(getInterviews(id));
-        applicationForm.setPhotoScope(resultSet.getString(PHOTO_SCOPE_COL));
-        applicationForm.setStatus(new Status(resultSet.getLong(ID_STATUS_COL), resultSet.getString("title")));
-        applicationForm.setUser(new User(resultSet.getLong(ID_USER_COL)));
-        applicationForm.setQuestions(getQuestions(id));
-        return applicationForm;
-    };
-
     private static final String SQL_GET_BY_ID = "SELECT a." + ID_COL + ", a." + ID_STATUS_COL + ", a." + IS_ACTIVE_COL
             + ",a." + ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a."
             + DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
@@ -86,13 +59,11 @@ public class ApplicationFormDaoImpl implements ApplicationFormDao {
             + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
             + "\" a INNER JOIN status s ON s.id = a.id_status \n"
             + "WHERE a.id_user = ? AND a.id_recruitment = (SELECT r.id FROM recruitment r WHERE r.end_date > CURRENT_DATE)";
-
     private static final String SQL_GET_LAST = "SELECT a." + ID_COL + ",  a.id_status, a.is_active,a."
             + ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a." + DATE_CREATE_COL
             + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
             + "\" a INNER JOIN status s ON s.id = a.id_status \n"
             + "WHERE a.id_user = ? AND a.date_create = (SELECT MAX(a_in.date_create) from application_form a_in where a_in.id_user = ?)";
-
     private static final String SQL_GET_BY_INTERVIEWER = "SELECT a." + ID_COL + ",  a.id_status, a.is_active,a."
             + ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a." + DATE_CREATE_COL
             + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
@@ -100,12 +71,10 @@ public class ApplicationFormDaoImpl implements ApplicationFormDao {
             + "WHERE EXISTS (SELECT i.id FROM interview i WHERE i.id_application_form = a." + ID_COL
             + " AND i.id_interviewer = ?) AND a." + IS_ACTIVE_COL + " = true AND a." + ID_STATUS_COL + " = "
             + StatusEnum.APPROVED.getId();
-
     private static final String SQL_GET_CURRENT_APP_FORMS_ASC = "Select a.id, a.id_status, a.is_active\n" +
             "  ,a.id_recruitment, a.photo_scope, a.id_user, a.\n" +
             "date_create, a.feedback, s.title from application_form a INNER JOIN recruitment r on a.id_recruitment = r.id\n" +
             "  INNER JOIN status s on a.id_status = s.id WHERE r.end_date > CURRENT_DATE ORDER BY ? ASC OFFSET ? LIMIT ?;";
-
     private static final String SQL_GET_All_APP_FORMS_SORTED = "SELECT apl.id, u.last_name, apl.id_status, apl.is_active,\n" +
             "  apl.id_recruitment, apl.photo_scope, apl.id_user, apl.date_create, apl.feedback, s.title\n" +
             "from \"user\" u INNER JOIN application_form apl on apl.id_user= u.id\n" +
@@ -128,70 +97,76 @@ public class ApplicationFormDaoImpl implements ApplicationFormDao {
             " INNER JOIN status s on s1.id_status = s.id\n" +
             "INNER JOIN user_role ur ON u.id = ur.id_user\n" +
             "WHERE (s1.end_date >current_date) and (ur.id_role = 3) AND  ((s1.id = ?) OR (u.last_name LIKE ?)) ORDER BY 2 OFFSET ? LIMIT ?;";
-
     private static final String SQL_QUERY_ENDING_ASC = " ASC OFFSET ? LIMIT ?;";
-
     private static final String SQL_QUERY_ENDING_DESC = " DESC OFFSET ? LIMIT ?;";
-
     private static final String SQL_GET_CURRENT_APP_FORMS_DESC = "Select a.id, a.id_status, a.is_active\n" +
             "  ,a.id_recruitment, a.photo_scope, a.id_user, a.\n" +
             "date_create, a.feedback, s.title from application_form a INNER JOIN recruitment r on a.id_recruitment = r.id\n" +
             "  INNER JOIN status s on a.id_status = s.id WHERE r.end_date > CURRENT_DATE ORDER BY ? DESC OFFSET ? LIMIT ?;";
-
     private static final String SQL_GET_CURRENT_APP_FORMS = "Select a.id, a.id_status, a.is_active\n" +
             "  ,a.id_recruitment, a.photo_scope, a.id_user, a.\n" +
             "date_create, a.feedback, s.title from application_form a INNER JOIN recruitment r on a.id_recruitment = r.id\n" +
             "  INNER JOIN status s on a.id_status = s.id WHERE r.end_date > CURRENT_DATE;";
-
     private static final String SQL_GET_CURRENT_APP_FORMS_FILTERED = "Select DISTINCT a.id, a.id_status, a.is_active"
             + "  ,a.id_recruitment, a.photo_scope, a.id_user, a."
             + "date_create, a.feedback, s.title from application_form a INNER JOIN recruitment r on a.id_recruitment = r.id"
             + "  INNER JOIN status s on a.id_status = s.id WHERE ";
-
     private static final String SQL_GET_APP_FORMS_FILTERED_CONDITION = "WHERE exists(SELECT 1 FROM form_answer fa\n" +
             "                INNER JOIN form_answer_variant fav on fa.id_variant = fav.id\n" +
             "                WHERE fav.answer = '?' and fa.id_question='?' and fa.id_application_form=a.id)\n" +
             "                AND";
-
     private static final String SQL_GET_BY_STATUS_RECRUITMENT = "SELECT a." + ID_COL + ",  a." + ID_STATUS_COL + ", a."
             + IS_ACTIVE_COL + ",a." + ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a."
             + DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
             + "\" a INNER JOIN status s ON s.id = a." + ID_STATUS_COL + "\n" + "WHERE a." + ID_STATUS_COL + " = ? AND a." + ID_RECRUITMENT_COL + " = ?";
-
     private static final String SQL_GET_REJECTED_AFTER_INTERVIEW = "SELECT a." + ID_COL + ",  a." + ID_STATUS_COL + ", a."
             + IS_ACTIVE_COL + ",a." + ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a."
             + DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
             + "\" a INNER JOIN status s ON s.id = a." + ID_STATUS_COL + "\n" + "WHERE a." + ID_RECRUITMENT_COL + " = ? AND (SELECT COUNT(*) FROM interview i WHERE i.id_application_form = a.id) = 2 AND a.id_status = 8";
-
     private static final String SQL_GET_RECRUITMENT = "SELECT a." + ID_COL + ", a." + ID_STATUS_COL + ", a." + IS_ACTIVE_COL
             + ",a." + ID_RECRUITMENT_COL + ", a." + PHOTO_SCOPE_COL + ", " + "a." + ID_USER_COL + ", a."
             + DATE_CREATE_COL + ", a." + FEEDBACK + ", s.title \n" + "FROM \"" + TABLE_NAME
             + "\" a INNER JOIN status s ON s.id = a.id_status \n" + "WHERE a.id_recruitment = ?;";
-
     private static final String SQL_SORT = " ORDER BY ";
-
     private static final String SQL_GET_COUNT_APP_FORM_STATUS = "select count(id_status) AS \"status_count\" from \"" + TABLE_NAME + "\" where id_status=? and is_active='true'";
-
     private static final String SQL_CHANGE_STATUS = "UPDATE application_form SET id_status = ? where id_status = ?;";
-
     private static final String SQL_IS_ASSIGNED = "SELECT EXISTS( SELECT i.id FROM interview i WHERE i.interviewer_role = ? AND i.id_application_form = ? )";
-
     private static final String SQL_GET_ALL_CURRENT_RECRUITMENT_STUDENTS = "SELECT COUNT(*) as rowcount " +
             "from application_form WHERE id_recruitment =?";
     private static final String SQL_GET_APPROVED_RECRUITMENT_STUDENTS = "SELECT COUNT(*) as rowcount " +
             "from application_form WHERE id_recruitment =? and id_status=?";
-
     private static final String SQL_GET_All = "SELECT a.id,  a.id_status, a.is_active,a."
             + "id_recruitment, a.photo_scope, a.id_user, a.date_create, a.feedback, s.title \n" + "FROM \""
             + TABLE_NAME + "\" a INNER JOIN status s ON s.id = a.id_status \n"
             + "WHERE a.id_user = ? AND a.id_recruitment <> (SELECT r.id FROM recruitment r WHERE r.end_date > CURRENT_DATE)";
-
+    private static final String SQL_GET_ANSWERS = "SELECT fa.id\n FROM \"form_answer\" fa\n WHERE fa.id_application_form = ?;";
     private static Logger log = LoggerFactory.getLogger(UserDaoImpl.class.getName());
+    @Autowired
+    private JdbcDaoSupport jdbcDaoSupport;
 
  /*   public ApplicationFormDaoImpl(DataSource dataSource) {
         this.jdbcDaoSupport = new JdbcDaoSupport();
         jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
     }*/
+    private ResultSetExtractor<ApplicationForm> extractor = resultSet -> {
+        ApplicationForm applicationForm = new ApplicationForm();
+        long id = resultSet.getLong(ID_COL);
+        applicationForm.setActive(resultSet.getBoolean(IS_ACTIVE_COL));
+        applicationForm.setAnswers(getAnswers(id));
+        applicationForm.setDateCreate(resultSet.getTimestamp(DATE_CREATE_COL));
+        applicationForm.setFeedback(resultSet.getString(FEEDBACK));
+        applicationForm.setId(id);
+        applicationForm.setRecruitment(new Recruitment(resultSet.getLong(ID_RECRUITMENT_COL)));
+        if (resultSet.wasNull()) {
+            applicationForm.setRecruitment(null);
+        }
+        applicationForm.setInterviews(getInterviews(id));
+        applicationForm.setPhotoScope(resultSet.getString(PHOTO_SCOPE_COL));
+        applicationForm.setStatus(new Status(resultSet.getLong(ID_STATUS_COL), resultSet.getString("title")));
+        applicationForm.setUser(new User(resultSet.getLong(ID_USER_COL)));
+        applicationForm.setQuestions(getQuestions(id));
+        return applicationForm;
+    };
 
     @Override
     public List<ApplicationForm> getSearchAppFormByNameFromToRows(String lastName, Long fromRows, Long rowsNum) {
@@ -278,13 +253,13 @@ public class ApplicationFormDaoImpl implements ApplicationFormDao {
         return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_APP_FORM_STATUS, resultSet -> resultSet.getLong(1), new Long(6));
     }
 
+    ;
+
     @Override
     public Long getCountAdvancedAppForm() {
         log.info("Looking for Count Advanced AppForm");
         return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_APP_FORM_STATUS, resultSet -> resultSet.getLong(1), new Long(7));
     }
-
-    ;
 
     private List<Interview> getInterviews(Long applicationFormId) {
         return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_INTERVIEWS, (ResultSetExtractor<Interview>) resultSet -> {
@@ -292,8 +267,6 @@ public class ApplicationFormDaoImpl implements ApplicationFormDao {
             return interviewProxy;
         }, applicationFormId);
     }
-
-    private static final String SQL_GET_ANSWERS = "SELECT fa.id\n FROM \"form_answer\" fa\n WHERE fa.id_application_form = ?;";
 
     private List<FormAnswer> getAnswers(Long applicationFormId) {
         return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_ANSWERS, resultSet -> {
@@ -452,13 +425,13 @@ public class ApplicationFormDaoImpl implements ApplicationFormDao {
         return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_APP_FORM_STATUS,
                 resultSet -> resultSet.getLong(1), StatusEnum.APPROVED.getId());
     }
-    
-	@Override
-	public int updateApplicationForm(ApplicationForm applicationForm, Connection connection) {
-		log.info("Updating application forms with id = {}" + applicationForm.getId());
+
+    @Override
+    public int updateApplicationForm(ApplicationForm applicationForm, Connection connection) {
+        log.info("Updating application forms with id = {}" + applicationForm.getId());
         Recruitment recruitment = applicationForm.getRecruitment();
         return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE, connection, applicationForm.getStatus().getId(),
                 applicationForm.isActive(), applicationForm.getPhotoScope(), applicationForm.getDateCreate(),
                 applicationForm.getFeedback(), recruitment != null ? recruitment.getId() : null, applicationForm.getId());
-	}
+    }
 }

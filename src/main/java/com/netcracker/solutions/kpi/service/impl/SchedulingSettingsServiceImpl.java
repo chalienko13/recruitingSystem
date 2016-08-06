@@ -15,7 +15,7 @@ public class SchedulingSettingsServiceImpl implements SchedulingSettingsService 
     private SchedulingSettingsDao schedulingSettingsDao;
 
     @Override
-    public int deleteAll(){
+    public int deleteAll() {
         return schedulingSettingsDao.deleteAll();
     }
 

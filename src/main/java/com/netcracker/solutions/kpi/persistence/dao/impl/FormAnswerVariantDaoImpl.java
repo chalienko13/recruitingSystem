@@ -14,16 +14,24 @@ import java.util.List;
 
 @Repository
 public class FormAnswerVariantDaoImpl implements FormAnswerVariantDao {
-    private static Logger log = LoggerFactory.getLogger(FormAnswerVariantDaoImpl.class.getName());
+    static final String TABLE_NAME = "form_answer_variant";
+    static final String ID_COL = "id";
 
+    static final String ANSWER_COL = "answer";
+    static final String ID_QUESTION_COL = "id_question";
+    private static final String SQL_GET = "SELECT " + ID_COL + ", " + ANSWER_COL + ", " + ID_QUESTION_COL + " from \""
+            + TABLE_NAME + "\"";
+    private static final String SQL_GET_BY_ID = SQL_GET + " WHERE " + ID_COL + " = ?;";
+    private static final String SQL_GET_BY_TITLE_QUESTION = SQL_GET + " WHERE " + ANSWER_COL + " = ? AND " + ID_QUESTION_COL + " = ?";
+    private static final String SQL_GET_BY_QUESTION_ID = SQL_GET + " WHERE " + ID_QUESTION_COL + " = ? ORDER BY " + ID_COL;
+    private static final String SQL_INSERT = "INSERT INTO " + TABLE_NAME + " (" + ANSWER_COL + ", " + ID_QUESTION_COL
+            + ") VALUES (?,?);";
+    private static final String SQL_UPDATE = "UPDATE \"" + TABLE_NAME + "\" " + "SET " + ANSWER_COL + " = ?, "
+            + ID_QUESTION_COL + " = ? WHERE " + ID_COL + " = ?;";
+    private static final String SQL_DELETE = "DELETE FROM \"" + TABLE_NAME + "\" WHERE \"" + TABLE_NAME + "\".id = ?;";
+    private static Logger log = LoggerFactory.getLogger(FormAnswerVariantDaoImpl.class.getName());
     @Autowired
     private JdbcDaoSupport jdbcDaoSupport;
-
-    /*public FormAnswerVariantDaoImpl(DataSource dataSource) {
-        this.jdbcDaoSupport = new JdbcDaoSupport();
-        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
-    }*/
-
     private ResultSetExtractor<FormAnswerVariant> extractor = resultSet -> {
         FormAnswerVariant formAnswerVariant = new FormAnswerVariant();
         formAnswerVariant.setId(resultSet.getLong(ID_COL));
@@ -31,29 +39,6 @@ public class FormAnswerVariantDaoImpl implements FormAnswerVariantDao {
         formAnswerVariant.setFormQuestion(new FormQuestion(resultSet.getLong(ID_QUESTION_COL)));
         return formAnswerVariant;
     };
-
-    static final String TABLE_NAME = "form_answer_variant";
-
-    static final String ID_COL = "id";
-    static final String ANSWER_COL = "answer";
-    static final String ID_QUESTION_COL = "id_question";
-
-    private static final String SQL_GET = "SELECT " + ID_COL + ", " + ANSWER_COL + ", " + ID_QUESTION_COL + " from \""
-            + TABLE_NAME + "\"";
-
-    private static final String SQL_GET_BY_ID = SQL_GET + " WHERE " + ID_COL + " = ?;";
-
-    private static final String SQL_GET_BY_TITLE_QUESTION = SQL_GET + " WHERE " + ANSWER_COL + " = ? AND " + ID_QUESTION_COL + " = ?";
-
-    private static final String SQL_GET_BY_QUESTION_ID = SQL_GET + " WHERE " + ID_QUESTION_COL + " = ? ORDER BY " + ID_COL;
-
-    private static final String SQL_INSERT = "INSERT INTO " + TABLE_NAME + " (" + ANSWER_COL + ", " + ID_QUESTION_COL
-            + ") VALUES (?,?);";
-
-    private static final String SQL_UPDATE = "UPDATE \"" + TABLE_NAME + "\" " + "SET " + ANSWER_COL + " = ?, "
-            + ID_QUESTION_COL + " = ? WHERE " + ID_COL + " = ?;";
-
-    private static final String SQL_DELETE = "DELETE FROM \"" + TABLE_NAME + "\" WHERE \"" + TABLE_NAME + "\".id = ?;";
 
     @Override
     public FormAnswerVariant getById(Long id) {

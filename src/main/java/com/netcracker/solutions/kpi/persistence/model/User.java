@@ -15,7 +15,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "\"user\"")
-public class User implements UserDetails{
+public class User implements UserDetails {
 
     private static final long serialVersionUID = -5190252598383342478L;
 
@@ -55,14 +55,6 @@ public class User implements UserDetails{
     @Column(name = "password")
     private String password;
 
-//    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
-    @Transient
-    private List<SocialInformation> socialInformations;
-
-//    @ManyToMany
-//    @JoinTable(name = "user_role",
-//            joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id"),
-//            inverseJoinColumns = @JoinColumn(name = "id_role", referencedColumnName = "id"))
     @Transient
     private List<ScheduleTimePoint> scheduleTimePoint;
     @Transient
@@ -71,7 +63,9 @@ public class User implements UserDetails{
     private List<UserTimePriority> userTimePriorities;
 
 
-    /******************** UserDetails */
+    /**
+     * ***************** UserDetails
+     */
     @Transient
     private Long expireDate;
     @Transient
@@ -83,10 +77,12 @@ public class User implements UserDetails{
     @Transient
     private boolean enabled = true;
 
-    /***********************************/
+    /**
+     * *******************************
+     */
 
     public User(Long id, String email, String firstName, String secondName, String lastName, String password,
-                Set<Role> roles, List<SocialInformation> socialInformations) {
+                Set<Role> roles) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
@@ -94,7 +90,6 @@ public class User implements UserDetails{
         this.lastName = lastName;
         this.roles = roles;
         this.password = password;
-        this.socialInformations = socialInformations;
     }
 
     public User() {
@@ -139,16 +134,6 @@ public class User implements UserDetails{
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @JsonIgnore
-    public List<SocialInformation> getSocialInformations() {
-        return socialInformations;
-    }
-
-    @JsonIgnore
-    public void setSocialInformations(List<SocialInformation> socialInformations) {
-        this.socialInformations = socialInformations;
     }
 
     public String getConfirmToken() {
@@ -215,12 +200,12 @@ public class User implements UserDetails{
         this.roles = roles;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Long getExpireDate() {
@@ -269,7 +254,6 @@ public class User implements UserDetails{
                 ", isActive=" + isActive +
                 ", registrationDate=" + registrationDate +
                 ", password='" + password + '\'' +
-                ", socialInformations=" + socialInformations +
                 ", userAuthorities=" + userAuthorities +
                 ", expireDate=" + expireDate +
                 ", accountNonExpired=" + accountNonExpired +

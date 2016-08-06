@@ -1,12 +1,10 @@
 package com.netcracker.solutions.kpi.config;
 
 import com.netcracker.solutions.kpi.controller.auth.*;
-import com.netcracker.solutions.kpi.filter.SocialLoginFilter;
 import com.netcracker.solutions.kpi.filter.StatelessAuthenticationFilter;
 import com.netcracker.solutions.kpi.filter.StatelessLoginFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -16,7 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.annotation.PostConstruct;
 
@@ -29,9 +26,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private LoginPasswordAuthenticationManager loginPasswordAuthenticationManager;// = LoginPasswordAuthenticationManager.getInstance();
-
-    @Autowired
-    private SocialNetworkAuthenticationManager socialNetworkAuthenticationManager;// = SocialNetworkAuthenticationManager.getInstance();
 
     @Autowired
     private AuthenticationSuccessHandler authenticationSuccessHandler;// = AuthenticationSuccessHandlerService.getInstance();
@@ -88,18 +82,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
 
                 .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationServiceLoginPassword,
-                        tokenAuthenticationServiceSocial),
+                                tokenAuthenticationServiceSocial),
                         UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationServiceLoginPassword,
-                        loginPasswordAuthenticationManager, authenticationSuccessHandler, authenticationSuccessHandlerService),
+                                loginPasswordAuthenticationManager, authenticationSuccessHandler, authenticationSuccessHandlerService),
                         UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new SocialLoginFilter(new AntPathRequestMatcher("/socialAuth/**"),
-                        socialNetworkAuthenticationManager,
-                        authenticationSuccessHandler,
-                        tokenAuthenticationServiceSocial),
-                        UsernamePasswordAuthenticationFilter.class)
-
-
                 .exceptionHandling().and()
                 .csrf().disable()
                 .servletApi().and()

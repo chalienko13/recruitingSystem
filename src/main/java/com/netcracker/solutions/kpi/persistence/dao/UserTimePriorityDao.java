@@ -26,7 +26,7 @@ public interface UserTimePriorityDao {
 
     List<UserTimePriority> getAllUserTimePriorities(Long userId);
 
-	boolean isSchedulePrioritiesExistStudent();
+    boolean isSchedulePrioritiesExistStudent();
 
     boolean isSchedulePrioritiesExistStaff();
 

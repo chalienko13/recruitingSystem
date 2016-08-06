@@ -4,9 +4,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by natalya on 14.05.2016.
- */
 public class User {
     private Long id;
     private List<Timestamp> timesAndDates = new ArrayList<>();
@@ -29,10 +26,6 @@ public class User {
 
     public List<Timestamp> getTimesAndDates() {
         return timesAndDates;
-    }
-
-    public void setTimesAndDates(List<Timestamp> timesAndDates) {
-        this.timesAndDates = timesAndDates;
     }
 
     @Override

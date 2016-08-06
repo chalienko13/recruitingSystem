@@ -3,9 +3,6 @@ package com.netcracker.solutions.kpi.util.scheduling;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
-/**
- * Created by natalya on 14.05.2016.
- */
 public class StudentsScheduleCell {
     private Timestamp dateAndHour;
     private int numberOfFreePlace;
@@ -37,6 +34,6 @@ public class StudentsScheduleCell {
 
     @Override
     public String toString() {
-        return dateAndHour.toString() +" | free place: " + numberOfFreePlace + " | Students: " + students;
+        return dateAndHour.toString() + " | free place: " + numberOfFreePlace + " | Students: " + students;
     }
 }

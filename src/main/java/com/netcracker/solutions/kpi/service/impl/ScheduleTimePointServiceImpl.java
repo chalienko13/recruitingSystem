@@ -38,22 +38,6 @@ public class ScheduleTimePointServiceImpl implements ScheduleTimePointService {
     }
 
     @Override
-    public Long insertScheduleTimePoint(ScheduleTimePoint scheduleTimePoint) {
-        return scheduleTimePointDao.insertScheduleTimePoint(scheduleTimePoint);
-    }
-
-    @Override
-    public int updateScheduleTimePoint(ScheduleTimePoint scheduleTimePoint) {
-        return scheduleTimePointDao.updateScheduleTimePoint(scheduleTimePoint);
-    }
-
-    @Override
-    public int deleteScheduleTimePoint(ScheduleTimePoint scheduleTimePoint) {
-        return scheduleTimePointDao.deleteScheduleTimePoint(scheduleTimePoint);
-    }
-
-
-    @Override
     public int deleteUserTimeFinal(User user, ScheduleTimePoint scheduleTimePoint) {
         return scheduleTimePointDao.deleteUserTimeFinal(user, scheduleTimePoint);
     }

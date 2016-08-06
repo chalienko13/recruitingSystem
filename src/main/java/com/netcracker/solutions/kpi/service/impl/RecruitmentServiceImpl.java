@@ -14,18 +14,9 @@ public class RecruitmentServiceImpl implements RecruitmentService {
     @Autowired
     private RecruitmentDAO recruitmentDAO;
 
-    /*public RecruitmentServiceImpl(RecruitmentDAO recruitmentDAO) {
-        this.recruitmentDAO = recruitmentDAO;
-    }*/
-
     @Override
     public Recruitment getRecruitmentById(Long id) {
         return recruitmentDAO.getRecruitmentById(id);
-    }
-
-    @Override
-    public Recruitment getRecruitmentByName(String name) {
-        return recruitmentDAO.getRecruitmentByName(name);
     }
 
     @Override
@@ -39,24 +30,19 @@ public class RecruitmentServiceImpl implements RecruitmentService {
     }
 
     @Override
-    public int deleteRecruitment(Recruitment recruitment) {
-        return recruitmentDAO.deleteRecruitment(recruitment);
-    }
-
-    @Override
     public List<Recruitment> getAll() {
         return recruitmentDAO.getAll();
     }
 
-	@Override
-	public Recruitment getCurrentRecruitmnet() {
-		return recruitmentDAO.getCurrentRecruitmnet();
-	}
+    @Override
+    public Recruitment getCurrentRecruitmnet() {
+        return recruitmentDAO.getCurrentRecruitmnet();
+    }
 
-	@Override
-	public List<Recruitment> getAllSorted() {
-		return recruitmentDAO.getAllSorted();
-	}
+    @Override
+    public List<Recruitment> getAllSorted() {
+        return recruitmentDAO.getAllSorted();
+    }
 
     @Override
     public Recruitment getLastRecruitment() {

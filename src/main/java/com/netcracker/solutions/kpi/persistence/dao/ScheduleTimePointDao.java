@@ -28,15 +28,15 @@ public interface ScheduleTimePointDao {
 
     int deleteUserTimeFinal(User user, ScheduleTimePoint scheduleTimePoint);
 
-	ScheduleTimePoint getScheduleTimePointByTimepoint(Timestamp timestamp);
+    ScheduleTimePoint getScheduleTimePointByTimepoint(Timestamp timestamp);
 
-	List<ScheduleTimePoint> getAll();
+    List<ScheduleTimePoint> getAll();
 
-	boolean isScheduleExists();
+    boolean isScheduleExists();
 
-	boolean isScheduleDatesExists();
+    boolean isScheduleDatesExists();
 
-    Map<Long,Long> getUsersNumberInFinalTimePoint(Timestamp timePoint);
+    Map<Long, Long> getUsersNumberInFinalTimePoint(Timestamp timePoint);
 
     Long addUserToTimepoint(User user, ScheduleTimePoint timePoint);
 }

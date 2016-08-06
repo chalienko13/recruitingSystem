@@ -32,6 +32,7 @@ public class ApplicationFormDto {
     public void setId(long id) {
         this.id = id;
     }
+
     public String getStatus() {
         return status;
     }

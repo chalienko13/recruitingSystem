@@ -26,14 +26,13 @@ import java.util.List;
 
 @Service
 public class ExportApplicationFormImp implements ExportApplicationForm {
-    private static Logger log = LoggerFactory.getLogger(ExportApplicationFormImp.class.getName());
-
     private final static int FONT_SIZE_BIG = 20;
     private final static int FONT_SIZE_MIDDLE = 13;
     private final static String CHECKBOX_FONT_PATH = "fonts/wingding.ttf";
     private final static String PHOTO_PATH = "photodir.path";
     private final static char CHECKED = '\u00FE';
     private final static char UNCHECKED = '\u00A8';
+    private static Logger log = LoggerFactory.getLogger(ExportApplicationFormImp.class.getName());
     private Font fontCheckboxes;
     private Font fontBig;
     private Font fontMiddle;
@@ -117,7 +116,7 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
         cell.setPhrase(new Phrase("Email:"));
         innerTable1.addCell(cell);
         for (String string : selectInputQuestions) {
-            cell.setPhrase(new Phrase(string +":"));
+            cell.setPhrase(new Phrase(string + ":"));
             innerTable1.addCell(cell);
         }
         PdfPCell cellTableLeft = new PdfPCell(innerTable1);
@@ -247,7 +246,7 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
         }
     }
 
-    private void insertImage(PdfPTable table, URL url) throws IOException,BadElementException {
+    private void insertImage(PdfPTable table, URL url) throws IOException, BadElementException {
         try {
             PdfPCell cellImg;
             cellImg = new PdfPCell(getImage(url));

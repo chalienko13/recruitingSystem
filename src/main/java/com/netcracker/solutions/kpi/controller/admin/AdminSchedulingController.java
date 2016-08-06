@@ -5,7 +5,6 @@ import com.netcracker.solutions.kpi.persistence.model.*;
 import com.netcracker.solutions.kpi.persistence.model.enums.RoleEnum;
 import com.netcracker.solutions.kpi.persistence.model.enums.SchedulingStatusEnum;
 import com.netcracker.solutions.kpi.service.*;
-import com.netcracker.solutions.kpi.service.util.SenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,27 +19,6 @@ import java.util.stream.Collectors;
 public class AdminSchedulingController {
 
     private final static long HOURS_FACTOR = 60 * 60 * 1000;
-
-    @Autowired
-    private RecruitmentService recruitmentService;// = ServiceFactory.getRecruitmentService();
-    @Autowired
-    private ApplicationFormService applicationFormService;// = ServiceFactory.getApplicationFormService();
-    @Autowired
-    private UserService userService;// = ServiceFactory.getUserService();
-    @Autowired
-    private SchedulingSettingsService schedulingSettingsService;// = ServiceFactory.getSchedulingSettingsService();
-    @Autowired
-    private ScheduleTimePointService timePointService;// = ServiceFactory.getScheduleTimePointService();
-/*    @Autowired
-    private DaoUtilService daoUtilService;*/// = ServiceFactory.getDaoUtilService();
-    @Autowired
-    private UserTimePriorityService userTimePriorityService;// = ServiceFactory.getUserTimePriorityService();
-    @Autowired
-    private EmailTemplateService emailTemplateService;// = ServiceFactory.getEmailTemplateService();
-    @Autowired
-    private SenderService senderService;// = SenderServiceImpl.getInstance();
-
-
     private static final String SAVE_SELECTED_DAYS_ERROR = "Choiced day has been early select, please refresh page";
     private static final String GET_SELECTED_DAYS_ERROR = "Error during get selected days, refresh page or try again later";
     private static final String DELETE_SELECTED_DAY_ERROR = "Error during delete selected day, refresh page or try again later";
@@ -51,7 +29,18 @@ public class AdminSchedulingController {
     private static final String STAFF_STUDENT_NOT_CONFIRM = "Student and staff hasn't been confirm";
     private static final String STAFF_NOT_CONFIRM = "Staff hasn't been confirm";
     private static final String STUDENT_NOT_CONFIRM = "Student hasn't been confirm";
-
+    @Autowired
+    private RecruitmentService recruitmentService;
+    @Autowired
+    private ApplicationFormService applicationFormService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private SchedulingSettingsService schedulingSettingsService;
+    @Autowired
+    private ScheduleTimePointService timePointService;
+    @Autowired
+    private UserTimePriorityService userTimePriorityService;
 
     @RequestMapping(value = "getCurrentStatus", method = RequestMethod.GET)
     public ResponseEntity getCurrentStatus() {

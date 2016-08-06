@@ -9,19 +9,14 @@ import java.util.Properties;
 
 public class PropertiesReader {
 
-    private static final String PROPERTIES_FILE ="app.properties";
+    private static final String PROPERTIES_FILE = "app.properties";
 
     private static Logger log = LoggerFactory.getLogger(PropertiesReader.class.getName());
-
-    private static class SingletonHolder {
-        static final PropertiesReader HOLDER_INSTANCE = new PropertiesReader();
-    }
+    private static String prop;
 
     public static PropertiesReader getInstance() {
         return SingletonHolder.HOLDER_INSTANCE;
     }
-
-    private static String prop;
 
     public String propertiesReader(String property) {
 
@@ -34,6 +29,10 @@ public class PropertiesReader {
             log.error("File not found", e);
         }
         return prop;
+    }
+
+    private static class SingletonHolder {
+        static final PropertiesReader HOLDER_INSTANCE = new PropertiesReader();
     }
 
 }

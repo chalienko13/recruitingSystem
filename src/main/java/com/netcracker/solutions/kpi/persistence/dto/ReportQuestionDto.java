@@ -2,38 +2,38 @@ package com.netcracker.solutions.kpi.persistence.dto;
 
 public class ReportQuestionDto {
 
-	private Long id;
-	private String title;
-	
-	public ReportQuestionDto() {
-	}
+    private Long id;
+    private String title;
 
-	public ReportQuestionDto(Long id, String title) {
-		super();
-		this.id = id;
-		this.title = title;
-	}
+    public ReportQuestionDto() {
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public ReportQuestionDto(Long id, String title) {
+        super();
+        this.id = id;
+        this.title = title;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	@Override
-	public String toString() {
-		return "ReportQuestionDto [id=" + id + ", title=" + title + "]";
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	
+    @Override
+    public String toString() {
+        return "ReportQuestionDto [id=" + id + ", title=" + title + "]";
+    }
+
+
 }
