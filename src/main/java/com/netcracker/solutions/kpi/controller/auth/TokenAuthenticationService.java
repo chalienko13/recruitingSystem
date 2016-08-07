@@ -11,9 +11,9 @@ public class TokenAuthenticationService {
     private static final String AUTH_HEADER_NAME_LOGIN_PASSWORD = "X-AUTH-TOKEN_LOGIN_PASSWORD";
     private static final String AUTH_HEADER_NAME_SOCIAL = "X-AUTH-TOKEN_SOCIAL";
     private static Logger log = LoggerFactory.getLogger(TokenAuthenticationService.class.getName());
-    private final TokenHandler tokenHandler;
+    private final TokenHandlerLoginPassword tokenHandler;
 
-    public TokenAuthenticationService(TokenHandler tokenHandler) {
+    public TokenAuthenticationService(TokenHandlerLoginPassword tokenHandler) {
         this.tokenHandler = tokenHandler;
     }
 

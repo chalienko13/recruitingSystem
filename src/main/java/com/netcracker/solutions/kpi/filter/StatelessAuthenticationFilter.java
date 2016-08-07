@@ -18,14 +18,11 @@ import java.io.IOException;
 public class StatelessAuthenticationFilter extends GenericFilterBean {
 
     private static final String AUTH_HEADER_NAME_LOGIN_PASSWORD = "X-AUTH-TOKEN_LOGIN_PASSWORD";
-    private static final String AUTH_HEADER_NAME_SOCIAL = "X-AUTH-TOKEN_SOCIAL";
-    private final TokenAuthenticationService tokenAuthenticationServiceLoginPassword;
-    private final TokenAuthenticationService tokenAuthenticationServiceSocial;
 
-    public StatelessAuthenticationFilter(TokenAuthenticationService tokenAuthenticationServiceLoginPassword,
-                                         TokenAuthenticationService tokenAuthenticationServiceSocial) {
+    private final TokenAuthenticationService tokenAuthenticationServiceLoginPassword;
+
+    public StatelessAuthenticationFilter(TokenAuthenticationService tokenAuthenticationServiceLoginPassword) {
         this.tokenAuthenticationServiceLoginPassword = tokenAuthenticationServiceLoginPassword;
-        this.tokenAuthenticationServiceSocial = tokenAuthenticationServiceSocial;
     }
 
     @Override
@@ -35,9 +32,6 @@ public class StatelessAuthenticationFilter extends GenericFilterBean {
         Authentication authentication = null;
         if (request.getHeader(AUTH_HEADER_NAME_LOGIN_PASSWORD) != null) {
             authentication = tokenAuthenticationServiceLoginPassword.getAuthentication((HttpServletRequest) req,
-                    (HttpServletResponse) res);
-        } else if (request.getHeader(AUTH_HEADER_NAME_SOCIAL) != null) {
-            authentication = tokenAuthenticationServiceSocial.getAuthentication((HttpServletRequest) req,
                     (HttpServletResponse) res);
         }
         SecurityContextHolder.getContext().setAuthentication(authentication);

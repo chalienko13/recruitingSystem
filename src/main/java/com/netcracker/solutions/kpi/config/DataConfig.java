@@ -1,6 +1,6 @@
 package com.netcracker.solutions.kpi.config;
 
-import org.hibernate.ejb.HibernatePersistence;
+import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -18,10 +18,9 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
-@PropertySource("classpath:app.properties")
+@PropertySource("classpath:/app.properties")
 @ComponentScan("com.netcracker.solutions.kpi")
 @EnableJpaRepositories("com.netcracker.solutions.kpi")
-//@EnableSpringConfigured
 public class DataConfig {
 
     private static final String DATABASE_DRIVER_PROP = "db.driver";
@@ -34,6 +33,7 @@ public class DataConfig {
     private static final String HIBERNATE_DIALECT_PROP = "db.hibernate.dialect";
     private static final String HIBERNATE_SHOW_SQL_PROP = "db.hibernate.show_sql";
     private static final String HIBERNATE_HBM2DDL_AUTO_PROP = "db.hibernate.hbm2ddl.auto";
+    private static final String HIBERNATE_FLUSH_MODE_PROP = "db.org.hibernate.flushMode";
 
     @Resource
     private Environment env;
@@ -55,7 +55,7 @@ public class DataConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(dataSource());
-        entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistence.class);
+        entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
         entityManagerFactoryBean.setPackagesToScan(ENTITY_PACKAGES);
 
         entityManagerFactoryBean.setJpaProperties(getHibernateProperties());
@@ -75,10 +75,6 @@ public class DataConfig {
 
     @Bean
     public JpaTransactionManager transactionManager() {
-//        JpaTransactionManager transactionManager = new JpaTransactionManager();
-//        transactionManager.setEntityManagerFactory((EntityManagerFactory) sessionFactory().getObject());
-//
-//        return transactionManager;
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
 
@@ -90,12 +86,8 @@ public class DataConfig {
         hiberProps.put(HIBERNATE_DIALECT_PROP, env.getRequiredProperty(HIBERNATE_DIALECT_PROP));
         hiberProps.put(HIBERNATE_SHOW_SQL_PROP, env.getRequiredProperty(HIBERNATE_SHOW_SQL_PROP));
         hiberProps.put(HIBERNATE_HBM2DDL_AUTO_PROP, env.getProperty(HIBERNATE_HBM2DDL_AUTO_PROP));
+        hiberProps.put(HIBERNATE_FLUSH_MODE_PROP, env.getProperty(HIBERNATE_FLUSH_MODE_PROP));
 
         return hiberProps;
-    }
-
-    private Properties getConnectionProperties() {
-        Properties conProps = new Properties();
-        return conProps;
     }
 }

@@ -1,6 +1,5 @@
 package com.netcracker.solutions.kpi.service.impl;
 
-import com.netcracker.solutions.kpi.persistence.dao.DataSourceSingleton;
 import com.netcracker.solutions.kpi.persistence.dao.FormAnswerDao;
 import com.netcracker.solutions.kpi.persistence.dao.InterviewDao;
 import com.netcracker.solutions.kpi.persistence.model.*;
@@ -13,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -35,6 +35,9 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Autowired
     private FormAnswerDao formAnswerDao;// = DaoFactory.getFormAnswerDao();
+
+    @Autowired
+    private DataSource dataSource;
 
     @Override
     public List<Interview> getAll() {
@@ -63,7 +66,7 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     public boolean insertInterviewWithAnswers(Interview interview, List<FormAnswer> formAnswers) {
-        try (Connection connection = DataSourceSingleton.getInstance().getConnection()) {
+        try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(false);
             Long generatedId = interviewDao.insertInterview(interview, connection);
             interview.setId(generatedId);
@@ -82,7 +85,7 @@ public class InterviewServiceImpl implements InterviewService {
 
     @Override
     public boolean updateInterview(Interview interview) {
-        try (Connection connection = DataSourceSingleton.getInstance().getConnection()) {
+        try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(false);
             interviewDao.updateInterview(interview, connection);
             formAnswerDao.deleteNotPresented(interview.getAnswers(), interview, connection);

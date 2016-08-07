@@ -4,6 +4,7 @@ import com.netcracker.solutions.kpi.config.PropertiesReader;
 import org.postgresql.ds.PGPoolingDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.naming.NamingException;
 import javax.sql.DataSource;
@@ -15,7 +16,8 @@ public class DataSourceSingleton {
 
     private DataSource dataSource;
 
-    private PropertiesReader propertiesReader = PropertiesReader.getInstance();
+    @Autowired
+    private PropertiesReader propertiesReader;
 
     private String databasePassword = propertiesReader.propertiesReader("db.password");
 

@@ -19,20 +19,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class AuthenticationSuccessHandlerService implements AuthenticationSuccessHandler {
-
-   /* private static AuthenticationSuccessHandlerService customAuthenticationSuccessHandler;
-
-    private AuthenticationSuccessHandlerService() {
-
-    }
-
-    public static AuthenticationSuccessHandlerService getInstance() {
-        if (customAuthenticationSuccessHandler == null) {
-            customAuthenticationSuccessHandler = new AuthenticationSuccessHandlerService();
-        }
-        return customAuthenticationSuccessHandler;
-    }*/
-
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response, Authentication authentication) throws

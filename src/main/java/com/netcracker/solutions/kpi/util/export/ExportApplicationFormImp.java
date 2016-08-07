@@ -42,6 +42,9 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
     @Autowired
     private FormAnswerService formAnswerService;// = ServiceFactory.getFormAnswerService();
 
+    @Autowired
+    private PropertiesReader propertiesReader;
+
     public ExportApplicationFormImp() throws IOException, DocumentException {
         //Initializing fonts
         fontBig = new Font(Font.FontFamily.TIMES_ROMAN, FONT_SIZE_BIG, Font.BOLD);
@@ -84,7 +87,7 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
         insertBaseStudentData(table, user, selectInputQuestions, selectInputAnswers);
 
         // Inserting Image in document
-        String photoDirPath = PropertiesReader.getInstance().propertiesReader(PHOTO_PATH);
+        String photoDirPath = propertiesReader.propertiesReader(PHOTO_PATH);
         URL url1 = new File(photoDirPath + applicationForm.getPhotoScope()).toURI().toURL();
         insertImage(table, url1);
         // Image inserted

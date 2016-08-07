@@ -1,22 +1,17 @@
 package com.netcracker.solutions.kpi.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+@Component
 public class PropertiesReader {
 
     private static final String PROPERTIES_FILE = "app.properties";
 
-    private static Logger log = LoggerFactory.getLogger(PropertiesReader.class.getName());
     private static String prop;
-
-    public static PropertiesReader getInstance() {
-        return SingletonHolder.HOLDER_INSTANCE;
-    }
 
     public String propertiesReader(String property) {
 
@@ -26,13 +21,7 @@ public class PropertiesReader {
             p.load(fileInputStream);
             prop = p.getProperty(property);
         } catch (IOException e) {
-            log.error("File not found", e);
         }
         return prop;
     }
-
-    private static class SingletonHolder {
-        static final PropertiesReader HOLDER_INSTANCE = new PropertiesReader();
-    }
-
 }

@@ -21,19 +21,6 @@ public class LoginPasswordAuthenticationManager implements AuthenticationManager
     @Autowired
     private PasswordEncoderGeneratorService passwordEncoderGeneratorService;
 
-    /*private LoginPasswordAuthenticationManager() {
-        this.userAuthServiceLoginPassword = UserAuthServiceLoginPassword.getInstance();
-        this.passwordEncoderGeneratorService = PasswordEncoderGeneratorService.getInstance();
-    }*/
-
-    /*private static class LoginPasswordAuthenticationProviderHolder{
-        private static final LoginPasswordAuthenticationManager HOLDER = new LoginPasswordAuthenticationManager();
-    }*/
-
-   /* public static LoginPasswordAuthenticationManager getInstance(){
-        return LoginPasswordAuthenticationProviderHolder.HOLDER;
-    }*/
-
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();

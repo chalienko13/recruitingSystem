@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 public interface GenericDAO<T, PK extends Serializable> {
-
-    void create(T newInstance);
-
     T getByID(PK id);
 
     void update(T transientObject);

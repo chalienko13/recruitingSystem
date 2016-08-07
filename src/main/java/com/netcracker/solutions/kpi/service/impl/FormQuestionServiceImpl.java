@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -24,6 +25,8 @@ import java.util.Set;
 @Service
 public class FormQuestionServiceImpl implements FormQuestionService {
     private static Logger log = LoggerFactory.getLogger(FormQuestionServiceImpl.class.getName());
+    @Autowired
+    private DataSource dataSource;
 
     @Autowired
     private RoleService roleService;
@@ -42,7 +45,7 @@ public class FormQuestionServiceImpl implements FormQuestionService {
     @Override
     public boolean insertFormQuestion(FormQuestion formQuestion, Role role,
                                       List<FormAnswerVariant> formAnswerVariants) {
-        try (Connection connection = DataSourceSingleton.getInstance().getConnection()) {
+        try (Connection connection = dataSource.getConnection()) {
             connection.setAutoCommit(false);
             Long generatedFormQuestionId = formQuestionDao.insertFormQuestion(formQuestion, connection);
             formQuestion.setId(generatedFormQuestionId);

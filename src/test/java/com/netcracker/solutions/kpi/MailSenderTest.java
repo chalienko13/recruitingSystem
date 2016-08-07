@@ -1,6 +1,9 @@
 package com.netcracker.solutions.kpi;
 
+import com.netcracker.solutions.kpi.config.DataConfig;
 import com.netcracker.solutions.kpi.config.MailConfig;
+import com.netcracker.solutions.kpi.persistence.dao.UserDao;
+import com.netcracker.solutions.kpi.service.UserService;
 import com.netcracker.solutions.kpi.service.impl.MailSenderImpl;
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -11,11 +14,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = MailConfig.class)
+@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = {MailConfig.class, DataConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class MailSenderTest {
     @Autowired
     MailSender mailSender;
+
+    @Autowired
+    UserDao userDao;
 
     Logger logger = Logger.getLogger(MailSenderTest.class);
 

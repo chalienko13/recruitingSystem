@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
                 token);
         user.setRoles(Sets.newHashSet(roles));
 
-        userDao.create(user);
+        userRepository.save(user);
 
         try{
             if (!user.isActive())

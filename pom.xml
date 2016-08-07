@@ -12,8 +12,8 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <spring.core>4.3.2.RELEASE</spring.core>
-        <spring.mvc>4.3.2.RELEASE</spring.mvc>
+        <spring.version>4.3.2.RELEASE</spring.version>
+        <hibernate.version>5.2.1.FINAL</hibernate.version>
         <javax.servlet>3.0.1</javax.servlet>
         <postgresVersion>9.1-901-1.jdbc4</postgresVersion>
         <junit.version>4.11</junit.version>
@@ -40,19 +40,19 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>${spring.core}</version>
+            <version>${spring.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
-            <version>${spring.core}</version>
+            <version>${spring.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>${spring.core}</version>
+            <version>${spring.version}</version>
         </dependency>
 
         <!--<dependency>-->
@@ -63,7 +63,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
-            <version>1.8.2.RELEASE</version>
+            <version>1.10.2.RELEASE</version>
         </dependency>
 
         <dependency>
@@ -75,20 +75,26 @@
 
         <dependency>
             <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
             <artifactId>spring-aspects</artifactId>
-            <version>${spring.core}</version>
+            <version>${spring.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
-            <version>${spring.core}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>5.2.0.Final</version>
+            <version>${spring.version}</version>
         </dependency>
 
         <dependency>
@@ -147,7 +153,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-            <version>${spring.mvc}</version>
+            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -226,7 +232,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
-            <version>4.2.5.RELEASE</version>
+            <version>${spring.version}</version>
         </dependency>
 
         <dependency>
@@ -281,17 +287,15 @@
             <artifactId>httpclient</artifactId>
             <version>4.3.2</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>5.1.0.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>4.2.5.RELEASE</version>
-            <scope>test</scope>
+            <version>${hibernate.version}</version>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>

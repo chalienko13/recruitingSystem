@@ -60,9 +60,10 @@ public class StudentApplicationFormController {
     @Autowired
     private RoleService roleService;
     @Autowired
-    private StatusService statusService;
+    private RecruitmentService recruitmentService;
+
     @Autowired
-    private RecruitmentService recruitmentService; //= ServiceFactory.getRecruitmentService();
+    private PropertiesReader propertiesReader;
 
     @RequestMapping(value = "appform", method = RequestMethod.POST)
     public String getApplicationForm() {
@@ -220,7 +221,7 @@ public class StudentApplicationFormController {
     private boolean savePhoto(ApplicationForm applicationForm, MultipartFile file, String fileExtension) {
         try {
             String photoScope = applicationForm.getId() + "." + fileExtension;
-            String photoDirPath = PropertiesReader.getInstance().propertiesReader("photodir.path");
+            String photoDirPath = propertiesReader.propertiesReader("photodir.path");
             File photoFile = new File(photoDirPath, photoScope);
             log.info("Saving photo to {}", photoFile.getAbsolutePath());
             file.transferTo(photoFile);

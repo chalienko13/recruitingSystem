@@ -14,34 +14,34 @@ import java.util.Map;
 @ComponentScan("com.netcracker.solutions.kpi.service.*")
 public class QuartzConfiguration {
 
-    @Bean
-    public JobDetailFactoryBean jobDetailResendMessage() {
-        JobDetailFactoryBean factory = new JobDetailFactoryBean();
-        Map<String, Object> map = new HashMap<>();
-        map.put("name", "ResendJob");
-        factory.setJobDataAsMap(map);
-        factory.setGroup("resendGroup");
-        factory.setName("resendMessageJob");
-        return factory;
-    }
-
-    @Bean
-    public CronTriggerFactoryBean cronTriggerResendMessage() {
-        CronTriggerFactoryBean stFactory = new CronTriggerFactoryBean();
-        stFactory.setJobDetail(jobDetailResendMessage().getObject());
-        stFactory.setStartDelay(3000);
-        stFactory.setName("mytrigger");
-        stFactory.setGroup("myGroup");
-        stFactory.setCronExpression("0 0/1 * 1/1 * ? *");
-        return stFactory;
-    }
-
-
-    @Bean
-    public SchedulerFactoryBean schedulerResendMessage() {
-        SchedulerFactoryBean scheduler = new SchedulerFactoryBean();
-        scheduler.setTriggers(cronTriggerResendMessage().getObject());
-        return scheduler;
-    }
+//    @Bean
+//    public JobDetailFactoryBean jobDetailResendMessage() {
+//        JobDetailFactoryBean factory = new JobDetailFactoryBean();
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("name", "ResendJob");
+//        factory.setJobDataAsMap(map);
+//        factory.setGroup("resendGroup");
+//        factory.setName("resendMessageJob");
+//        return factory;
+//    }
+//
+//    @Bean
+//    public CronTriggerFactoryBean cronTriggerResendMessage() {
+//        CronTriggerFactoryBean stFactory = new CronTriggerFactoryBean();
+//        stFactory.setJobDetail(jobDetailResendMessage().getObject());
+//        stFactory.setStartDelay(3000);
+//        stFactory.setName("mytrigger");
+//        stFactory.setGroup("myGroup");
+//        stFactory.setCronExpression("0 0/1 * 1/1 * ? *");
+//        return stFactory;
+//    }
+//
+//
+//    @Bean
+//    public SchedulerFactoryBean schedulerResendMessage() {
+//        SchedulerFactoryBean scheduler = new SchedulerFactoryBean();
+//        scheduler.setTriggers(cronTriggerResendMessage().getObject());
+//        return scheduler;
+//    }
 
 }

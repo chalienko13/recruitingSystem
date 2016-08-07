@@ -2,23 +2,28 @@ package com.netcracker.solutions.kpi.config;
 
 import com.netcracker.solutions.kpi.service.impl.MailSenderImpl;
 import org.springframework.context.annotation.*;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.MailSender;
 
+import javax.annotation.Resource;
 import java.util.Properties;
 
+@PropertySource("classpath:app.properties")
 @Configuration
 public class MailConfig {
     private String MAIL_SMTP_CONNECTIONTIMEOUT = "mail.smtp.connectiontimeout";
     private String MAIL_SMTP_TIMEOUT = "mail.smtp.timeout";
     private String MAIL_SMTP_WRITETIMEOUT = "mail.smtp.writetimeout";
     private String MAIL_SOCKET_TIMEOUT = "15000";
+    @Resource
+    private Environment env;
 
     @Bean
     public MailSender mailSender() {
         MailSenderImpl mailSender = new MailSenderImpl();
 
-        mailSender.setUsername("freest93@gmail.com");
-        mailSender.setPassword("");
+        mailSender.setUsername(env.getRequiredProperty("sender.email"));
+        mailSender.setPassword(env.getRequiredProperty("sender.password"));
 
         mailSender.setBatchSize(100);
 

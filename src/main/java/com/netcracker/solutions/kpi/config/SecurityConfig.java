@@ -35,23 +35,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     @Qualifier("TokenHandlerLoginPassword")
-    private TokenHandler tokenHandlerLoginPassword;// = TokenHandlerLoginPassword.getInstance();
+    private TokenHandlerLoginPassword tokenHandlerLoginPassword;// = TokenHandlerLoginPassword.getInstance();
 
-    @Autowired
-    @Qualifier("TokenHandlerSocial")
-    private TokenHandler tokenHandlerSocial;// = TokenHandlerSocial.getInstance();
 
     @Autowired
     private AuthenticationSuccessHandlerService authenticationSuccessHandlerService;
 
     private TokenAuthenticationService tokenAuthenticationServiceLoginPassword;
 
-    private TokenAuthenticationService tokenAuthenticationServiceSocial;
-
     @PostConstruct
     public void init() {
         tokenAuthenticationServiceLoginPassword = new TokenAuthenticationService(tokenHandlerLoginPassword);
-        tokenAuthenticationServiceSocial = new TokenAuthenticationService(tokenHandlerSocial);
     }
 
 
@@ -81,8 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
 
-                .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationServiceLoginPassword,
-                                tokenAuthenticationServiceSocial),
+                .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationServiceLoginPassword),
                         UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationServiceLoginPassword,
                                 loginPasswordAuthenticationManager, authenticationSuccessHandler, authenticationSuccessHandlerService),
