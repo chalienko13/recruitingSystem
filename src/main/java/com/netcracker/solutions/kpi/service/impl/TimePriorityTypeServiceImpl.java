@@ -5,10 +5,12 @@ import com.netcracker.solutions.kpi.persistence.model.TimePriorityType;
 import com.netcracker.solutions.kpi.service.TimePriorityTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class TimePriorityTypeServiceImpl implements TimePriorityTypeService {
 
     @Autowired

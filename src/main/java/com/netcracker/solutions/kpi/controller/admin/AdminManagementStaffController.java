@@ -106,17 +106,7 @@ public class AdminManagementStaffController {
 
     @RequestMapping(value = "editEmployee", method = RequestMethod.POST)
     public ResponseEntity editEmployeeParams(@RequestBody UserDto userDto) {
-        com.netcracker.solutions.kpi.persistence.model.User user = userService.getUserByID(userDto.getId());
-        user.setFirstName(userDto.getFirstName());
-        user.setSecondName(userDto.getSecondName());
-        user.setLastName(userDto.getLastName());
-        user.setEmail(userDto.getEmail());
-        Set<Role> userRoles = new HashSet<>();
-        for (Role role : userDto.getRoleList()) {
-            userRoles.add(roleService.getRoleByTitle("ROLE_" + role.getRoleName()));
-        }
-        user.setRoles(userRoles);
-        if (userService.updateUserWithRole(user)) {
+        if (userService.updateUser(userDto)) {
             return ResponseEntity.ok().body(null);
         } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(CAN_NOT_EDIT);

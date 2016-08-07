@@ -34,6 +34,7 @@ public class AdminFormSettingsController {
 
     @RequestMapping(value = "getQuestions", method = RequestMethod.GET)
     public List<FormQuestionDto> getQuestions(@RequestParam String role) {
+        //TODO replace with service call to db
         Role roleTitle = roleService.getRoleByTitle(role);
         List<FormQuestion> formQuestionList = formQuestionService.getByRole(roleTitle);
         List<FormQuestionDto> formQuestionListDto = new ArrayList<>();

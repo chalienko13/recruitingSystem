@@ -5,10 +5,12 @@ import com.netcracker.solutions.kpi.persistence.model.SchedulingSettings;
 import com.netcracker.solutions.kpi.service.SchedulingSettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class SchedulingSettingsServiceImpl implements SchedulingSettingsService {
 
     @Autowired

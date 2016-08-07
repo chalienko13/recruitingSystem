@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@Transactional
 public class FormQuestionServiceImpl implements FormQuestionService {
     private static Logger log = LoggerFactory.getLogger(FormQuestionServiceImpl.class.getName());
     @Autowired

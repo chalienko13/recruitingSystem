@@ -3,6 +3,7 @@ package com.netcracker.solutions.kpi.service.impl;
 import com.google.common.collect.Sets;
 import com.netcracker.solutions.kpi.controller.auth.PasswordEncoderGeneratorService;
 import com.netcracker.solutions.kpi.persistence.dao.UserDao;
+import com.netcracker.solutions.kpi.persistence.dto.UserDto;
 import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
 import com.netcracker.solutions.kpi.persistence.model.User;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -72,15 +74,14 @@ public class UserServiceImpl implements UserService {
                 token);
 
         Set<Role> dbRoles = Sets.newHashSet();
-        for(Role r : roles) {
-            Role dbRole = roleRepository.getByRoleName(r.getRoleName());
-            dbRoles.add(dbRole);
+        for (Role r : roles) {
+            dbRoles.add(roleRepository.getByRoleName(r.getRoleName()));
         }
         user.setRoles(dbRoles);
 
         userRepository.save(user);
 
-        try{
+        try {
             if (!user.isActive())
                 emailService.sendRegistrationConfirmation(user.getEmail());
             else
@@ -97,11 +98,24 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    //// TODO: 03.08.2016
     @Override
-    public boolean updateUserWithRole(User user) {
-        updateUser(user);
-        return true;
+    public boolean updateUser(UserDto userDto) {
+        User user = getUserByID(userDto.getId());
+        if (user != null) {
+            user.setFirstName(userDto.getFirstName());
+            user.setSecondName(userDto.getSecondName());
+            user.setLastName(userDto.getLastName());
+            user.setEmail(userDto.getEmail());
+            Set<Role> userRoles = new HashSet<>();
+            for (Role role : userDto.getRoleList()) {
+                userRoles.add(roleRepository.getByRoleName("ROLE_" + role.getRoleName()));
+            }
+            user.setRoles(userRoles);
+            updateUser(user);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 

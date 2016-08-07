@@ -1,5 +1,6 @@
 package com.netcracker.solutions.kpi.service;
 
+import com.netcracker.solutions.kpi.persistence.dto.UserDto;
 import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
 import com.netcracker.solutions.kpi.persistence.model.User;
@@ -20,8 +21,7 @@ public interface UserService {
 
     void updateUser(User user);
 
-    // // TODO: 03.08.2016
-    boolean updateUserWithRole(User user);
+    boolean updateUser(UserDto userDto);
 
     List<User> getAllNotScheduleStudents();
 

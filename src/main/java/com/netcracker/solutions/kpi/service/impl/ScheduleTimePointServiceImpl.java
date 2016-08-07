@@ -6,12 +6,14 @@ import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.service.ScheduleTimePointService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
 @Service
+@Transactional
 public class ScheduleTimePointServiceImpl implements ScheduleTimePointService {
 
     @Autowired
