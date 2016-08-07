@@ -6,6 +6,7 @@ import com.netcracker.solutions.kpi.persistence.dao.UserDao;
 import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
 import com.netcracker.solutions.kpi.persistence.model.User;
+import com.netcracker.solutions.kpi.persistence.repository.RoleRepository;
 import com.netcracker.solutions.kpi.persistence.repository.UserRepository;
 import com.netcracker.solutions.kpi.service.EmailService;
 import com.netcracker.solutions.kpi.service.UserService;
@@ -15,12 +16,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
     private static Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -29,6 +33,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     private EmailService emailService;
@@ -63,7 +70,13 @@ public class UserServiceImpl implements UserService {
                 isActive,
                 new Timestamp(System.currentTimeMillis()),
                 token);
-        user.setRoles(Sets.newHashSet(roles));
+
+        Set<Role> dbRoles = Sets.newHashSet();
+        for(Role r : roles) {
+            Role dbRole = roleRepository.getByRoleName(r.getRoleName());
+            dbRoles.add(dbRole);
+        }
+        user.setRoles(dbRoles);
 
         userRepository.save(user);
 
@@ -165,7 +178,7 @@ public class UserServiceImpl implements UserService {
         } catch (NumberFormatException e) {
             log.info("Search. Search field don`t equals id");
         }
-        return userRepository.getEmployeesByNameFromToRows("%" + name + "%", id);
+        return userRepository.getEmployeesByNameFromToRows(id, "%" + name + "%");
     }
 
     // TODO: 04.08.2016

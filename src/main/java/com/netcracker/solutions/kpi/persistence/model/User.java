@@ -37,7 +37,7 @@ public class User implements UserDetails {
     private String lastName;
 
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "id_role", referencedColumnName = "id"))

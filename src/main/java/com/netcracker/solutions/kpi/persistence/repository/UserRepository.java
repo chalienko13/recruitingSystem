@@ -74,9 +74,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "Select * from (Select DISTINCT u.id, u.email, u.first_name, u.last_name, u.second_name, u.password," +
             "u.confirm_token, u.is_active, u.registration_date from \"user\" u  INNER JOIN user_role ur ON u.id = ur.id_user\n" +
-            "WHERE (ur.id_role = 2 OR ur.id_role = 5 OR ur.id_role = 1) AND ((u.id = ?2) OR (u.last_name LIKE ?1))) as temp\n" +
+            "WHERE (ur.id_role = 2 OR ur.id_role = 5 OR ur.id_role = 1) AND ((u.id = ?1) OR (u.last_name LIKE ?2))) as temp\n" +
             " ORDER BY 2 OFFSET 0 LIMIT 10", nativeQuery = true)
-    List<User> getEmployeesByNameFromToRows(String lastName, Long id);
+    List<User> getEmployeesByNameFromToRows(Long id, String lastName);
 
     // TODO: 04.08.2016
     @Query(value = "select * from \"user\"", nativeQuery = true)
