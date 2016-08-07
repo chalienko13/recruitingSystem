@@ -63,6 +63,9 @@ public class StudentApplicationFormController {
     private RecruitmentService recruitmentService;
 
     @Autowired
+    private StatusService statusService;
+
+    @Autowired
     private PropertiesReader propertiesReader;
 
     @RequestMapping(value = "appform", method = RequestMethod.POST)
@@ -253,15 +256,14 @@ public class StudentApplicationFormController {
     }
 
     private ApplicationForm createApplicationForm(User user) {
+        log.info("Create Application Form for User {}",user);
         ApplicationForm applicationForm = new ApplicationForm();
         applicationForm.setUser(user);
         Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
-        applicationForm.setStatus(StatusEnum.REGISTERED.getStatus());
+        applicationForm.setStatus(statusService.getStatusById(StatusEnum.REGISTERED.getId()));
         applicationForm.setActive(true);
         applicationForm.setDateCreate(new Timestamp(System.currentTimeMillis()));
-        if (recruitment == null || (recruitment != null && !isRegistrationDeadlineEnded(recruitment))) {
-            applicationForm.setRecruitment(recruitment);
-        }
+        applicationForm.setRecruitment(recruitment);
         return applicationForm;
     }
 

@@ -7,8 +7,10 @@ import com.netcracker.solutions.kpi.persistence.model.*;
 import com.netcracker.solutions.kpi.persistence.model.enums.RoleEnum;
 import com.netcracker.solutions.kpi.persistence.model.enums.StatusEnum;
 import com.netcracker.solutions.kpi.persistence.repository.ApplicationFormRepository;
+import com.netcracker.solutions.kpi.persistence.repository.FormAnswerRepository;
 import com.netcracker.solutions.kpi.service.ApplicationFormService;
 import com.netcracker.solutions.kpi.service.DecisionService;
+import com.netcracker.solutions.kpi.service.FormAnswerService;
 import com.netcracker.solutions.kpi.service.InterviewService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +46,9 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
     @Autowired
     private FormAnswerDao formAnswerDao;
 
+    @Autowired
+    private FormAnswerRepository formAnswerRepository;
+
     @Override
     public ApplicationForm getApplicationFormById(Long id) {
         return applicationFormRepository.findOne(id);
@@ -71,21 +76,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 
     @Override
     public boolean insertApplicationForm(ApplicationForm applicationForm) {
-        try (Connection connection = DataSourceSingleton.getInstance().getConnection()) {
-            connection.setAutoCommit(false);
-            Long generatedId = applicationFormDao.insertApplicationForm(applicationForm, connection);
-            applicationForm.setId(generatedId);
-            for (FormAnswer formAnswer : applicationForm.getAnswers()) {
-                formAnswerDao.insertFormAnswerForApplicationForm(formAnswer, formAnswer.getFormQuestion(),
-                        applicationForm, connection);
-            }
-            connection.commit();
-        } catch (SQLException e) {
-            if (log.isWarnEnabled()) {
-                log.error("Cannot insert Application form", e);
-            }
-            return false;
-        }
+        applicationFormRepository.save(applicationForm);
         return true;
     }
 
