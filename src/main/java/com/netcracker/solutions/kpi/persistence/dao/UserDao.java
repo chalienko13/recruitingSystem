@@ -7,7 +7,7 @@ import com.netcracker.solutions.kpi.persistence.model.User;
 import java.util.List;
 import java.util.Set;
 
-public interface UserDao extends GenericDAO<User, Long> {
+public interface UserDao  {
     Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
 
     Set<User> getAllEmploees();

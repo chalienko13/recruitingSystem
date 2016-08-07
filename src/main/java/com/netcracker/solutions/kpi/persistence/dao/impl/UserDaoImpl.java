@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 @Repository
-public class UserDaoImpl extends GenericHibernateDAO<User, Long> implements UserDao {
+public class UserDaoImpl implements UserDao {
     private static final int ROLE_STUDENT = 3;
     private static final int APPROVED_STATUS = 3;
     private static final String SQL_GET_ALL_NOT_SCHEDULE_STUDENTS = "SELECT u.id, u.email, u.first_name,u.last_name, u.second_name,\n" +
@@ -149,10 +149,6 @@ public class UserDaoImpl extends GenericHibernateDAO<User, Long> implements User
         user.setRoles(getRoles(resultSet.getLong("id")));
         return user;
     };
-
-    public UserDaoImpl() {
-        super(User.class);
-    }
 
     @Override
     public List<Integer> getCountUsersOnInterviewDaysForRole(Role role) {

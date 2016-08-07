@@ -171,7 +171,7 @@ public class UserServiceImpl implements UserService {
     // TODO: 04.08.2016
     @Override
     public List<User> getEmployeesFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase) {
-        return userRepository.getEmployeesFromToRows(fromRows, rowsNum, sortingCol, increase);
+        return userRepository.getEmployeesFromToRows(/*fromRows, rowsNum, sortingCol, increase*/);
     }
 
     // TODO: 04.08.2016
@@ -179,8 +179,8 @@ public class UserServiceImpl implements UserService {
     public Long getAllEmployeeCountFiltered(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart,
                                             Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer,
                                             boolean notEvaluated) {
-        return userRepository.getEmployeeCountFiltered(fromRows, rowsNum, sortingCol, increase, idStart, idFinish, roles,
-                interviewer, notIntrviewer, notEvaluated);
+        return userRepository.getEmployeeCountFiltered(/*fromRows, rowsNum, sortingCol, increase, idStart, idFinish, roles,
+                interviewer, notIntrviewer, notEvaluated*/);
     }
 
     // TODO: 04.08.2016
@@ -188,8 +188,8 @@ public class UserServiceImpl implements UserService {
     public List<User> getFilteredEmployees(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart,
                                            Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer,
                                            boolean notEvaluated) {
-        return userRepository.getFilteredEmployees(fromRows, rowsNum, sortingCol, increase, idStart, idFinish, roles, interviewer,
-                notIntrviewer, notEvaluated);
+        return userRepository.getFilteredEmployees(/*fromRows, rowsNum, sortingCol, increase, idStart, idFinish, roles, interviewer,
+                notIntrviewer, notEvaluated*/);
     }
 
     @Override

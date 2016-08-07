@@ -1,6 +1,5 @@
 package com.netcracker.solutions.kpi.persistence.repository;
 
-import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -81,15 +80,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // TODO: 04.08.2016
     @Query(value = "select * from \"user\"", nativeQuery = true)
-    List<User> getEmployeesFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase);
+    List<User> getEmployeesFromToRows(/*Long fromRows, Long rowsNum, Long sortingCol, boolean increase*/);
 
     // TODO: 04.08.2016
     @Query(value = "select count(*) from \"user\"", nativeQuery = true)
-    Long getEmployeeCountFiltered(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart,
-                                  Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated);
+    Long getEmployeeCountFiltered(/*Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart,
+                                  Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated*/);
 
     // TODO: 04.08.2016
     @Query(value = "select * from \"user\"", nativeQuery = true)
-    List<User> getFilteredEmployees(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart,
-                                    Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated);
+    List<User> getFilteredEmployees(/*Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart,
+                                    Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer, boolean notEvaluated*/);
 }

@@ -63,16 +63,6 @@ public class DataConfig {
         return entityManagerFactoryBean;
     }
 
-//    @Bean
-//    public LocalSessionFactoryBean sessionFactory() {
-//        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-//        sessionFactory.setDataSource(dataSource());
-//        sessionFactory.setPackagesToScan(ENTITY_PACKAGES);
-//        sessionFactory.setHibernateProperties(getHibernateProperties());
-//
-//        return sessionFactory;
-//    }
-
     @Bean
     public JpaTransactionManager transactionManager() {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
@@ -86,7 +76,7 @@ public class DataConfig {
         hiberProps.put(HIBERNATE_DIALECT_PROP, env.getRequiredProperty(HIBERNATE_DIALECT_PROP));
         hiberProps.put(HIBERNATE_SHOW_SQL_PROP, env.getRequiredProperty(HIBERNATE_SHOW_SQL_PROP));
         hiberProps.put(HIBERNATE_HBM2DDL_AUTO_PROP, env.getProperty(HIBERNATE_HBM2DDL_AUTO_PROP));
-        hiberProps.put(HIBERNATE_FLUSH_MODE_PROP, env.getProperty(HIBERNATE_FLUSH_MODE_PROP));
+        //hiberProps.put(HIBERNATE_FLUSH_MODE_PROP, env.getProperty(HIBERNATE_FLUSH_MODE_PROP));
 
         return hiberProps;
     }

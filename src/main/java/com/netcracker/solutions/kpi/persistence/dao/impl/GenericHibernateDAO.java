@@ -22,10 +22,10 @@ public abstract class GenericHibernateDAO<T, PK extends Serializable> extends Hi
         this.type = type;
     }
 
-    @Autowired
+   /* @Autowired
     public void injectSessionFactory(SessionFactory sessionFactory) {
         setSessionFactory(sessionFactory);
-    }
+    }*/
 
     @Override
     public T getByID(PK id) {
