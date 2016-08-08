@@ -17,6 +17,7 @@ import java.util.Collection;
 /**
  * Created by dmch0716 on 05.08.2016.
  */
+
 @Component(value = "successHandler")
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
@@ -38,24 +39,24 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     /**
      * Builds the target URL according to the logic defined in the main class Javadoc.
      */
-    protected String determineTargetUrl(Authentication authentication) {
+    private String determineTargetUrl(Authentication authentication) {
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (GrantedAuthority grantedAuthority : authorities) {
             if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
                 return "frontend/index.html#/admin/main";
             } else if (grantedAuthority.getAuthority().equals("ROLE_TECH")) {
-                return "";
+                return "frontend/index.html#/staff/main";
             }else if (grantedAuthority.getAuthority().equals("ROLE_SOFT")) {
-                return "";
+                return "frontend/index.html#/staff/main";
             }else if (grantedAuthority.getAuthority().equals("ROLE_STUDENT")) {
-                return "student/appform";
+                return "frontend/index.html#/student/appform";
             }
         }
         throw new IllegalStateException();
     }
 
-    protected void clearAuthenticationAttributes(HttpServletRequest request) {
+    private void clearAuthenticationAttributes(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session == null) {
             return;

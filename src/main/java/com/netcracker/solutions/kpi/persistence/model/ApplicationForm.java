@@ -12,6 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "application_form")
 public class ApplicationForm implements Serializable {
+
     private static final long serialVersionUID = 2573334038825578138L;
     @Id
     @GeneratedValue

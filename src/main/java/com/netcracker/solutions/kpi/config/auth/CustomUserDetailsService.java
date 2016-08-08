@@ -22,6 +22,7 @@ import java.util.Set;
  */
 @Service("customUserDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
+
     @Autowired
     private UserService userService;
 

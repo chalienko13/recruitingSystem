@@ -5,7 +5,6 @@ import com.itextpdf.text.DocumentException;
 import com.netcracker.solutions.kpi.config.PropertiesReader;
 import com.netcracker.solutions.kpi.persistence.dto.*;
 import com.netcracker.solutions.kpi.persistence.model.*;
-import com.netcracker.solutions.kpi.persistence.model.adapter.GsonFactory;
 import com.netcracker.solutions.kpi.persistence.model.enums.RoleEnum;
 import com.netcracker.solutions.kpi.persistence.model.enums.StatusEnum;
 import com.netcracker.solutions.kpi.service.*;
@@ -15,6 +14,8 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import util.form.FormAnswerProcessor;
@@ -49,6 +50,7 @@ public class StudentApplicationFormController {
             .toJson(new MessageDto("You must fill in all mandatory fields.", MessageDtoType.ERROR));
     private static final String REGISTRATION_DEADLINE = gson.toJson(new MessageDto(
             "You cannot update your application form after registration deadline.", MessageDtoType.ERROR));
+
     @Autowired
     private FormAnswerService formAnswerService;
     @Autowired
@@ -61,14 +63,15 @@ public class StudentApplicationFormController {
     private RoleService roleService;
     @Autowired
     private RecruitmentService recruitmentService;
-
     @Autowired
     private PropertiesReader propertiesReader;
 
     @RequestMapping(value = "appform", method = RequestMethod.POST)
-    public String getApplicationForm() {
+    public ResponseEntity getApplicationForm() {
         User student = userService.getAuthorizedUser();
+        log.info("Authorized User: " + student.getEmail());
         ApplicationForm applicationForm = applicationFormService.getCurrentApplicationFormByUserId(student.getId());
+        log.info("Application form: " + applicationForm);
         boolean newForm = false;
         if (applicationForm == null) {
             applicationForm = applicationFormService.getLastApplicationFormByUserId(student.getId());
@@ -84,8 +87,7 @@ public class StudentApplicationFormController {
         if (recruitment == null || (recruitment != null && !isRegistrationDeadlineEnded(recruitment))) {
             applicationForm.setRecruitment(recruitment);
         }
-        Gson applicationFormGson = GsonFactory.getApplicationFormGson();
-        return applicationFormGson.toJson(applicationForm);
+        return new ResponseEntity(applicationForm,HttpStatus.FOUND);
     }
 
     @RequestMapping(value = "saveApplicationForm", method = RequestMethod.POST)

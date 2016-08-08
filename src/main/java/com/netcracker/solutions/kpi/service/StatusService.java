@@ -1,9 +1,11 @@
 package com.netcracker.solutions.kpi.service;
 
 import com.netcracker.solutions.kpi.persistence.model.Status;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface StatusService {
 
     Status getStatusById(Long id);
