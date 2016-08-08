@@ -1,5 +1,8 @@
 package com.netcracker.solutions.kpi.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -20,15 +23,19 @@ public class ScheduleDayPoint implements Serializable{
     private Short id;
 
     @Column(name = "day_point", unique = true, nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date dayPoint;
 
     //mby useless?
+    @JsonIgnore
     @Transient
     private Set<User> users;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "dayPoint", fetch = FetchType.LAZY)
     private Set<ScheduleTimePoint> timePoints;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "dayPoint", fetch = FetchType.LAZY)
     private Set<UserTime> userTimes;
 

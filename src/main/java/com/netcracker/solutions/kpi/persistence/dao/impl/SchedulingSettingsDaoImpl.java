@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.util.List;
 
+//TODO Delete this(Olesia)
 @Repository
 public class SchedulingSettingsDaoImpl implements SchedulingSettingsDao {
     private static Logger log = LoggerFactory.getLogger(SchedulingSettingsDaoImpl.class.getName());
@@ -50,25 +51,6 @@ public class SchedulingSettingsDaoImpl implements SchedulingSettingsDao {
     public int deleteAll() {
         log.info("Delete all rows from scheduling settings");
         return jdbcDaoSupport.getJdbcTemplate().update(DELETE_ALL);
-    }
-
-    @Override
-    public Long insertTimeRange(SchedulingSettings schedulingSettings) {
-        log.info("Inserting Scheduling Setting with startDate = {} ", schedulingSettings.getStartDate());
-        return jdbcDaoSupport.getJdbcTemplate().insert(INSERT_TIME_RANGE, schedulingSettings.getStartDate(),
-                schedulingSettings.getEndDate());
-    }
-
-    @Override
-    public int updateTimeRange(SchedulingSettings schedulingSettings) {
-        log.info("Updating Scheduling Setting with id = {} ", schedulingSettings.getId());
-        return jdbcDaoSupport.getJdbcTemplate().update(UPDATE_TIME_RANGE, schedulingSettings.getStartDate(), schedulingSettings.getEndDate(), schedulingSettings.getId());
-    }
-
-    @Override
-    public int deleteTimeRange(Long id) {
-        log.info("Delete Scheduling Setting with id = {}", id);
-        return jdbcDaoSupport.getJdbcTemplate().update(DELETE_TIME_RANGE, id);
     }
 
     @Override

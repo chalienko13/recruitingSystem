@@ -175,7 +175,7 @@ public class ServiceFactory {
         return sendMessageService;
     }
 
-    public static SchedulingSettingsService getSchedulingSettingsService() {
+    public static SchedulingService getSchedulingSettingsService() {
         if (schedulingSettingsService == null) {
             schedulingSettingsService = new SchedulingSettingsServiceImpl(DaoFactory.getSchedulingSettingsDao());
         }

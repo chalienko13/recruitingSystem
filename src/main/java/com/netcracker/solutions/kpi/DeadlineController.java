@@ -32,7 +32,7 @@ public class DeadlineController {
     private UserService userService;// = ServiceFactory.getUserService();
 
     @Autowired
-    private SchedulingSettingsService scheduleSettingsService;// = ServiceFactory.getSchedulingSettingsService();
+    private SchedulingService scheduleService;// = ServiceFactory.getSchedulingSettingsService();
 
     @Autowired
     private ScheduleDayPointService scheduleDayPointService;// = ServiceFactory.getScheduleTimePointService();
@@ -98,7 +98,7 @@ public class DeadlineController {
             applicationFormService.updateApplicationForm(applicationForm);
         }
         userService.disableAllStaff();
-        scheduleSettingsService.deleteAll();
+        scheduleService.deleteAll();
         scheduleDayPointService.deleteAll();
     }
 
