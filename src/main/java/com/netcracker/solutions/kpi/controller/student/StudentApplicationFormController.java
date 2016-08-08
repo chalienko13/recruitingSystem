@@ -1,32 +1,26 @@
 package com.netcracker.solutions.kpi.controller.student;
 
-import com.google.gson.Gson;
+import com.google.gson.*;
 import com.itextpdf.text.DocumentException;
 import com.netcracker.solutions.kpi.config.PropertiesReader;
 import com.netcracker.solutions.kpi.persistence.dto.*;
 import com.netcracker.solutions.kpi.persistence.model.*;
-import com.netcracker.solutions.kpi.persistence.model.adapter.GsonFactory;
-import com.netcracker.solutions.kpi.persistence.model.enums.RoleEnum;
-import com.netcracker.solutions.kpi.persistence.model.enums.StatusEnum;
+import com.netcracker.solutions.kpi.persistence.model.adapter.*;
+import com.netcracker.solutions.kpi.persistence.model.enums.*;
 import com.netcracker.solutions.kpi.service.*;
-import com.netcracker.solutions.kpi.util.export.ExportApplicationForm;
-import com.netcracker.solutions.kpi.util.export.ExportApplicationFormImp;
+import com.netcracker.solutions.kpi.util.export.*;
 import org.apache.commons.io.FilenameUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import util.form.FormAnswerProcessor;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @RequestMapping("/student")
@@ -68,26 +62,15 @@ public class StudentApplicationFormController {
     @Autowired
     private PropertiesReader propertiesReader;
 
+    @Transactional
     @RequestMapping(value = "appform", method = RequestMethod.POST)
     public String getApplicationForm() {
         User student = userService.getAuthorizedUser();
-        ApplicationForm applicationForm = applicationFormService.getCurrentApplicationFormByUserId(student.getId());
-        boolean newForm = false;
-        if (applicationForm == null) {
-            applicationForm = applicationFormService.getLastApplicationFormByUserId(student.getId());
-            if (applicationForm == null || !applicationForm.isActive()) {
-                newForm = true;
-                applicationForm = createApplicationFormFromOld(applicationForm, student);
-            }
-        }
-        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
-        if (!newForm && applicationForm.getRecruitment() == null) {
-            addNewFormQuestions(applicationForm);
-        }
-        if (recruitment == null || (recruitment != null && !isRegistrationDeadlineEnded(recruitment))) {
-            applicationForm.setRecruitment(recruitment);
-        }
-        Gson applicationFormGson = GsonFactory.getApplicationFormGson();
+        ApplicationForm applicationForm = applicationFormService.getApplicationFormByUserId(student.getId());
+        //TODO: Replace by jackson
+        Gson applicationFormGson =
+                new GsonBuilder().registerTypeAdapter(applicationForm.getClass(), new ApplicationFormAdapter())
+                .create();
         return applicationFormGson.toJson(applicationForm);
     }
 
@@ -151,36 +134,7 @@ public class StudentApplicationFormController {
         }
     }
 
-    private ApplicationForm createApplicationFormFromOld(ApplicationForm oldApplicationForm, User user) {
-        ApplicationForm applicationForm = createApplicationForm(user);
 
-        List<FormAnswer> formAnswers = new ArrayList<>();
-
-        List<FormQuestion> formQuestions = formQuestionService
-                .getEnableByRole(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT)));
-        for (FormQuestion formQuestion : formQuestions) {
-            boolean wasInOldForm = false;
-            if (oldApplicationForm != null) {
-                List<FormAnswer> oldAnswers = formAnswerService.getByApplicationFormAndQuestion(oldApplicationForm,
-                        formQuestion);
-                wasInOldForm = formAnswers.addAll(oldAnswers);
-            }
-            if (!wasInOldForm) {
-                FormAnswer formAnswer = createFormAnswer(oldApplicationForm, formQuestion);
-                formAnswers.add(formAnswer);
-            }
-        }
-        applicationForm.setAnswers(formAnswers);
-        return applicationForm;
-    }
-
-    private void addNewFormQuestions(ApplicationForm applicationForm) {
-        List<FormQuestion> unconnectedQuestion = formQuestionService.getEnableUnconnectedQuestion(applicationForm);
-        for (FormQuestion formQuestion : unconnectedQuestion) {
-            FormAnswer formAnswer = createFormAnswer(applicationForm, formQuestion);
-            applicationForm.getAnswers().add(formAnswer);
-        }
-    }
 
     private void updateUser(User user, UserDto userDto) {
         user.setLastName(userDto.getLastName());
@@ -246,13 +200,6 @@ public class StudentApplicationFormController {
         ExportApplicationForm pdfAppForm = new ExportApplicationFormImp();
         pdfAppForm.export(applicationForm, response);
 
-    }
-
-    private FormAnswer createFormAnswer(ApplicationForm applicationForm, FormQuestion question) {
-        FormAnswer answer = new FormAnswer();
-        answer.setApplicationForm(applicationForm);
-        answer.setFormQuestion(question);
-        return answer;
     }
 
     private ApplicationForm createApplicationForm(User user) {

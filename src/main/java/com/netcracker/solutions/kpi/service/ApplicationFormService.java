@@ -1,7 +1,6 @@
 package com.netcracker.solutions.kpi.service;
 
 import com.netcracker.solutions.kpi.persistence.model.*;
-import com.netcracker.solutions.kpi.persistence.model.enums.StatusEnum;
 
 import java.util.List;
 
@@ -61,4 +60,6 @@ public interface ApplicationFormService {
     boolean updateApplicationFormWithAnswers(ApplicationForm applicationForm);
 
     void calculateStatuses(Recruitment recruitment);
+
+    ApplicationForm getApplicationFormByUserId(Long userId);
 }
