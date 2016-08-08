@@ -57,7 +57,6 @@ public class DataConfig {
         entityManagerFactoryBean.setDataSource(dataSource());
         entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
         entityManagerFactoryBean.setPackagesToScan(ENTITY_PACKAGES);
-
         entityManagerFactoryBean.setJpaProperties(getHibernateProperties());
 
         return entityManagerFactoryBean;

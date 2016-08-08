@@ -1,6 +1,6 @@
 package com.netcracker.solutions.kpi.controller.student;
 
-import com.netcracker.solutions.kpi.controller.auth.UserAuthentication;
+import com.netcracker.solutions.kpi.config.auth.CustomUserDetails;
 import com.netcracker.solutions.kpi.persistence.dto.ApplicationFormDto;
 import com.netcracker.solutions.kpi.persistence.model.ApplicationForm;
 import com.netcracker.solutions.kpi.persistence.model.User;
@@ -30,7 +30,7 @@ public class StudentFeedbackController {
     public void getFeedback(@RequestParam String feedBack) {
         log.info("Getting last application form");
         ApplicationForm applicationForm = applicationFormService.getLastApplicationFormByUserId(
-                ((UserAuthentication) SecurityContextHolder.getContext().getAuthentication()).getDetails().getId());
+                ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()).getId());
         applicationForm.setFeedback(feedBack);
         log.info("Save feedback in application form id - {}", applicationForm.getId());
         applicationFormService.updateApplicationForm(applicationForm);

@@ -1,7 +1,6 @@
 package com.netcracker.solutions.kpi.persistence.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.netcracker.solutions.kpi.controller.auth.UserAuthority;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.security.core.GrantedAuthority;
@@ -58,8 +57,6 @@ public class User implements UserDetails {
     @Transient
     private List<ScheduleTimePoint> scheduleTimePoint;
     @Transient
-    private Set<UserAuthority> userAuthorities;
-    @Transient
     private List<UserTimePriority> userTimePriorities;
 
 
@@ -93,6 +90,10 @@ public class User implements UserDetails {
     }
 
     public User() {
+    }
+
+
+    public User(User user) {
     }
 
     public User(Long id) {
@@ -254,7 +255,9 @@ public class User implements UserDetails {
                 ", isActive=" + isActive +
                 ", registrationDate=" + registrationDate +
                 ", password='" + password + '\'' +
-                ", userAuthorities=" + userAuthorities +
+//                ", socialInformations=" + socialInformations +
+//               // ", userAuthorities=" + userAuthorities +
+//                ", userAuthorities=" + userAuthorities +
                 ", expireDate=" + expireDate +
                 ", accountNonExpired=" + accountNonExpired +
                 ", accountNonLocked=" + accountNonLocked +

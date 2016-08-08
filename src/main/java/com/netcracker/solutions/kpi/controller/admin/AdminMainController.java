@@ -3,6 +3,7 @@ package com.netcracker.solutions.kpi.controller.admin;
 import com.netcracker.solutions.kpi.persistence.model.Recruitment;
 import com.netcracker.solutions.kpi.service.ApplicationFormService;
 import com.netcracker.solutions.kpi.service.RecruitmentService;
+import com.netcracker.solutions.kpi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

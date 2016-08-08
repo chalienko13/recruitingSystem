@@ -23,7 +23,7 @@ public class FormAnswerVariant implements Serializable {
     @Column(name = "answer")
     private String answer;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_question")
     private FormQuestion formQuestion;
 

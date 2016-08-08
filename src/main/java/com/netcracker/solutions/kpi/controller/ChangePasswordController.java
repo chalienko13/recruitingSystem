@@ -1,12 +1,12 @@
 package com.netcracker.solutions.kpi.controller;
 
-import com.netcracker.solutions.kpi.controller.auth.PasswordEncoderGeneratorService;
 import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +19,7 @@ public class ChangePasswordController {
     private UserService userService;
 
     @Autowired
-    private PasswordEncoderGeneratorService passwordEncoderGeneratorService;
+    private PasswordEncoder passwordEncoder;// = PasswordEncoderGeneratorService.getInstance();
 
 
     @RequestMapping(value = "changepassword", method = RequestMethod.POST)
@@ -27,8 +27,8 @@ public class ChangePasswordController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName();
         User user = userService.getUserByUsername(name);
-        if (passwordEncoderGeneratorService.matches(user.getPassword(), oldPassword)) {
-            user.setPassword(passwordEncoderGeneratorService.encode(newPassword));
+        if (passwordEncoder.matches(user.getPassword(),oldPassword)) {
+            user.setPassword(passwordEncoder.encode(newPassword));
             userService.updateUser(user);
         }
         return ResponseEntity.ok(null);

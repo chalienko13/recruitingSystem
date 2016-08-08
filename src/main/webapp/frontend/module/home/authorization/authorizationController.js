@@ -13,10 +13,11 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
                 method: 'POST',
                 url: '/loginIn',
                 contentType: 'application/json',
-                data: {email: $scope.email, password: $scope.password}
+                data: {username: $scope.email, password: $scope.password}
             }).success(function (data, status, headers) {
-                TokenStorage.clear();
-                TokenStorage.store(headers('X-AUTH-TOKEN_LOGIN_PASSWORD'), 'X-AUTH-TOKEN_LOGIN_PASSWORD');
+                console.log("Success");
+                // TokenStorage.clear();
+                // TokenStorage.store(headers('X-AUTH-TOKEN_LOGIN_PASSWORD'), 'X-AUTH-TOKEN_LOGIN_PASSWORD');
                 $rootScope.username = data.username;
                 $rootScope.id = data.id;
                 $rootScope.role = data.role;
@@ -25,7 +26,7 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
                 //toDo this is crutch_oriented
                 window.location.replace("/frontend/index.html#" + data.redirectURL);
             }).error(function (data, status, headers) {
-                console.log(data);
+                console.log("Error " + data);
                 if (status == 401) {
                     $scope.errorcredential = true;
                 }

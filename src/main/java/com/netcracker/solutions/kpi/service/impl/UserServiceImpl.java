@@ -1,7 +1,6 @@
 package com.netcracker.solutions.kpi.service.impl;
 
 import com.google.common.collect.Sets;
-import com.netcracker.solutions.kpi.controller.auth.PasswordEncoderGeneratorService;
 import com.netcracker.solutions.kpi.persistence.dao.UserDao;
 import com.netcracker.solutions.kpi.persistence.dto.UserDto;
 import com.netcracker.solutions.kpi.persistence.model.Role;
@@ -16,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
     private EmailService emailService;
 
     @Autowired
-    private PasswordEncoderGeneratorService passwordEncoderGeneratorService;
+    private PasswordEncoder passwordEncoderGeneratorService;
 
     @Override
     public User getUserByUsername(String userName) {
@@ -150,7 +150,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getAuthorizedUser() {
-        return (User) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        org.springframework.security.core.userdetails.User login = (org.springframework.security.core.userdetails.User)
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        log.info("User login: {}",login.getUsername());
+        return userRepository.getByEmail(login.getUsername());
     }
 
     @Override

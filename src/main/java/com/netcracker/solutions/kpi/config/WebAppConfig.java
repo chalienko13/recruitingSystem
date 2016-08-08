@@ -12,7 +12,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "com.netcracker.solutions.kpi")
-public class WebAppConfig extends WebMvcConfigurerAdapter {
+public class    WebAppConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -33,6 +33,8 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
         resolver.setPrefix("/frontend/module/home/newMainPage/");
         resolver.setSuffix(".html");
+    /*    resolver.setPrefix("/frontend/");
+        resolver.setSuffix(".jsp");*/
         resolver.setOrder(1);
         return resolver;
     }

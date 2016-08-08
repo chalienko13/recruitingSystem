@@ -1,58 +1,39 @@
 package com.netcracker.solutions.kpi.config;
 
-import com.netcracker.solutions.kpi.controller.auth.*;
-import com.netcracker.solutions.kpi.filter.StatelessAuthenticationFilter;
-import com.netcracker.solutions.kpi.filter.StatelessLoginFilter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import javax.annotation.PostConstruct;
 
 @Configuration
 @EnableWebSecurity
 @ComponentScan(basePackages = "com.netcracker.solutions.kpi")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private static final String SECRET_KEY = "verySecret";
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Autowired
-    private LoginPasswordAuthenticationManager loginPasswordAuthenticationManager;// = LoginPasswordAuthenticationManager.getInstance();
-
-    @Autowired
-    private AuthenticationSuccessHandler authenticationSuccessHandler;// = AuthenticationSuccessHandlerService.getInstance();
-
-    @Autowired
-    private UserAuthServiceLoginPassword userAuthServiceLoginPassword;// = UserAuthServiceLoginPassword.getInstance();
-
-    @Autowired
-    @Qualifier("TokenHandlerLoginPassword")
-    private TokenHandlerLoginPassword tokenHandlerLoginPassword;// = TokenHandlerLoginPassword.getInstance();
-
-
-    @Autowired
-    private AuthenticationSuccessHandlerService authenticationSuccessHandlerService;
-
-    private TokenAuthenticationService tokenAuthenticationServiceLoginPassword;
-
-    @PostConstruct
-    public void init() {
-        tokenAuthenticationServiceLoginPassword = new TokenAuthenticationService(tokenHandlerLoginPassword);
+    public void registerGlobalAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordencoder());
     }
 
+    @Autowired
+    private AuthenticationSuccessHandler    successHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http
+        http.csrf()
+                .disable()
                 .authorizeRequests()
                 .antMatchers("/home").anonymous()
 
@@ -61,33 +42,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/frontend/module/admin/view/**").hasRole("ADMIN")
                 .antMatchers("**/reports/**").hasRole("ADMIN")
 
-                .and()
-                .authorizeRequests()
+
                 .antMatchers("/frontend/module/student/view/**").hasRole("STUDENT")
                 .antMatchers("/student/appform/**").permitAll()
                 .antMatchers("/student/**").hasRole("STUDENT")
 
-                .and()
-                .authorizeRequests()
+
                 .antMatchers("/frontend/module/staff/view/**").hasAnyRole("SOFT", "TECH")
                 .antMatchers("/staff/appForm/**").permitAll()
-                .antMatchers("/staff/**").hasAnyRole("SOFT", "TECH")
+                .antMatchers("/staff/**").hasAnyRole("SOFT", "TECH");
 
-                .and()
+        http.formLogin()
+                .loginPage("/")
+                .loginProcessingUrl("/j_spring_security_check")
+                .failureUrl("/login?error")
+                .usernameParameter("j_username")
+                .passwordParameter("j_password")
+                .successHandler(successHandler)
+                .permitAll();
 
-                .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationServiceLoginPassword),
-                        UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationServiceLoginPassword,
-                                loginPasswordAuthenticationManager, authenticationSuccessHandler, authenticationSuccessHandlerService),
-                        UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling().and()
-                .csrf().disable()
-                .servletApi().and()
-                .headers().cacheControl();
+        http.logout()
+                .permitAll()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout")
+                .invalidateHttpSession(true);
+
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userAuthServiceLoginPassword).passwordEncoder(new BCryptPasswordEncoder());
+    @Bean(name = "passwordEncoder")
+    public PasswordEncoder passwordencoder() {
+        return new BCryptPasswordEncoder();
     }
+
 }

@@ -2,6 +2,7 @@ package com.netcracker.solutions.kpi.persistence.model;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,21 +18,21 @@ public class ApplicationForm implements Serializable {
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_status")
     private Status status;
 
     @Column(name = "is_active")
     private boolean active;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_recruitment")
     private Recruitment recruitment;
 
     @Column(name = "photo_scope")
     private String photoScope;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_user")
     private User user;
 
@@ -43,7 +44,7 @@ public class ApplicationForm implements Serializable {
     @Transient
     private List<Interview> interviews;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "applicationForm")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "applicationForm")
     private List<FormAnswer> answers;
     @Transient
     private List<FormQuestion> questions;

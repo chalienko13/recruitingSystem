@@ -1,5 +1,7 @@
 package com.netcracker.solutions.kpi.config;
 
+import com.netcracker.solutions.kpi.config.auth.CustomUserDetailsService;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -33,6 +35,11 @@ public class AppConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 
         FilterRegistration.Dynamic securityFilter = servletContext.addFilter("springSecurityFilterChain", DelegatingFilterProxy.class);
         securityFilter.addMappingForUrlPatterns(null, false, "/*");
+    }
+
+    @Bean
+    public CustomUserDetailsService getUserDetailsService(){
+        return new CustomUserDetailsService();
     }
 
     @Override
