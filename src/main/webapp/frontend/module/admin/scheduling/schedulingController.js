@@ -246,6 +246,7 @@ function schedulingController($scope, ngToast, schedulingService) {
         console.log("delete Student TimeFinal with id = " + currentStudent.id + " and timePoint id = " + currentTimePoint.id);
     };
 
+    //rename
     $scope.setTime = function (object, date) {
         if (object.id === -1) {
             var temp = {

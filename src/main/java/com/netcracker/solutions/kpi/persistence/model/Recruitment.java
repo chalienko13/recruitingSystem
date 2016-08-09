@@ -13,10 +13,11 @@ public class Recruitment implements Serializable {
 
     private static final long serialVersionUID = 4839409160085869405L;
 
+    //TODO Change to Long
     @Id
     @GeneratedValue
     @Column(name = "id", unique = true, nullable = false)
-    private Long id;
+    private Short id;
 
     @Column(name = "name")
     private String name;
@@ -28,10 +29,10 @@ public class Recruitment implements Serializable {
     private Timestamp endDate;
 
     @Column(name = "max_general_group")
-    private int maxGeneralGroup;
+    private Short maxGeneralGroup;
 
     @Column(name = "max_advanced_group")
-    private int maxAdvancedGroup;
+    private Short maxAdvancedGroup;
 
     @Column(name = "registration_deadline")
     private Timestamp registrationDeadline;
@@ -40,22 +41,22 @@ public class Recruitment implements Serializable {
     private Timestamp scheduleChoicesDeadline;
 
     @Column(name = "students_on_interview")
-    private int studentsOnInterview;
+    private Short studentsOnInterview;
 
     @Column(name = "time_interview_tech")
-    private int timeInterviewTech;
+    private Short timeInterviewTech;
 
     @Column(name = "time_interview_soft")
-    private int timeInterviewSoft;
+    private Short timeInterviewSoft;
 
     @Column(name = "number_tech_interviewers")
-    private int numberTechInterviewers;
+    private Short numberTechInterviewers;
 
     @Column(name = "number_soft_interviewers")
-    private int numberSoftInterviewers;
+    private Short numberSoftInterviewers;
 
-    @Column(name = "number_of_hours")
-    private int numberOfDays;
+    @Column(name = "number_of_days")
+    private Short numberOfDays;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "scheduling_status")
@@ -64,14 +65,14 @@ public class Recruitment implements Serializable {
     public Recruitment() {
     }
 
-    public Recruitment(Long id) {
+    public Recruitment(Short id) {
         this.id = id;
     }
 
-    public Recruitment(int numberOfDays, String name, Timestamp startDate, Timestamp endDate,
-                       int maxGeneralGroup, int maxAdvancedGroup, Timestamp registrationDeadline,
-                       Timestamp scheduleChoicesDeadline, int studentsOnInterview, int timeInterviewTech,
-                       int timeInterviewSoft, int numberTechInterviwers, int numberSoftInterviwers, SchedulingStatus schedulingStatus) {
+    public Recruitment(Short numberOfDays, String name, Timestamp startDate, Timestamp endDate,
+                       Short maxGeneralGroup, Short maxAdvancedGroup, Timestamp registrationDeadline,
+                       Timestamp scheduleChoicesDeadline, Short studentsOnInterview, Short timeInterviewTech,
+                       Short timeInterviewSoft, Short numberTechInterviwers, Short numberSoftInterviwers, SchedulingStatus schedulingStatus) {
         this.numberOfDays = numberOfDays;
         this.name = name;
         this.startDate = startDate;
@@ -88,10 +89,10 @@ public class Recruitment implements Serializable {
         this.schedulingStatus = schedulingStatus;
     }
 
-    public Recruitment(Long id, String name, Timestamp startDate, Timestamp endDate, int maxGeneralGroup,
-                       int maxAdvancedGroup, Timestamp registrationDeadline, Timestamp scheduleChoicesDeadline,
-                       int studentsOnInterview, int timeInterviewTech, int timeInterviewSoft,
-                       int numberTechInterviewers, int numberSoftInterviewers, int numberOfDays, SchedulingStatus schedulingStatus) {
+    public Recruitment(Short id, String name, Timestamp startDate, Timestamp endDate, Short maxGeneralGroup,
+                       Short maxAdvancedGroup, Timestamp registrationDeadline, Timestamp scheduleChoicesDeadline,
+                       Short studentsOnInterview, Short timeInterviewTech, Short timeInterviewSoft,
+                       Short numberTechInterviewers, Short numberSoftInterviewers, Short numberOfDays, SchedulingStatus schedulingStatus) {
         this.id = id;
         this.name = name;
         this.startDate = startDate;
@@ -109,7 +110,7 @@ public class Recruitment implements Serializable {
         this.schedulingStatus = schedulingStatus;
     }
 
-    public Recruitment(String name, Timestamp startDate, int maxAdvancedGroup, int maxGeneralGroup, Timestamp registrationDeadline, Timestamp scheduleChoicesDeadline) {
+    public Recruitment(String name, Timestamp startDate, Short maxAdvancedGroup, Short maxGeneralGroup, Timestamp registrationDeadline, Timestamp scheduleChoicesDeadline) {
         this.name = name;
         this.startDate = startDate;
         this.maxGeneralGroup = maxGeneralGroup;
@@ -118,11 +119,11 @@ public class Recruitment implements Serializable {
         this.scheduleChoicesDeadline = scheduleChoicesDeadline;
     }
 
-    public Long getId() {
+    public Short getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Short id) {
         this.id = id;
     }
 
@@ -151,19 +152,19 @@ public class Recruitment implements Serializable {
         this.endDate = endDate;
     }
 
-    public int getMaxGeneralGroup() {
+    public Short getMaxGeneralGroup() {
         return maxGeneralGroup;
     }
 
-    public void setMaxGeneralGroup(int maxGeneralGroup) {
+    public void setMaxGeneralGroup(Short maxGeneralGroup) {
         this.maxGeneralGroup = maxGeneralGroup;
     }
 
-    public int getMaxAdvancedGroup() {
+    public Short getMaxAdvancedGroup() {
         return maxAdvancedGroup;
     }
 
-    public void setMaxAdvancedGroup(int maxAdvancedGroup) {
+    public void setMaxAdvancedGroup(Short maxAdvancedGroup) {
         this.maxAdvancedGroup = maxAdvancedGroup;
     }
 
@@ -183,51 +184,51 @@ public class Recruitment implements Serializable {
         this.scheduleChoicesDeadline = scheduleChoicesDeadline;
     }
 
-    public int getStudentsOnInterview() {
+    public Short getStudentsOnInterview() {
         return studentsOnInterview;
     }
 
-    public void setStudentsOnInterview(int studentsOnInterview) {
+    public void setStudentsOnInterview(Short studentsOnInterview) {
         this.studentsOnInterview = studentsOnInterview;
     }
 
-    public int getTimeInterviewTech() {
+    public Short getTimeInterviewTech() {
         return timeInterviewTech;
     }
 
-    public void setTimeInterviewTech(int timeInterviewTech) {
+    public void setTimeInterviewTech(Short timeInterviewTech) {
         this.timeInterviewTech = timeInterviewTech;
     }
 
-    public int getTimeInterviewSoft() {
+    public Short getTimeInterviewSoft() {
         return timeInterviewSoft;
     }
 
-    public void setTimeInterviewSoft(int timeInterviewSoft) {
+    public void setTimeInterviewSoft(Short timeInterviewSoft) {
         this.timeInterviewSoft = timeInterviewSoft;
     }
 
-    public int getNumberTechInterviewers() {
+    public Short getNumberTechInterviewers() {
         return numberTechInterviewers;
     }
 
-    public void setNumberTechInterviewers(int numberTechInterviewers) {
+    public void setNumberTechInterviewers(Short numberTechInterviewers) {
         this.numberTechInterviewers = numberTechInterviewers;
     }
 
-    public int getNumberSoftInterviewers() {
+    public Short getNumberSoftInterviewers() {
         return numberSoftInterviewers;
     }
 
-    public void setNumberSoftInterviewers(int numberSoftInterviewers) {
+    public void setNumberSoftInterviewers(Short numberSoftInterviewers) {
         this.numberSoftInterviewers = numberSoftInterviewers;
     }
 
-    public int getNumberOfDays() {
+    public Short getNumberOfDays() {
         return numberOfDays;
     }
 
-    public void setNumberOfDays(int numberOfDays) {
+    public void setNumberOfDays(Short numberOfDays) {
         this.numberOfDays = numberOfDays;
     }
 

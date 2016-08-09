@@ -1,4 +1,4 @@
-package com.netcracker.solutions.kpi.persistence.dto;
+package com.netcracker.solutions.kpi.persistence.dto.scheduling;
 
 public class StudentSchedulePriorityDto {
 

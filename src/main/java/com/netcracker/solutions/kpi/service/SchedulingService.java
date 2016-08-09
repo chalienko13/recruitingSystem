@@ -27,6 +27,12 @@ public interface SchedulingService {
 
     void deleteScheduleTimePoints(List<ScheduleTimePoint> scheduleTimePoints);
 
+    //FOR WORK WITH RECRUITMENT PARAMETERS
+
+    void addTimeInterviewTech(Short recruitmentId, Short timeInterviewTech, Short timeInterviewSoft);
+
+    void addTimeInterviewSoft(Short timeInterviewSoft, Short recruitmentId);
+
     //FOR WORK WITH INTERVIEWERS IN RECRUITMENT
 
     //FOR WORK WITH STUDENTS IN RECRUITMENT

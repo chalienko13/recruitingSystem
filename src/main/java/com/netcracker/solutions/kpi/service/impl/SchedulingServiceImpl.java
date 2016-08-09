@@ -4,6 +4,7 @@ import com.netcracker.solutions.kpi.persistence.dao.SchedulingSettingsDao;
 import com.netcracker.solutions.kpi.persistence.model.ScheduleDayPoint;
 import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
 import com.netcracker.solutions.kpi.persistence.model.SchedulingSettings;
+import com.netcracker.solutions.kpi.persistence.repository.RecruitmentRepository;
 import com.netcracker.solutions.kpi.persistence.repository.ScheduleDayPointRepository;
 import com.netcracker.solutions.kpi.persistence.repository.ScheduleTimePointRepository;
 import com.netcracker.solutions.kpi.service.SchedulingService;
@@ -22,6 +23,9 @@ public class SchedulingServiceImpl implements SchedulingService {
 
     @Autowired
     private ScheduleTimePointRepository scheduleTimePointRepository;
+
+    @Autowired
+    private RecruitmentRepository recruitmentRepository;
 
     //TODO delete this later (Olesia)
     @Autowired
@@ -61,6 +65,19 @@ public class SchedulingServiceImpl implements SchedulingService {
     @Override
     public void deleteScheduleTimePoints(List<ScheduleTimePoint> scheduleTimePoints) {
         scheduleTimePointRepository.delete(scheduleTimePoints);
+    }
+
+    //FOR WORK WITH RECRUITMENT PARAMETERS
+
+
+    @Override
+    public void addTimeInterviewTech(Short timeInterviewTech, Short recruitmentId, Short timeInterviewSoft ) {
+        recruitmentRepository.updateTimeInterviewTech(recruitmentId.shortValue(), timeInterviewTech.shortValue(), timeInterviewSoft.shortValue());
+    }
+
+    @Override
+    public void addTimeInterviewSoft(Short timeInterviewSoft, Short recruitmentId) {
+
     }
 
     //TODO Rewrite (Olesia)

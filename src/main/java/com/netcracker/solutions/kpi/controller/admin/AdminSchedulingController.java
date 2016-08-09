@@ -1,6 +1,7 @@
 package com.netcracker.solutions.kpi.controller.admin;
 
 import com.netcracker.solutions.kpi.persistence.dto.*;
+import com.netcracker.solutions.kpi.persistence.dto.scheduling.InterviewParametersDTO;
 import com.netcracker.solutions.kpi.persistence.model.*;
 import com.netcracker.solutions.kpi.persistence.model.enums.RoleEnum;
 import com.netcracker.solutions.kpi.persistence.model.enums.SchedulingStatusEnum;
@@ -55,4 +56,10 @@ public class AdminSchedulingController {
         schedulingService.createScheduleTimePoints(scheduleTimePoints);
     }
 
+    //FOR WORK WITH RECRUITMENT PARAMETERS
+
+    @RequestMapping(value = "/addTimeInterviewTech", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public void addTimeInterviewTech (@RequestBody InterviewParametersDTO interviewParameters) {
+        schedulingService.addTimeInterviewTech(interviewParameters.getRecruitmentId(), interviewParameters.getTimeInterviewTech(), interviewParameters.getTimeInterviewSoft());
+    }
 }

@@ -1,24 +1,46 @@
-package com.netcracker.solutions.kpi.persistence.dto;
+package com.netcracker.solutions.kpi.persistence.dto.scheduling;
+
+import java.sql.Timestamp;
 
 /**
- * Created by IO on 16.05.2016.
+ * Created by Alona on 17.05.2016.
  */
-public class SchedulingSettingDto {
+public class ScheduleOverallDto {
+    private Long id;
+    private Timestamp timePoint;
     private long amountOfStudents;
     private long amountOfTech;
     private long amountOfSoft;
 
-    public SchedulingSettingDto() {
+    public ScheduleOverallDto() {
     }
 
-    public SchedulingSettingDto(long amountOfStudents) {
-        this.amountOfStudents = amountOfStudents;
+    public ScheduleOverallDto(Timestamp timePoint) {
+        this.timePoint = timePoint;
     }
 
-    public SchedulingSettingDto(long amountOfStudents, long amountOfTech, long amountOfSoft) {
+    public ScheduleOverallDto(Long id, Timestamp timePoint, long amountOfStudents, long amountOfTech, long amountOfSoft) {
+        this.id = id;
+        this.timePoint = timePoint;
         this.amountOfStudents = amountOfStudents;
         this.amountOfTech = amountOfTech;
         this.amountOfSoft = amountOfSoft;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Timestamp getTimePoint() {
+        return timePoint;
+    }
+
+    public void setTimePoint(Timestamp timePoint) {
+        this.timePoint = timePoint;
     }
 
     public long getAmountOfStudents() {
@@ -45,4 +67,3 @@ public class SchedulingSettingDto {
         this.amountOfSoft = amountOfSoft;
     }
 }
-

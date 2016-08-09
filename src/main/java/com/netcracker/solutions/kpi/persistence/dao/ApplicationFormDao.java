@@ -45,9 +45,9 @@ public interface ApplicationFormDao {
 
     int changeCurrentsAppFormStatus(Long fromIdStatus,Long toIdStatus);
 
-    Long getCountRecruitmentStudents(Long id);
+    Long getCountRecruitmentStudents(Short id);
 
-    Long getApprovedStudentsByRecruitmentId(Long id);
+    Long getApprovedStudentsByRecruitmentId(Short id);
 
     List<ApplicationForm> getCurrentApplicationForms(Long fromRow, Long rowsNum, Long sortingCol, boolean increase);
 

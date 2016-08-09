@@ -16,7 +16,7 @@ function schedulingService($http) {
     var NOT_STARTED = 5;
 
     var service = {};
-    
+     
     service.getCurrentStatusService = function () {
         return $http({
             method : 'GET',
@@ -24,6 +24,7 @@ function schedulingService($http) {
         })
     };
     
+    //rename - normal
     service.getCurrentRecruitmentCountStudents = function () {
         return $http.get('/scheduling/getStaffCount').then(function (response) {
             console.log(response.data);
@@ -34,7 +35,7 @@ function schedulingService($http) {
     service.saveSelectedDayService = function (data) {
         return $http({
             method: 'POST',
-            url: '/scheduling/saveSelectedDays',
+            url: '/admin/createScheduleDayPoints',
             data: data
         })
     };
