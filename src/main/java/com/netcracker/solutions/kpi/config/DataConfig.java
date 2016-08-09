@@ -1,6 +1,7 @@
 package com.netcracker.solutions.kpi.config;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -46,7 +47,6 @@ public class DataConfig {
         dataSource.setUrl(env.getRequiredProperty(DATABASE_URL_PROP));
         dataSource.setUsername(env.getRequiredProperty(DATABASE_USERNAME_PROP));
         dataSource.setPassword(env.getRequiredProperty(DATABASE_PASSWD_PROP));
-        //dataSource.setConnectionProperties();
 
         return dataSource;
     }

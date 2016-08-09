@@ -1,5 +1,6 @@
 package com.netcracker.solutions.kpi.service.impl;
 
+import com.netcracker.solutions.kpi.config.ApplicationConfiguration;
 import com.netcracker.solutions.kpi.persistence.model.*;
 import com.netcracker.solutions.kpi.persistence.model.enums.StatusEnum;
 import com.netcracker.solutions.kpi.persistence.repository.EmailTemplateRepository;
@@ -13,7 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.MessageFormat;
 import java.util.*;
 
 @Service
@@ -39,7 +39,8 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     TokenUtil tokenUtil;
 
-    private static long EXPIRE_TIME = 24*60*60*1000L;
+    @Autowired
+    ApplicationConfiguration configuration;
 
     private static long REG_CONFIRM_TEMPLATE_ID = 2L;
     private static long PASS_RECOVERY_TEMPLATE_ID = 14L;
@@ -51,10 +52,7 @@ public class EmailServiceImpl implements EmailService {
     public void sendRegistrationConfirmation(String email) {
         User user = userService.getUserByUsername(email);
 
-        user.setConfirmToken(tokenUtil.generateToken(email, EXPIRE_TIME));
-        userService.updateUser(user);
-
-        SimpleMailMessage simpleMailMessage = getMessage(REG_CONFIRM_TEMPLATE_ID, user, null);
+        SimpleMailMessage simpleMailMessage = getMessage(REG_CONFIRM_TEMPLATE_ID, getContextVariables(user, null));
         simpleMailMessage.setTo(email);
 
         mailSender.send(simpleMailMessage);
@@ -64,7 +62,7 @@ public class EmailServiceImpl implements EmailService {
     public void sendCreationNotification(String email) {
         User user = userService.getUserByUsername(email);
 
-        SimpleMailMessage simpleMailMessage = getMessage(USER_CREATED_TEMPLATE_ID, user, null);
+        SimpleMailMessage simpleMailMessage = getMessage(USER_CREATED_TEMPLATE_ID, getContextVariables(user, null));
         simpleMailMessage.setTo(email);
 
         mailSender.send(simpleMailMessage);
@@ -74,10 +72,10 @@ public class EmailServiceImpl implements EmailService {
     public void sendPasswordRecovery(String email) throws UsernameNotFoundException {
         User user = userService.getUserByUsername(email);
 
-        Map<String, String> variables = new HashMap<>();
-        variables.put("recoveryToken", tokenUtil.generateToken(email, EXPIRE_TIME));
+        Map<String, String> variables = getContextVariables(user, null);
+        variables.put("recoveryToken", configuration.serverUrl + "/recoverPassword?token=" + tokenUtil.generateToken(email, configuration.tokenExpireTime));
 
-        SimpleMailMessage simpleMailMessage = getMessage(PASS_RECOVERY_TEMPLATE_ID, user, null);
+        SimpleMailMessage simpleMailMessage = getMessage(PASS_RECOVERY_TEMPLATE_ID, variables);
         simpleMailMessage.setTo(email);
 
         mailSender.send(simpleMailMessage);
@@ -85,7 +83,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendInterviewInvitation(Recruitment recruitment) {
-        SimpleMailMessage simpleMailMessage = getMessage(INTERVIEW_INVITE_TEMPLATE_ID, null, null);
+        SimpleMailMessage simpleMailMessage = getMessage(INTERVIEW_INVITE_TEMPLATE_ID, getContextVariables(null, null));
 
         String[] emails = applicationFormService.getByStatusAndRecruitment(StatusEnum.APPROVED.getStatus(), recruitment)
                 .stream()
@@ -102,7 +100,7 @@ public class EmailServiceImpl implements EmailService {
         for(Status status : new Status[]{StatusEnum.APPROVED_TO_ADVANCED_COURSES.getStatus(),
                                          StatusEnum.APPROVED_TO_ADVANCED_COURSES.getStatus(),
                                          StatusEnum.APPROVED_TO_JOB.getStatus()}) {
-            SimpleMailMessage simpleMailMessage = getMessage(INTERVIEW_RESULT_TEMPLATE_ID, null, null);
+            SimpleMailMessage simpleMailMessage = getMessage(INTERVIEW_RESULT_TEMPLATE_ID, getContextVariables(null, null));
 
             String[] emails = applicationFormService.getByStatusAndRecruitment(status, recruitment)
                     .stream()
@@ -115,7 +113,7 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
-    private SimpleMailMessage getMessage(Long templateId, User user, Map<String, String> variables) {
+    private SimpleMailMessage getMessage(Long templateId, Map<String, String> variables) {
         EmailTemplate emailTemplate = emailTemplateRepository.findOne(templateId);
 
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
@@ -123,25 +121,31 @@ public class EmailServiceImpl implements EmailService {
         simpleMailMessage.setSubject(emailTemplate.getTitle());
 
         String text = emailTemplate.getText();
-        if(user != null) {
-            text = text
-                    .replace("%firstName%", user.getFirstName())
-                    .replace("%secondName%", user.getSecondName())
-                    .replace("%secondName%", user.getLastName())
-                    .replace("%email%", user.getEmail())
-                    .replace("%id%", String.valueOf(user.getId()))
-                    .replace("%password%", user.getPassword())
-                    .replace("%confirmationLink%", user.getConfirmToken())
-                    .replace("%recoveryPassLink%", tokenUtil.generateToken(user.getEmail(), EXPIRE_TIME));
-        }
-        if(variables != null) {
-            StrSubstitutor strSubstitutor = new StrSubstitutor(variables);
-            text = strSubstitutor.replace(text);
-        }
+        StrSubstitutor strSubstitutor = new StrSubstitutor(variables);
+        text = strSubstitutor.replace(text);
         simpleMailMessage.setText(text);
 
         log.debug("SimpleMailMessage From Template: {}", simpleMailMessage);
         return simpleMailMessage;
+    }
+
+    private Map<String, String> getContextVariables(User user, Map<String, String> vars) {
+        HashMap<String, String> contextVariables = new HashMap<>();
+        contextVariables.put("server.url", configuration.serverUrl);
+        if(vars != null)
+            contextVariables.putAll(vars);
+
+        if(user != null) {
+            contextVariables.put("firstName", user.getFirstName());
+            contextVariables.put("secondName", user.getSecondName());
+            contextVariables.put("secondName", user.getLastName());
+            contextVariables.put("email", user.getEmail());
+            contextVariables.put("id", String.valueOf(user.getId()));
+            contextVariables.put("password", user.getPassword());
+            contextVariables.put("confirmationLink", user.getConfirmToken());
+            contextVariables.put("recoveryPassLink", tokenUtil.generateToken(user.getEmail(), configuration.tokenExpireTime));
+        }
+        return contextVariables;
     }
 
 }

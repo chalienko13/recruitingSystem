@@ -1,6 +1,7 @@
 package com.netcracker.solutions.kpi.service.impl;
 
 import com.google.common.collect.Sets;
+import com.netcracker.solutions.kpi.config.ApplicationConfiguration;
 import com.netcracker.solutions.kpi.persistence.dao.UserDao;
 import com.netcracker.solutions.kpi.persistence.dto.UserDto;
 import com.netcracker.solutions.kpi.persistence.model.Role;
@@ -10,6 +11,7 @@ import com.netcracker.solutions.kpi.persistence.repository.RoleRepository;
 import com.netcracker.solutions.kpi.persistence.repository.UserRepository;
 import com.netcracker.solutions.kpi.service.EmailService;
 import com.netcracker.solutions.kpi.service.UserService;
+import com.netcracker.solutions.kpi.util.TokenUtil;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +48,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoderGeneratorService;
+
+    @Autowired
+    TokenUtil tokenUtil;
+
+    @Autowired
+    ApplicationConfiguration configuration;
 
     @Override
     public User getUserByUsername(String userName) {
@@ -88,7 +96,10 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         if (!user.isActive())
-        { emailService.sendRegistrationConfirmation(user.getEmail()); }
+        {
+            user.setConfirmToken(tokenUtil.generateToken(email, configuration.tokenExpireTime));
+            userRepository.save(user);
+            emailService.sendRegistrationConfirmation(user.getEmail()); }
         else
         { emailService.sendCreationNotification(user.getEmail()); }
         return user;
@@ -236,6 +247,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User confirmByToken(String token) {
         User user = userRepository.getByConfirmToken(token);
+        log.debug("User [{}] by confirm token: [{}]", user, token);
         if (user == null) return null;
 
         user.setActive(true);
