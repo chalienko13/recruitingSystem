@@ -5,12 +5,15 @@ import com.netcracker.solutions.kpi.persistence.model.enums.StatusEnum;
 import com.netcracker.solutions.kpi.persistence.repository.EmailTemplateRepository;
 import com.netcracker.solutions.kpi.service.*;
 import com.netcracker.solutions.kpi.util.TokenUtil;
+import org.apache.commons.lang3.text.StrSubstitutor;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.*;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.MessageFormat;
 import java.util.*;
 
 @Service
@@ -45,11 +48,8 @@ public class EmailServiceImpl implements EmailService {
     private static long INTERVIEW_RESULT_TEMPLATE_ID = 11L;
 
     @Override
-    public void sendRegistrationConfirmation(String email) throws Exception {
+    public void sendRegistrationConfirmation(String email) {
         User user = userService.getUserByUsername(email);
-        if (user == null) {
-            throw new Exception();
-        }
 
         user.setConfirmToken(tokenUtil.generateToken(email, EXPIRE_TIME));
         userService.updateUser(user);
@@ -61,11 +61,8 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendCreationNotification(String email) throws Exception {
+    public void sendCreationNotification(String email) {
         User user = userService.getUserByUsername(email);
-        if (user == null) {
-            throw new Exception();
-        }
 
         SimpleMailMessage simpleMailMessage = getMessage(USER_CREATED_TEMPLATE_ID, user, null);
         simpleMailMessage.setTo(email);
@@ -74,11 +71,8 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendPasswordRecovery(String email) throws Exception {
+    public void sendPasswordRecovery(String email) throws UsernameNotFoundException {
         User user = userService.getUserByUsername(email);
-        if (user == null) {
-            throw new Exception();
-        }
 
         Map<String, String> variables = new HashMap<>();
         variables.put("recoveryToken", tokenUtil.generateToken(email, EXPIRE_TIME));
@@ -141,9 +135,8 @@ public class EmailServiceImpl implements EmailService {
                     .replace("%recoveryPassLink%", tokenUtil.generateToken(user.getEmail(), EXPIRE_TIME));
         }
         if(variables != null) {
-            for(Map.Entry<String, String> variable : variables.entrySet()) {
-                text = text.replace("%"+variable.getKey()+"%", variable.getValue());
-            }
+            StrSubstitutor strSubstitutor = new StrSubstitutor(variables);
+            text = strSubstitutor.replace(text);
         }
         simpleMailMessage.setText(text);
 

@@ -1,29 +1,17 @@
 package com.netcracker.solutions.kpi.controller.auth;
 
 
-import com.netcracker.solutions.kpi.persistence.dto.MessageDto;
-import com.netcracker.solutions.kpi.persistence.dto.PasswordChangeDto;
-import com.netcracker.solutions.kpi.persistence.dto.UserDto;
+import com.netcracker.solutions.kpi.persistence.dto.*;
 import com.netcracker.solutions.kpi.persistence.model.User;
-import com.netcracker.solutions.kpi.service.EmailService;
-import com.netcracker.solutions.kpi.service.UserService;
+import com.netcracker.solutions.kpi.service.*;
 import com.netcracker.solutions.kpi.util.TokenUtil;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 
 @RestController
 public class ForgotPassword {
@@ -42,14 +30,10 @@ public class ForgotPassword {
     private PasswordEncoder passwordEncoderGeneratorService;
 
     @RequestMapping(value = "/recoverPassword", method = RequestMethod.POST)
-    public ResponseEntity<UserDto> sendRecoverURL(@RequestBody UserDto userDto) throws MessagingException {
-        try {
-            emailService.sendPasswordRecovery(userDto.getEmail());
-            userDto.setFirstName("user");
-            return ResponseEntity.ok(userDto);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(userDto);
-        }
+    public ResponseEntity<UserDto> sendRecoverURL(@RequestBody UserDto userDto) {
+        emailService.sendPasswordRecovery(userDto.getEmail());
+        userDto.setFirstName("user");
+        return ResponseEntity.ok(userDto);
     }
 
     @RequestMapping(value = "/recoverPassword", method = RequestMethod.GET)

@@ -15,11 +15,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -47,7 +49,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByUsername(String userName) {
-        return userRepository.getByEmail(userName);
+        User user = userRepository.getByEmail(userName);
+        if(user == null) {
+            throw new UsernameNotFoundException(MessageFormat.format("User with username=[{0}] not found", userName));
+        }
+        return user;
     }
 
     @Override
@@ -81,15 +87,10 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
-        try {
-            if (!user.isActive())
-                emailService.sendRegistrationConfirmation(user.getEmail());
-            else
-                emailService.sendCreationNotification(user.getEmail());
-        } catch (Exception e) {
-            //TODO: Error Handling?
-            return null;
-        }
+        if (!user.isActive())
+        { emailService.sendRegistrationConfirmation(user.getEmail()); }
+        else
+        { emailService.sendCreationNotification(user.getEmail()); }
         return user;
     }
 
