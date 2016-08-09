@@ -1,25 +1,19 @@
 package com.netcracker.solutions.kpi.service.impl;
 
-import com.netcracker.solutions.kpi.persistence.dao.ApplicationFormDao;
-import com.netcracker.solutions.kpi.persistence.dao.DataSourceSingleton;
-import com.netcracker.solutions.kpi.persistence.dao.FormAnswerDao;
+import com.netcracker.solutions.kpi.persistence.dao.*;
 import com.netcracker.solutions.kpi.persistence.model.*;
-import com.netcracker.solutions.kpi.persistence.model.enums.RoleEnum;
-import com.netcracker.solutions.kpi.persistence.model.enums.StatusEnum;
-import com.netcracker.solutions.kpi.persistence.repository.ApplicationFormRepository;
-import com.netcracker.solutions.kpi.service.ApplicationFormService;
-import com.netcracker.solutions.kpi.service.DecisionService;
-import com.netcracker.solutions.kpi.service.InterviewService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.netcracker.solutions.kpi.persistence.model.enums.*;
+import com.netcracker.solutions.kpi.persistence.repository.*;
+import com.netcracker.solutions.kpi.service.*;
+import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
+import java.sql.*;
+import java.util.*;
+import java.util.Date;
 
 import static com.netcracker.solutions.kpi.persistence.model.enums.StatusEnum.APPROVED;
 
@@ -43,6 +37,30 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 
     @Autowired
     private FormAnswerDao formAnswerDao;
+
+    @Autowired
+    private FormAnswerRepository formAnswerRepository;
+
+    @Autowired
+    private JpaTransactionManager jpaTransactionManager;
+
+    @Autowired
+    private RecruitmentService recruitmentService;
+
+    @Autowired
+    private FormQuestionService formQuestionService;
+
+    @Autowired
+    private FormAnswerService formAnswerService;
+
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private StatusService statusService;
 
     @Override
     public ApplicationForm getApplicationFormById(Long id) {
@@ -71,21 +89,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 
     @Override
     public boolean insertApplicationForm(ApplicationForm applicationForm) {
-        try (Connection connection = DataSourceSingleton.getInstance().getConnection()) {
-            connection.setAutoCommit(false);
-            Long generatedId = applicationFormDao.insertApplicationForm(applicationForm, connection);
-            applicationForm.setId(generatedId);
-            for (FormAnswer formAnswer : applicationForm.getAnswers()) {
-                formAnswerDao.insertFormAnswerForApplicationForm(formAnswer, formAnswer.getFormQuestion(),
-                        applicationForm, connection);
-            }
-            connection.commit();
-        } catch (SQLException e) {
-            if (log.isWarnEnabled()) {
-                log.error("Cannot insert Application form", e);
-            }
-            return false;
-        }
+        applicationFormRepository.save(applicationForm);
         return true;
     }
 
@@ -101,7 +105,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 
     @Override
     public ApplicationForm getCurrentApplicationFormByUserId(Long id) {
-        return applicationFormDao.getCurrentApplicationFormByUserId(id);
+        return applicationFormRepository.getOne(applicationFormDao.getCurrentApplicationFormByUserId(id).getId());
     }
 
     @Override
@@ -111,7 +115,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 
     @Override
     public ApplicationForm getLastApplicationFormByUserId(Long id) {
-        return applicationFormDao.getLastApplicationFormByUserId(id);
+        return applicationFormRepository.getOne(applicationFormDao.getLastApplicationFormByUserId(id).getId());
     }
 
     @Override
@@ -177,7 +181,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 
     @Override
     public boolean updateApplicationFormWithAnswers(ApplicationForm applicationForm) {
-        try (Connection connection = DataSourceSingleton.getInstance().getConnection()) {
+        try (Connection connection = jpaTransactionManager.getDataSource().getConnection()) {
             connection.setAutoCommit(false);
             applicationFormDao.updateApplicationForm(applicationForm, connection);
             formAnswerDao.deleteNotPresented(applicationForm.getAnswers(), applicationForm, connection);
@@ -219,5 +223,85 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
                 }
             }
         }
+    }
+
+    @Transactional
+    @Override
+    public ApplicationForm getApplicationFormByUserId(Long userId)
+    {
+        ApplicationForm applicationForm = getCurrentApplicationFormByUserId(userId);
+        boolean newForm = false;
+        if (applicationForm == null) {
+            applicationForm = getLastApplicationFormByUserId(userId);
+            if (applicationForm == null || !applicationForm.isActive()) {
+                newForm = true;
+                applicationForm = createApplicationFormFromOld(applicationForm, userService.getUserByID(userId));
+            }
+        }
+        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+        if (!newForm && applicationForm.getRecruitment() == null) {
+            addNewFormQuestions(applicationForm);
+        }
+        if (recruitment == null || (recruitment != null && !isRegistrationDeadlineEnded(recruitment))) {
+            applicationForm.setRecruitment(recruitment);
+        }
+        return applicationForm;
+    }
+
+    private ApplicationForm createApplicationFormFromOld(ApplicationForm oldApplicationForm, User user) {
+        ApplicationForm applicationForm = createApplicationForm(user);
+
+        List<FormAnswer> formAnswers = new ArrayList<>();
+
+        List<FormQuestion> formQuestions = formQuestionService
+                .getEnableByRole(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT)));
+        for (FormQuestion formQuestion : formQuestions) {
+            boolean wasInOldForm = false;
+            if (oldApplicationForm != null) {
+                List<FormAnswer> oldAnswers = formAnswerService.getByApplicationFormAndQuestion(oldApplicationForm,
+                        formQuestion);
+                wasInOldForm = formAnswers.addAll(oldAnswers);
+            }
+            if (!wasInOldForm) {
+                FormAnswer formAnswer = createFormAnswer(oldApplicationForm, formQuestion);
+                formAnswers.add(formAnswer);
+            }
+        }
+        applicationForm.setAnswers(formAnswers);
+        return applicationForm;
+    }
+
+    private void addNewFormQuestions(ApplicationForm applicationForm) {
+        List<FormQuestion> unconnectedQuestion = formQuestionService.getEnableUnconnectedQuestion(applicationForm);
+        for (FormQuestion formQuestion : unconnectedQuestion) {
+            FormAnswer formAnswer = createFormAnswer(applicationForm, formQuestion);
+            applicationForm.getAnswers().add(formAnswer);
+        }
+    }
+
+    private boolean isRegistrationDeadlineEnded(Recruitment recruitment) {
+        Timestamp deadline = recruitment.getRegistrationDeadline();
+        return deadline != null && deadline.before(new Date());
+    }
+
+    private FormAnswer createFormAnswer(ApplicationForm applicationForm, FormQuestion question) {
+        FormAnswer answer = new FormAnswer();
+        answer.setApplicationForm(applicationForm);
+        answer.setFormQuestion(question);
+        return answer;
+    }
+
+
+
+    private ApplicationForm createApplicationForm(User user) {
+        log.info("Create Application Form for User {}",user);
+        ApplicationForm applicationForm = new ApplicationForm();
+        applicationForm.setUser(user);
+        Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+        applicationForm.setStatus(statusService.getStatusById(StatusEnum.REGISTERED.getId()));
+        applicationForm.setActive(true);
+        applicationForm.setDateCreate(new Timestamp(System.currentTimeMillis()));
+        applicationForm.setRecruitment(recruitment);
+        return applicationForm;
     }
 }

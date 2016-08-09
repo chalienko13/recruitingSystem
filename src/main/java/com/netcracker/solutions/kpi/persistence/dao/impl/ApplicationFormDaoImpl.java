@@ -3,6 +3,7 @@ package com.netcracker.solutions.kpi.persistence.dao.impl;
 import com.netcracker.solutions.kpi.persistence.dao.ApplicationFormDao;
 import com.netcracker.solutions.kpi.persistence.model.*;
 import com.netcracker.solutions.kpi.persistence.model.enums.StatusEnum;
+import com.netcracker.solutions.kpi.persistence.repository.ApplicationFormRepository;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,9 @@ import java.util.List;
 
 @Repository
 public class ApplicationFormDaoImpl implements ApplicationFormDao {
+
+    @Autowired
+    ApplicationFormRepository applicationFormRepository;
 
     private static final String ID_COL = "id";
     private static final String ID_STATUS_COL = "id_status";
@@ -144,10 +148,6 @@ public class ApplicationFormDaoImpl implements ApplicationFormDao {
     @Autowired
     private JdbcDaoSupport jdbcDaoSupport;
 
- /*   public ApplicationFormDaoImpl(DataSource dataSource) {
-        this.jdbcDaoSupport = new JdbcDaoSupport();
-        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
-    }*/
     private ResultSetExtractor<ApplicationForm> extractor = resultSet -> {
         ApplicationForm applicationForm = new ApplicationForm();
         long id = resultSet.getLong(ID_COL);
@@ -252,8 +252,6 @@ public class ApplicationFormDaoImpl implements ApplicationFormDao {
         log.info("Looking for Count General AppForm");
         return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_COUNT_APP_FORM_STATUS, resultSet -> resultSet.getLong(1), new Long(6));
     }
-
-    ;
 
     @Override
     public Long getCountAdvancedAppForm() {

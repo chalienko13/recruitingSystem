@@ -1,9 +1,7 @@
 package com.netcracker.solutions.kpi;
 
-import com.netcracker.solutions.kpi.config.DataConfig;
-import com.netcracker.solutions.kpi.config.MailConfig;
+import com.netcracker.solutions.kpi.config.*;
 import com.netcracker.solutions.kpi.persistence.dao.UserDao;
-import com.netcracker.solutions.kpi.service.UserService;
 import com.netcracker.solutions.kpi.service.impl.MailSenderImpl;
 import org.apache.log4j.Logger;
 import org.junit.Test;

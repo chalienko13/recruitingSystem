@@ -6,9 +6,6 @@ import com.netcracker.solutions.kpi.persistence.model.ApplicationForm;
 import com.netcracker.solutions.kpi.persistence.model.FormQuestion;
 import com.netcracker.solutions.kpi.persistence.model.Interview;
 
-/**
- * Created by Chalienko on 25.04.2016.
- */
 public class GsonFactory {
     private static Gson applicationFormGson;
     private static Gson userGson;

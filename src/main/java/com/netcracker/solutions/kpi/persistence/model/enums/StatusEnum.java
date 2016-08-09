@@ -3,39 +3,15 @@ package com.netcracker.solutions.kpi.persistence.model.enums;
 import com.netcracker.solutions.kpi.persistence.model.Status;
 import com.netcracker.solutions.kpi.service.StatusService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.EnumSet;
 
-@Configurable
 public enum StatusEnum {
     REGISTERED(1L), IN_REVIEW(2L), APPROVED(3L), PENDING_RESULTS(4L), APPROVED_TO_JOB(5L), APPROVED_TO_GENERAL_COURSES(
             6L), APPROVED_TO_ADVANCED_COURSES(7L), REJECTED(8L);
-
     Long id;
-
-    private StatusService statusService;
-
-    public void setStatusService(StatusService statusService) {
-        this.statusService = statusService;
-    }
-
-    @Component
-    public static class StatusServiceInjector {
-        @Autowired
-        private StatusService statusService;
-
-        @PostConstruct
-        public void postConstruct() {
-            for (StatusEnum statusEnum : EnumSet.allOf(StatusEnum.class)) {
-                statusEnum.setStatusService(statusService);
-            }
-        }
-    }
-
-
 
     StatusEnum(Long id) {
         this.id = id;
@@ -67,7 +43,21 @@ public enum StatusEnum {
         return id;
     }
 
+    Status status;
+
+    @Component
+    public static class ServiceInjection{
+        @Autowired
+        public StatusService statusService;
+
+        @PostConstruct
+        public void postConstruct() {
+            for (StatusEnum statusEnum : EnumSet.allOf(StatusEnum.class))
+                statusEnum.status = statusService.getStatusById(statusEnum.getId());
+        }
+    }
+
     public Status getStatus() {
-        return statusService.getStatusById(id);
+        return status;
     }
 }

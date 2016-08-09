@@ -5,13 +5,11 @@ import com.netcracker.solutions.kpi.persistence.model.ApplicationForm;
 import com.netcracker.solutions.kpi.persistence.model.FormQuestion;
 import com.netcracker.solutions.kpi.persistence.model.Recruitment;
 import com.netcracker.solutions.kpi.persistence.model.User;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Type;
 import java.util.Map;
 
-/**
- * Created by Chalienko on 24.04.2016.
- */
 public class ApplicationFormAdapter extends AbstractQuestionsWithAnswersAdapter
         implements JsonSerializer<ApplicationForm> {
 
@@ -20,7 +18,7 @@ public class ApplicationFormAdapter extends AbstractQuestionsWithAnswersAdapter
                                  JsonSerializationContext jsonSerializationContext) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("id", applicationForm.getId());
-        jsonObject.addProperty("status", applicationForm.getStatus().getTitle());
+//        jsonObject.addProperty("status", applicationForm.getStatus().getTitle());
         jsonObject.addProperty("active", applicationForm.isActive());
         jsonObject.addProperty("feedback", applicationForm.getFeedback());
         Recruitment recruitment = applicationForm.getRecruitment();

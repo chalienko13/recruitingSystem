@@ -1,6 +1,5 @@
 package com.netcracker.solutions.kpi.service.impl;
 
-import com.netcracker.solutions.kpi.persistence.dao.DataSourceSingleton;
 import com.netcracker.solutions.kpi.persistence.dao.FormAnswerVariantDao;
 import com.netcracker.solutions.kpi.persistence.dao.FormQuestionDao;
 import com.netcracker.solutions.kpi.persistence.model.ApplicationForm;
@@ -14,6 +13,7 @@ import com.netcracker.solutions.kpi.service.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +38,9 @@ public class FormQuestionServiceImpl implements FormQuestionService {
 
     @Autowired
     private FormAnswerVariantDao formAnswerVariantDao;
+
+    @Autowired
+    private JpaTransactionManager jpaTransactionManager;
 
     @Override
     public FormQuestion getById(Long id) {
@@ -93,7 +96,7 @@ public class FormQuestionServiceImpl implements FormQuestionService {
 
     @Override
     public boolean updateQuestions(FormQuestion formQuestion, List<FormAnswerVariant> formAnswerVariants) {
-        try (Connection connection = DataSourceSingleton.getInstance().getConnection()) {
+        try (Connection connection = jpaTransactionManager.getDataSource().getConnection()) {
             connection.setAutoCommit(false);
             formQuestionDao.updateFormQuestion(formQuestion, connection);
 
