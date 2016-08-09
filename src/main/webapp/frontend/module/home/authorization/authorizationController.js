@@ -2,8 +2,6 @@
 
 function authorizationController($scope, TokenStorage, $http, $rootScope, $location, $window) {
 
-    // $scope.authsuccess = false;
-
     $scope.login = function () {
 
         if ($scope.password === undefined) {
@@ -11,17 +9,15 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
         } else {
             $http({
                 method: 'POST',
-                url: '/loginIn',
+                url: '/j_spring_security_check',
                 contentType: 'application/json',
-                data: {username: $scope.email, password: $scope.password}
+                params:
+                {username: $scope.email, password: $scope.password}
             }).success(function (data, status, headers) {
                 console.log("Success");
-                // TokenStorage.clear();
-                // TokenStorage.store(headers('X-AUTH-TOKEN_LOGIN_PASSWORD'), 'X-AUTH-TOKEN_LOGIN_PASSWORD');
                 $rootScope.username = data.username;
                 $rootScope.id = data.id;
                 $rootScope.role = data.role;
-/*              $location.url(data.redirectURL);*/
                 $scope.errorcredential = false;
                 //toDo this is crutch_oriented
                 window.location.replace("/frontend/index.html#" + data.redirectURL);
@@ -34,17 +30,17 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
         }
     };
 
-    $scope.facebookLogin = function () {
+/*    $scope.facebookLogin = function () {
         FB.login(function (response) {
                 if (response.authResponse) {
                     console.log('Welcome!  Fetching your information.... ');
                     FB.api('/me?fields=name,email', function (response) {
                         console.log(response);
                         console.log(response.email);
-                        /*setting the user object*/
+                        /!*setting the user object*!/
                         //$cookieStore.put('userObj', response);
 
-                        /*get the access token*/
+                        /!*get the access token*!/
                         var FBAccessToken = FB.getAuthResponse();
                         var data = angular.extend(response, FBAccessToken);
                         console.log(FBAccessToken);
@@ -92,7 +88,7 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
             console.log(status);
             console.log(headers);
         })
-    };
+    };*/
 
     $scope.registration = function () {
         console.log("registation");
