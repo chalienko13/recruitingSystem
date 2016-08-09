@@ -1,7 +1,6 @@
 package com.netcracker.solutions.kpi.persistence.model;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -54,8 +53,8 @@ public class Recruitment implements Serializable {
     @Column(name = "number_soft_interviewers")
     private int numberSoftInterviewers;
 
-    @Column(name = "number_of_hours")
-    private int numberOfDays;
+    @Column(name = "number_of_days")
+    private Integer numberOfDays;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "scheduling_status")

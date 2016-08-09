@@ -42,7 +42,7 @@ public class RecruitmentServiceImpl implements RecruitmentService {
 
     @Override
     public Recruitment getCurrentRecruitmnet() {
-        return getRecruitmentById(recruitmentDAO.getCurrentRecruitmnet().getId());
+        return recruitmentRepository.getCurrent();
     }
 
     @Override
@@ -52,6 +52,6 @@ public class RecruitmentServiceImpl implements RecruitmentService {
 
     @Override
     public Recruitment getLastRecruitment() {
-        return  getRecruitmentById(recruitmentDAO.getLastRecruitment().getId());
+        return  recruitmentRepository.findLast();
     }
 }

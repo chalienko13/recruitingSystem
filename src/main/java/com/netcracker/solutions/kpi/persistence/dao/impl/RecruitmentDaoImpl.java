@@ -54,11 +54,6 @@ public class RecruitmentDaoImpl implements RecruitmentDAO {
             "WHERE r.end_date > CURRENT_DATE;";
     private static final String SQL_GET_REGISTERED_COUNT = "SELECT COUNT(*) FROM \"application_form\" + apl\n" +
             "WHERE apl.id_recruitment=?";
-    private static final String SQL_GET_LAST_N_RECRUITMENT = "SELECT r.id, r.name,r.start_date,r.end_date, r.max_general_group, " +
-            " r.max_advanced_group, r.registration_deadline, r.schedule_choices_deadline, " +
-            " r.schedule_choices_deadline, r.students_on_interview  ,r.time_interview_soft, r.time_interview_tech, " +
-            " r.number_tech_interviewers, r.number_soft_interviewers, r.number_of_hours, r.scheduling_status, " +
-            " ss.title FROM recruitment r JOIN scheduling_status ss on (ss.id= r.scheduling_status) ORDER BY r.id DESC LIMIT ?;";
     private static Logger log = LoggerFactory.getLogger(RecruitmentDaoImpl.class.getName());
     @Autowired
     private JdbcDaoSupport jdbcDaoSupport;
@@ -142,11 +137,5 @@ public class RecruitmentDaoImpl implements RecruitmentDAO {
     public List<Recruitment> getAllSorted() {
         log.info("Get sorted recruitments");
         return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_ALL_SORTED, extractor);
-    }
-
-    @Override
-    public Recruitment getLastRecruitment() {
-        log.info("Get last recruitment");
-        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_LAST_N_RECRUITMENT, extractor, 1);
     }
 }

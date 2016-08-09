@@ -25,7 +25,5 @@ public interface RecruitmentDAO {
 
     List<Recruitment> getAllSorted();
 
-    Recruitment getLastRecruitment();
-
 
 }
