@@ -17,7 +17,6 @@ import java.util.Collection;
 /**
  * Created by dmch0716 on 05.08.2016.
  */
-
 @Component(value = "successHandler")
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
@@ -52,6 +51,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             }else if (grantedAuthority.getAuthority().equals("ROLE_STUDENT")) {
                 return "frontend/index.html#/student/appform";
             }
+            return "/";
         }
         throw new IllegalStateException();
     }

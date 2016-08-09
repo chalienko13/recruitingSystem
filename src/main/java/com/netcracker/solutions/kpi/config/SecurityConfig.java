@@ -1,5 +1,6 @@
 package com.netcracker.solutions.kpi.config;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -12,6 +13,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+
+import javax.annotation.Resource;
+
 
 @Configuration
 @EnableWebSecurity
@@ -27,16 +34,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    private AuthenticationSuccessHandler    successHandler;
+    private AuthenticationSuccessHandler successHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.csrf()
-                .disable()
+        http.csrf().csrfTokenRepository(csrfTokenRepository())
+                .and()
                 .authorizeRequests()
                 .antMatchers("/home").anonymous()
-
                 .and()
                 .authorizeRequests()
                 .antMatchers("/frontend/module/admin/view/**").hasRole("ADMIN")
@@ -50,16 +56,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/frontend/module/staff/view/**").hasAnyRole("SOFT", "TECH")
                 .antMatchers("/staff/appForm/**").permitAll()
-                .antMatchers("/staff/**").hasAnyRole("SOFT", "TECH");
+                .antMatchers("/staff/**").hasAnyRole("SOFT", "TECH")
+                .and()
+                .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
 
-        http.formLogin()
+        http
+                .csrf().csrfTokenRepository(csrfTokenRepository())
+                .and()
+                .formLogin()
                 .loginPage("/")
                 .loginProcessingUrl("/j_spring_security_check")
-                .failureUrl("/login?error")
-                .usernameParameter("j_username")
-                .passwordParameter("j_password")
+                .usernameParameter("username")
+                .passwordParameter("password")
                 .successHandler(successHandler)
-                .permitAll();
+                .failureUrl("/login?error")
+                .permitAll()
+                .and()
+                .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
+
 
         http.logout()
                 .permitAll()
@@ -67,6 +81,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login?logout")
                 .invalidateHttpSession(true);
 
+    }
+
+    private CsrfTokenRepository csrfTokenRepository() {
+        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+        repository.setHeaderName("X-XSRF-TOKEN");
+        return repository;
     }
 
     @Bean(name = "passwordEncoder")
