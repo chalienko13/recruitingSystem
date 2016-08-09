@@ -30,20 +30,29 @@ public class AdminSchedulingController {
         schedulingService.createScheduleDayPoints(scheduleDayPoints);
     }
 
+    /***
+     * Better use deleteScheduleDayPointsById!
+     * @param scheduleDayPoints
+     */
     @RequestMapping(value = "/deleteScheduleDayPoints", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public void deleteScheduleDayPoints (@RequestBody List<ScheduleDayPoint> scheduleDayPoints) {
         schedulingService.deleteScheduleDayPoints(scheduleDayPoints);
     }
 
     @RequestMapping(value = "/deleteScheduleDayPointsById", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public void deleteScheduleDayPointsById (@RequestBody Short id) {
-        schedulingService.deleteScheduleDayPointsById(id);
+    public void deleteScheduleDayPointsById (@RequestBody ArrayList<Short> ids) {
+        schedulingService.deleteScheduleDayPointsById(ids);
     }
 
     //mby make post. think about it
     @RequestMapping(value = "/getAllScheduleDayPoints", method = RequestMethod.GET)
     public List<ScheduleDayPoint> getAllScheduleDayPoints () {
         return schedulingService.findAllScheduleDayPoints();
+    }
+
+    @RequestMapping(value = "/createScheduleTimePoints", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public void createScheduleTimePoints (@RequestBody List<ScheduleTimePoint> scheduleTimePoints) {
+        schedulingService.createScheduleTimePoints(scheduleTimePoints);
     }
 
 }

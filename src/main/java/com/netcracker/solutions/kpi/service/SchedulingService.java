@@ -4,6 +4,8 @@ import com.netcracker.solutions.kpi.persistence.model.ScheduleDayPoint;
 import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
 import com.netcracker.solutions.kpi.persistence.model.SchedulingSettings;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -17,7 +19,7 @@ public interface SchedulingService {
 
     void deleteScheduleDayPoints(List<ScheduleDayPoint> scheduleDayPoints);
 
-    void deleteScheduleDayPointsById(Short id);
+    void deleteScheduleDayPointsById(ArrayList<Short> ids);
 
     List<ScheduleDayPoint> findAllScheduleDayPoints();
 

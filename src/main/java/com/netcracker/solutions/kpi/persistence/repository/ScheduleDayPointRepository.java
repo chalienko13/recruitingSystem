@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.jdo.annotations.*;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by olil0716 on 8/8/2016.
@@ -13,5 +13,5 @@ import java.util.List;
 @Repository
 public interface ScheduleDayPointRepository extends JpaRepository<ScheduleDayPoint, Short> {
     @Transactional
-    Long deleteById(Short id);
+    void deleteByIdIn(ArrayList<Short> ids);
 }
