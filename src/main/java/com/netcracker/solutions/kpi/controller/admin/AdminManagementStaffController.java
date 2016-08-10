@@ -11,7 +11,6 @@ import com.netcracker.solutions.kpi.persistence.model.enums.RoleEnum;
 import com.netcracker.solutions.kpi.service.InterviewService;
 import com.netcracker.solutions.kpi.service.RoleService;
 import com.netcracker.solutions.kpi.service.UserService;
-import com.netcracker.solutions.kpi.service.UserTimePriorityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +38,6 @@ public class AdminManagementStaffController {
     private RoleService roleService;
     @Autowired
     private InterviewService interviewService;
-    @Autowired
-    private UserTimePriorityService userTimePriorityService;
 
     @RequestMapping(value = "showAllEmployees", method = RequestMethod.GET)
     public List<com.netcracker.solutions.kpi.persistence.model.User> showEmployees(@RequestParam int pageNum, @RequestParam Long rowsNum, @RequestParam Long sortingCol,

@@ -327,7 +327,7 @@ public class ApplicationFormDaoImpl implements ApplicationFormDao {
     }
 
     @Override
-    public Long getApprovedStudentsByRecruitmentId(Short id) {
+    public Long getApprovedStudentsByRecruitmentId(Long id) {
         return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_APPROVED_RECRUITMENT_STUDENTS,
                 resultSet -> resultSet.getLong("rowcount"), id, 3);
     }

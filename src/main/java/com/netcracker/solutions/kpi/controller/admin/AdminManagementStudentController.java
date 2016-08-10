@@ -37,8 +37,6 @@ public class AdminManagementStudentController {
     private RecruitmentService recruitmentService;
     @Autowired
     private InterviewService interviewService;
-    @Autowired
-    private UserTimePriorityService userTimePriorityService;
     //@Autowired
     //private ScheduleTimePointService scheduleTimePointService;
     @Autowired
@@ -274,7 +272,8 @@ public class AdminManagementStudentController {
                 .getByStatusAndRecruitment(APPROVED.getStatus(), recruitment);
         for (ApplicationForm applicationForm : approvedForms) {
             User student = applicationForm.getUser();
-            userTimePriorityService.createStudentTimePriotities(student);
+            //didnt work old recruitment
+            //userTimePriorityService.createStudentTimePriotities(student);
         }
     }
 

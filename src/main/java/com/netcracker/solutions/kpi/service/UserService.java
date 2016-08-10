@@ -29,7 +29,7 @@ public interface UserService {
     void deleteUser(User user);
 
     //TODO rewrire (Olesia)
-    /*Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
+    /*Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);*/
 
     List<User> getEmployeesFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase);
 

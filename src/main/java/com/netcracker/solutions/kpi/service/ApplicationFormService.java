@@ -41,7 +41,7 @@ public interface ApplicationFormService {
 
     Long getCountRecruitmentStudents(Long id);
 
-    Long getCountApprovedStudentsByRecruitmentId(Short id);
+    Long getCountApprovedStudentsByRecruitmentId(Long id);
 
     List<ApplicationForm> getApplicationFormsSorted(Long fromRow, Long rowsNum, Long sortingCol, boolean increase);
 

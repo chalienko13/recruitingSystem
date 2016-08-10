@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface UserDao  {
-    Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);
+    /*Long insertFinalTimePoint(User user, ScheduleTimePoint scheduleTimePoint);*/
 
     Set<User> getAllEmploees();
 

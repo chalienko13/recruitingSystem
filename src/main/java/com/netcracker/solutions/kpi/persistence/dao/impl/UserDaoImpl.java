@@ -157,8 +157,6 @@ public class UserDaoImpl implements UserDao {
         return Collections.emptyList();
     }
 
-    @Override
-    }*/
 
     @Override
     public Set<com.netcracker.solutions.kpi.persistence.model.User> getAllEmploees() {

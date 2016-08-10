@@ -161,11 +161,6 @@ public class UserServiceImpl implements UserService {
     }*/
 
     @Override
-    public User getUserByToken(String token) {
-        return userRepository.getByConfirmToken(token);
-    }
-
-    @Override
     public List<User> getAll() {
         return userRepository.findAll();
     }
