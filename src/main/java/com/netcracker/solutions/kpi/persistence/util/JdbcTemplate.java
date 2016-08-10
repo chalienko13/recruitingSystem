@@ -72,7 +72,7 @@ public class JdbcTemplate {
             return insert(statement, objects);
         } catch (SQLException e) {
             log.error("Cannot insert objects ", e);
-            return 0L;
+            throw new RuntimeException(e);
         }
     }
 
@@ -95,8 +95,8 @@ public class JdbcTemplate {
             return collection;
         } catch (SQLException e) {
             log.error("Cannot read objects ", e);
+            throw new RuntimeException(e);
         }
-        return collection;
     }
 
     public <T> Set<T> queryForSet(String sql, ResultSetExtractor<T> resultSetExtractor, Object... objects) {
@@ -116,6 +116,7 @@ public class JdbcTemplate {
             }
         } catch (SQLException e) {
             log.error("Cannot insert object ", e);
+            throw new RuntimeException(e);
         }
         return 0L;
     }
@@ -151,6 +152,7 @@ public class JdbcTemplate {
             }
         } catch (SQLException e) {
             log.error("Cannot read object ", e);
+            throw new RuntimeException(e);
         }
         return null;
     }

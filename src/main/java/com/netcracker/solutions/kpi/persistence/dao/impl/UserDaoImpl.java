@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -154,8 +152,9 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<Integer> getCountUsersOnInterviewDaysForRole(Role role) {
         log.info("Get count users on interview days for role {}", role.getId());
-        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_COUNT_USERS_ON_INTERVIEW_DAYS_FOR_ROLE,
-                resultSet -> resultSet.getInt("count"), role.getId());
+        /*return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_COUNT_USERS_ON_INTERVIEW_DAYS_FOR_ROLE,
+                resultSet -> resultSet.getInt("count"), role.getId());*/
+        return Collections.emptyList();
     }
 
     @Override

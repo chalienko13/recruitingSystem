@@ -37,6 +37,7 @@ public class AdminFormSettingsController {
         //TODO replace with service call to db
         Role roleTitle = roleService.getRoleByTitle(role);
         List<FormQuestion> formQuestionList = formQuestionService.getByRole(roleTitle);
+
         List<FormQuestionDto> formQuestionListDto = new ArrayList<>();
         for (FormQuestion formQuestion : formQuestionList) {
             FormQuestionDto formQuestionDto = new FormQuestionDto();
@@ -46,13 +47,15 @@ public class AdminFormSettingsController {
             formQuestionDto.setEnable(formQuestion.isEnable());
             formQuestionDto.setQuestion(formQuestion.getTitle());
             formQuestionDto.setOrder(formQuestion.getOrder());
-            formQuestionDto.setFormAnswerVariants(new ArrayList<>());
-            if (formQuestion.getFormAnswerVariants() == null) {
-                formQuestion.setFormAnswerVariants(new ArrayList<>());
+            
+            List<String> answerVariants = new ArrayList<>();
+            List<FormAnswerVariant> formAnswerVariants = formQuestion.getFormAnswerVariants();
+            if (formAnswerVariants != null && !formAnswerVariants.isEmpty()) {
+                for (FormAnswerVariant answerVariant : formAnswerVariants) {
+                    answerVariants.add(answerVariant.getAnswer());
+                }
             }
-            for (FormAnswerVariant answerVariant : formQuestion.getFormAnswerVariants()) {
-                formQuestionDto.getFormAnswerVariants().add(answerVariant.getAnswer());
-            }
+            formQuestionDto.setFormAnswerVariants(answerVariants);
             formQuestionListDto.add(formQuestionDto);
         }
         return formQuestionListDto;
@@ -77,6 +80,7 @@ public class AdminFormSettingsController {
         formQuestion.setFormAnswerVariants(formAnswerVariantList);
         formQuestion.setOrder(formQuestionDto.getOrder());
         formQuestionService.insertFormQuestion(formQuestion, role, formAnswerVariantList);
+
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 

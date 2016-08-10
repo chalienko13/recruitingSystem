@@ -38,7 +38,7 @@ public class FormQuestion implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "formQuestion")
     private List<FormAnswerVariant> formAnswerVariants;
 
-    @Column(name = "order")
+    @Column(name = "orderq")
     private int order;
 
 

@@ -64,7 +64,7 @@ public class FormQuestionServiceImpl implements FormQuestionService {
             if (log.isWarnEnabled()) {
                 log.warn("Transaction failed When Trying to add Form Question with Variants and Role");
             }
-            return false;
+            throw new RuntimeException(e);
         }
         return true;
     }

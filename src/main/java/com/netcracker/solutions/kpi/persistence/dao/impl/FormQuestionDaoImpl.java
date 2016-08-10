@@ -24,16 +24,18 @@ public class FormQuestionDaoImpl implements FormQuestionDao {
     static final String ID_QUESTION_TYPE_COL = "id_question_type";
     static final String ENABLE_COL = "enable";
     static final String MANDATORY_COL = "mandatory";
-    static final String ORDER_COL = "order";
+    static final String ORDER_COL = "orderq";
     private static final String SQL_GET_ALL = "SELECT fq." + ID_COL + ", fq." + TITLE_COL + ", fq."
             + ID_QUESTION_TYPE_COL + ", fq." + ENABLE_COL + ", fq." + MANDATORY_COL + ", fq." + ORDER_COL + ", fqt."
             + QuestionTypeDaoImpl.TYPE_TITLE_COL + " FROM " + TABLE_NAME + " fq INNER JOIN "
             + QuestionTypeDaoImpl.TABLE_NAME + " fqt ON fqt." + QuestionTypeDaoImpl.ID_COL + " = fq."
             + ID_QUESTION_TYPE_COL + "";
     private static final String SQL_GET_BY_ID = SQL_GET_ALL + " WHERE fq." + ID_COL + " = ?;";
-    private static final String SQL_GET_BY_ROLE = "SELECT fq.id, fq.title, fq.id_question_type, fq.enable, fq.mandatory, fq.order, fqt.type_title FROM form_question fq\n" +
+
+    private static final String SQL_GET_BY_ROLE = "SELECT fq.id, fq.title, fq.id_question_type, fq.enable, fq.mandatory, fq.orderq, fqt.type_title FROM form_question fq\n" +
             "  INNER JOIN form_question_type fqt ON fqt.id = fq.id_question_type\n" +
-            "  INNER JOIN form_question_role fqr ON fqr.id_form_question = fq.id WHERE fqr.id_role = ? ORDER BY fq.order";
+            "  INNER JOIN form_question_role fqr ON fqr.id_form_question = fq.id WHERE fqr.id_role = ? ORDER BY fq.orderq";
+
     private static final String SQL_GET_BY_ROLE_NONTEXT = SQL_GET_ALL + " INNER JOIN " + ROLE_MAP_TABLE_NAME + " fqr ON fqr."
             + ROLE_MAP_TABLE_FORM_QUESTION_ID + " = fq." + ID_COL + " WHERE fqr." + ROLE_MAP_TABLE_ROLE_ID + " = ? AND (fq."
             + ID_QUESTION_TYPE_COL + "= ANY('{2,3,4}'::int[]));";
@@ -47,8 +49,10 @@ public class FormQuestionDaoImpl implements FormQuestionDao {
     private static final String SQL_ENABLE_GET_BY_APPLICATION_FORM = SQL_GET_ALL + " INNER JOIN form_answer fa ON fa.id_question = fq.id WHERE fa.id_application_form = ? AND fq.enable = true;";
     private static final String SQL_UNCONNECTED = SQL_GET_ALL + " INNER JOIN form_question_role fqr ON fqr.id_form_question = fq.id" +
             " WHERE fqr.id_role = 3 AND NOT EXISTS(SELECT fa.id from form_answer fa WHERE fa.id_question = fq.id AND fa.id_application_form = ?)";
+
     private static final String SQL_INSERT = "INSERT INTO " + TABLE_NAME + " ( " + TITLE_COL + ", " + ENABLE_COL + ", "
             + MANDATORY_COL + ", " + ID_QUESTION_TYPE_COL + ", \"" + ORDER_COL + "\") " + "VALUES (?,?,?,?,?)";
+
     private static final String SQL_UPDATE = "UPDATE " + TABLE_NAME + " SET " + TITLE_COL + " = ?, " + ENABLE_COL
             + " = ?, " + ID_QUESTION_TYPE_COL + " = ?, " + MANDATORY_COL + " = ?, \"" + ORDER_COL + "\" = ? WHERE " + ID_COL + " = ?;";
     private static final String SQL_DELETE = "DELETE FROM " + TABLE_NAME + " WHERE " + ID_COL + " = ?";
@@ -157,11 +161,18 @@ public class FormQuestionDaoImpl implements FormQuestionDao {
     }
 
     private List<FormAnswerVariant> getAnswerVariants(Long formQuestionID) {
-        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters("SELECT fav.id FROM form_answer_variant fav WHERE fav.id_question = ? ORDER BY fav.id",
+        return jdbcDaoSupport.getJdbcTemplate().queryWithParameters("SELECT fav.id, fav.answer FROM form_answer_variant fav WHERE fav.id_question = ? ORDER BY fav.id",
                 resultSet -> {
                     List<FormAnswerVariant> answersVariants = new ArrayList<>();
                     do {
-                        answersVariants.add(new FormAnswerVariant(resultSet.getLong(FormAnswerVariantDaoImpl.ID_COL)));
+                        Long id = resultSet.getLong(FormAnswerVariantDaoImpl.ID_COL);
+                        String answer = resultSet.getString(FormAnswerVariantDaoImpl.ANSWER_COL);
+
+                        FormAnswerVariant faw = new FormAnswerVariant();
+                        faw.setId(id);
+                        faw.setAnswer(answer);
+
+                        answersVariants.add(faw);
                     } while (resultSet.next());
                     return answersVariants;
                 }, formQuestionID);

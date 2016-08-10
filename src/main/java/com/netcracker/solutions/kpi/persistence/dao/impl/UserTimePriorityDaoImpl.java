@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -131,13 +132,15 @@ public class UserTimePriorityDaoImpl implements UserTimePriorityDao {
     @Override
     public List<UserTimePriority> getAllUserTimePriorities(Long userId) {
         log.info("Getting all User time priorities ");
-        return jdbcDaoSupport.getJdbcTemplate().queryForList(GET_ALL_USER_TIME_PRIORITY, extractor, userId);
+       /* return jdbcDaoSupport.getJdbcTemplate().queryForList(GET_ALL_USER_TIME_PRIORITY, extractor, userId);*/
+        return Collections.emptyList();
     }
 
     @Override
     public List<UserTimePriorityDto> getAllTimePriorityForUserById(Long userId) {
         log.info("Getting all time priorities for user with id ={} ", userId);
-        return jdbcDaoSupport.getJdbcTemplate().queryForList(GET_ALL_TIME_PRIORITY_FOR_USER_BY_ID, extractorDto, userId);
+        /*return jdbcDaoSupport.getJdbcTemplate().queryForList(GET_ALL_TIME_PRIORITY_FOR_USER_BY_ID, extractorDto, userId);*/
+        return Collections.emptyList();
     }
 
     @Override
