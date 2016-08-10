@@ -32,6 +32,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     protected void handle(HttpServletRequest request,
                           HttpServletResponse response, Authentication authentication) throws IOException {
         String targetUrl = determineTargetUrl(authentication);
+/*        response.addHeader("redirecturl", targetUrl);
+        request.setAttribute("redirecturl", targetUrl);*/
         redirectStrategy.sendRedirect(request, response, targetUrl);
     }
 
@@ -43,15 +45,14 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (GrantedAuthority grantedAuthority : authorities) {
             if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
-                return "frontend/index.html#/admin/main";
+                return "/admin/main";
             } else if (grantedAuthority.getAuthority().equals("ROLE_TECH")) {
-                return "frontend/index.html#/staff/main";
+                return "/staff/main";
             }else if (grantedAuthority.getAuthority().equals("ROLE_SOFT")) {
-                return "frontend/index.html#/staff/main";
+                return "/staff/main";
             }else if (grantedAuthority.getAuthority().equals("ROLE_STUDENT")) {
-                return "frontend/index.html#/student/appform";
+                return "/student/appform";
             }
-            return "/";
         }
         throw new IllegalStateException();
     }

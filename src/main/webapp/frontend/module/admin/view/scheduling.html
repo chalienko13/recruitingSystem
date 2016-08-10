@@ -11,89 +11,89 @@
             <div class="tab-content">
                 <div id="schedSettings" class="tab-pane fade in active">
 
-            <div class="row">
-                <h4>
-                    To create a schedule, set the input parameters.
+                    <div class="row">
+                        <h4>
+                            To create a schedule, set the input parameters.
                 <span class="glyphicon glyphicon-question-sign"
-                        title="You can change this parameters by selection users in Staff/Student management"
-                        data-toggle="tooltip" data-placement="top" tooltip></span>
-                </h4>
+                      title="You can change this parameters by selection users in Staff/Student management"
+                      data-toggle="tooltip" data-placement="top" tooltip></span>
+                        </h4>
 
-            </div>
-            <div class="row info-text">
-                <div class="col-md-2">
-                    Amount of approved students to interview:
-                    {{countStudent}}
-                </div>
-                <div class="col-md-2">
-                    Amount of tech:
-                    {{amountOfTech}}
-                </div>
-                <div class="col-md-2">
-                    Amount of soft:
-                    {{amountOfSoft}}
-                </div>
-            </div>
-            <div class="row" ng-disabled="recruiting">
-                <h4>Select dates on calendar</h4>
-                <!--<p class="marks-cell"><b>0/30</b> hours selected</p>-->
-            </div>
-            <div id="calendar-sizing" ng-disabled="recruiting">
-                <table ng-disabled="recruiting">
-                    <tr>
-                        <td>
-                            <uib-datepicker ng-model='activeDate'  multi-select='selectedDates'
-                                            type=="range" ng-disabled="recruiting"></uib-datepicker>
-                        </td>
-                        <td class="col-md-10">
-                                Selected Dates:
-                                <div>
-                                    <div ng-repeat='d in selectedDates track by $index' class="col-md-2">
-                                        {{d | date : 'fullDate'}}
-                                            <div class="col-md-12 no-padding">
-                                        <button class='btn btn-xs btn-warning' style='margin:5px;'
-                                                ng-click='removeFromSelected(d)' ng-init="createMap(d)">Remove
-                                        </button>
-                                            </div>
-                                        <!--<uib-timepicker ng-model="startTime" ng-init="startTime = map[d].startTime" hour-step="1" ng-disabled="minute" minute-step="1" show-meridian="AM"></uib-timepicker>-->
-                                        <!--<uib-timepicker ng-model="endTime" ng-init="endTime = map[d].endTime" hour-step="1" minute-step="1" show-meridian="AM"></uib-timepicker>-->
-                                        <input type="number" ng-model="map[d].startTime" style='width: 130px'>
-                                        <input type="number" ng-model="map[d].endTime" style='width: 130px'>
-                                            <div class="col-md-12 no-padding">
-                                        <button class='btn btn-xs btn-warning time-result' style='margin:5px'
-                                                ng-click='setTime(map[d], d)' ng-hide="map[d].id != -1">Save
-                                        </button>
-                                        <button class='btn btn-xs btn-warning time-result' style='margin:5px'
-                                                ng-click='edit(map[d], d)' ng-hide="map[d].id === -1">Edit
-                                        </button>
-                                            </div>
-                                    </div>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="row info-text">
-                <button type="submit" class="btn btn-info search-element btn-left col-md-2"
-                        ng-click="submitDaysSelection()" ng-hide="!(currentStatus != 1)" ng-disabled="recruiting">
-                    Confirm days selection
-                </button>
-                <button type="submit" class="btn btn-info search-element btn-left col-md-2"
-                        ng-click="cancelDaysSelection()" ng-hide="!(currentStatus === 1)" ng-disabled="recruiting">
-                    Cancel days selection
-                </button>
-
-            </div>
-
-            <form name="schedulingForm" ng-init="getInterviewParameters()">
-                <div class="row info-text">
-                    <h4>
-                        Set the interview parameters:
-                    </h4>
-                    <div class="col-md-2">
-                        Duration for each interview:
                     </div>
+                    <div class="row info-text">
+                        <div class="col-md-2">
+                            Amount of approved students to interview:
+                            {{countStudent}}
+                        </div>
+                        <div class="col-md-2">
+                            Amount of tech:
+                            {{amountOfTech}}
+                        </div>
+                        <div class="col-md-2">
+                            Amount of soft:
+                            {{amountOfSoft}}
+                        </div>
+                    </div>
+                    <div class="row" ng-disabled="recruiting">
+                        <h4>Select dates on calendar</h4>
+                        <!--<p class="marks-cell"><b>0/30</b> hours selected</p>-->
+                    </div>
+                    <div id="calendar-sizing" ng-disabled="recruiting">
+                        <table ng-disabled="recruiting">
+                            <tr>
+                                <td>
+                                    <uib-datepicker ng-model='activeDate'  multi-select='selectedDates'
+                                                    type=="range" ng-disabled="recruiting"></uib-datepicker>
+                                </td>
+                                <td class="col-md-10">
+                                    Selected Dates:
+                                    <div>
+                                        <div ng-repeat='d in selectedDates track by $index' class="col-md-2">
+                                            {{d | date : 'EEE, dd MMM, yyyy'}}
+                                            <div class="col-md-12 no-padding">
+                                                <button class='btn btn-xs btn-warning' style='margin:5px;'
+                                                        ng-click='removeFromSelected(d)' ng-init="createMap(d)">Remove
+                                                </button>
+                                            </div>
+                                            <!--<uib-timepicker ng-model="startTime" ng-init="startTime = map[d].startTime" hour-step="1" ng-disabled="minute" minute-step="1" show-meridian="AM"></uib-timepicker>-->
+                                            <!--<uib-timepicker ng-model="endTime" ng-init="endTime = map[d].endTime" hour-step="1" minute-step="1" show-meridian="AM"></uib-timepicker>-->
+                                            <!--                                        <input type="number" ng-model="map[d].startTime" style='width: 130px'>
+                                                                                    <input type="number" ng-model="map[d].endTime" style='width: 130px'>-->
+                                            <div class="col-md-12 no-padding">
+                                                <button class='btn btn-xs btn-warning time-result' style='margin:5px'
+                                                        ng-click='setTime(map[d], d)' ng-hide="map[d].id != -1">Save
+                                                </button>
+                                                <!--                            <button class='btn btn-xs btn-warning time-result' style='margin:5px'
+                                                                                    ng-click='edit(map[d], d)' ng-hide="map[d].id === -1">Edit
+                                                                            </button>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="row info-text">
+                        <button type="submit" class="btn btn-info search-element btn-left col-md-2"
+                                ng-click="submitDaysSelection()" ng-hide="!(currentStatus != 1)" ng-disabled="recruiting">
+                            Confirm days selection
+                        </button>
+                        <button type="submit" class="btn btn-info search-element btn-left col-md-2"
+                                ng-click="cancelDaysSelection()" ng-hide="!(currentStatus === 1)" ng-disabled="recruiting">
+                            Cancel days selection
+                        </button>
+
+                    </div>
+
+                    <form name="schedulingForm" ng-init="getInterviewParameters()">
+                        <div class="row info-text">
+                            <h4>
+                                Set the interview parameters:
+                            </h4>
+                            <div class="col-md-2">
+                                Duration for each interview:
+                            </div>
 
                             <div class="col-md-2">
                                 Tech duration:
@@ -111,21 +111,21 @@
                                 <span ng-show="schedulingForm.softDuration.$error.required">required</span>
                                 <span ng-show="schedulingForm.softDuration.$error.pattern">pattern</span>
                             </div>
-                </div>
-                <div class="row info-text">
-                        <button type="submit" class="btn btn-info search-element btn-left col-md-2"
-                                ng-disabled="schedulingForm.$invalid"
-                                ng-click="saveInterviewParameters(softDuration, techDuration)">
-                            Save interview parameters
-                        </button>
-                </div>
-                <div class="row info-text">
-                        <button type="submit" class="btn btn-info search-element btn-left col-md-2"
-                                ng-disabled="schedulingForm.$invalid" ng-click="startScheduling()">
-                            Start schedule
-                        </button>
-                </div>
-            </form>
+                        </div>
+                        <div class="row info-text">
+                            <button type="submit" class="btn btn-info search-element btn-left col-md-2"
+                                    ng-disabled="schedulingForm.$invalid"
+                                    ng-click="saveInterviewParameters(softDuration, techDuration)">
+                                Save interview parameters
+                            </button>
+                        </div>
+                        <div class="row info-text">
+                            <button type="submit" class="btn btn-info search-element btn-left col-md-2"
+                                    ng-disabled="schedulingForm.$invalid" ng-click="startScheduling()">
+                                Start schedule
+                            </button>
+                        </div>
+                    </form>
                 </div>
                 <div id="currSched" class="tab-pane fade">
                     <div class="row">
