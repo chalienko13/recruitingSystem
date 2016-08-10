@@ -114,7 +114,7 @@ public class StaffStudentManagementController {
 
     private boolean isApplicaionFormActual(ApplicationForm applicationForm) {
         return applicationForm.isActive()
-                && Objects.equals(applicationForm.getStatus(), StatusEnum.APPROVED.getStatus());
+                && Objects.equals(applicationForm.getStatus().getTitle(), StatusEnum.APPROVED.getStatus().getTitle());
     }
 
     private AssignedStudentDto getApplicationFormDto(ApplicationForm applicationForm) {
