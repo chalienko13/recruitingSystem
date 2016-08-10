@@ -34,7 +34,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         String targetUrl = determineTargetUrl(authentication);
 /*        response.addHeader("redirecturl", targetUrl);
         request.setAttribute("redirecturl", targetUrl);*/
-        redirectStrategy.sendRedirect(request, response, targetUrl);
+        redirectStrategy.sendRedirect(request, response, "/frontend/index.html");
     }
 
     /**
@@ -45,7 +45,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (GrantedAuthority grantedAuthority : authorities) {
             if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
-                return "/admin/main";
+                return "/frontend/index.html";
             } else if (grantedAuthority.getAuthority().equals("ROLE_TECH")) {
                 return "/staff/main";
             }else if (grantedAuthority.getAuthority().equals("ROLE_SOFT")) {
@@ -53,8 +53,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             }else if (grantedAuthority.getAuthority().equals("ROLE_STUDENT")) {
                 return "/student/appform";
             }
+            return "/frontend/index.html";
         }
-        throw new IllegalStateException();
+        return "/frontend/index.html";
     }
 
     private void clearAuthenticationAttributes(HttpServletRequest request) {
