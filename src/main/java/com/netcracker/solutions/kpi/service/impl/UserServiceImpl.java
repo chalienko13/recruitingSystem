@@ -1,21 +1,35 @@
 package com.netcracker.solutions.kpi.service.impl;
 
+import com.google.common.collect.Sets;
+import com.netcracker.solutions.kpi.config.ApplicationConfiguration;
 import com.netcracker.solutions.kpi.persistence.dao.UserDao;
+import com.netcracker.solutions.kpi.persistence.dto.UserDto;
 import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.User;
+import com.netcracker.solutions.kpi.persistence.repository.RoleRepository;
 import com.netcracker.solutions.kpi.persistence.repository.UserRepository;
+import com.netcracker.solutions.kpi.service.EmailService;
 import com.netcracker.solutions.kpi.service.UserService;
+import com.netcracker.solutions.kpi.util.TokenUtil;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.text.MessageFormat;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
     private static Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
@@ -25,12 +39,28 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    ///REFACTORED TO REPOSITORY - START
-    ///--------------------------------
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoderGeneratorService;
+
+    @Autowired
+    TokenUtil tokenUtil;
+
+    @Autowired
+    ApplicationConfiguration configuration;
 
     @Override
     public User getUserByUsername(String userName) {
-        return userRepository.getByEmail(userName);
+        User user = userRepository.getByEmail(userName);
+        if(user == null) {
+            throw new UsernameNotFoundException(MessageFormat.format("User with username=[{0}] not found", userName));
+        }
+        return user;
     }
 
     @Override
@@ -44,8 +74,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createUser(User user) {
+    public User createUser(String email, String firstname, String secondname, String lastname, String password, Iterable<Role> roles, boolean isActive) {
+        password = password == null ? RandomStringUtils.randomAlphabetic(10) : password;
+        String token = RandomStringUtils.randomAlphabetic(50);
+        User user = new User(email,
+                firstname,
+                secondname,
+                lastname,
+                passwordEncoderGeneratorService.encode(password),
+                isActive,
+                new Timestamp(System.currentTimeMillis()),
+                token);
+
+        Set<Role> dbRoles = Sets.newHashSet();
+        for (Role r : roles) {
+            dbRoles.add(roleRepository.getByRoleName(r.getRoleName()));
+        }
+        user.setRoles(dbRoles);
+
         userRepository.save(user);
+
+        if (!user.isActive())
+        {
+            user.setConfirmToken(tokenUtil.generateToken(email, configuration.tokenExpireTime));
+            userRepository.save(user);
+            emailService.sendRegistrationConfirmation(user.getEmail()); }
+        else
+        { emailService.sendCreationNotification(user.getEmail()); }
+        return user;
     }
 
     @Override
@@ -53,21 +109,26 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    //// TODO: 03.08.2016
     @Override
-    public boolean updateUserWithRole(User user) {
-        updateUser(user);
-        return true;
-    }
-
-    @Override
-    public void addRole(User user, Role role) {
-        if(role != null) {
-            Set<Role> currentRoles = user.getRoles();
-            currentRoles.add(role);
+    public boolean updateUser(UserDto userDto) {
+        User user = getUserByID(userDto.getId());
+        if (user != null) {
+            user.setFirstName(userDto.getFirstName());
+            user.setSecondName(userDto.getSecondName());
+            user.setLastName(userDto.getLastName());
+            user.setEmail(userDto.getEmail());
+            Set<Role> userRoles = new HashSet<>();
+            for (Role role : userDto.getRoleList()) {
+                userRoles.add(roleRepository.getByRoleName("ROLE_" + role.getRoleName()));
+            }
+            user.setRoles(userRoles);
             updateUser(user);
+            return true;
+        } else {
+            return false;
         }
     }
+
 
     @Override
     public Long getUserCount() {
@@ -111,7 +172,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getAuthorizedUser() {
-        return (User) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        org.springframework.security.core.userdetails.User login = (org.springframework.security.core.userdetails.User)
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        log.info("User login: {}",login.getUsername());
+        return userRepository.getByEmail(login.getUsername());
     }
 
     @Override
@@ -122,11 +186,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public Long getAllEmployeeCount() {
         return userRepository.getEmployeeCount();
-    }
-
-    @Override
-    public int deleteToken(Long id) {
-        return userRepository.deleteToken(id);
     }
 
     @Override
@@ -149,11 +208,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.getActiveEmployees(idRole0, idRole1);
     }
 
-    @Override
-    public List<User> getStudentsWithNotconnectedForms() {
-        return userRepository.getStudentsWithNotconnectedForms();
-    }
-
     // TODO: 04.08.2016
     @Override
     public List<User> getEmployeesByNameFromToRows(String name) {
@@ -163,18 +217,13 @@ public class UserServiceImpl implements UserService {
         } catch (NumberFormatException e) {
             log.info("Search. Search field don`t equals id");
         }
-        return userRepository.getEmployeesByNameFromToRows("%" + name + "%",id);
-    }
-
-    @Override
-    public List<User> batchUpdate(List<User> users) {
-        return userRepository.save(users);
+        return userRepository.getEmployeesByNameFromToRows(id, "%" + name + "%");
     }
 
     // TODO: 04.08.2016
     @Override
     public List<User> getEmployeesFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase) {
-        return userRepository.getEmployeesFromToRows(fromRows, rowsNum, sortingCol, increase);
+        return userRepository.getEmployeesFromToRows(/*fromRows, rowsNum, sortingCol, increase*/);
     }
 
     // TODO: 04.08.2016
@@ -182,8 +231,8 @@ public class UserServiceImpl implements UserService {
     public Long getAllEmployeeCountFiltered(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart,
                                             Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer,
                                             boolean notEvaluated) {
-        return userRepository.getEmployeeCountFiltered(fromRows, rowsNum, sortingCol, increase, idStart, idFinish, roles,
-                interviewer, notIntrviewer, notEvaluated);
+        return userRepository.getEmployeeCountFiltered(/*fromRows, rowsNum, sortingCol, increase, idStart, idFinish, roles,
+                interviewer, notIntrviewer, notEvaluated*/);
     }
 
     // TODO: 04.08.2016
@@ -191,14 +240,9 @@ public class UserServiceImpl implements UserService {
     public List<User> getFilteredEmployees(Long fromRows, Long rowsNum, Long sortingCol, boolean increase, Long idStart,
                                            Long idFinish, List<Role> roles, boolean interviewer, boolean notIntrviewer,
                                            boolean notEvaluated) {
-        return userRepository.getFilteredEmployees(fromRows, rowsNum, sortingCol, increase, idStart, idFinish, roles, interviewer,
-                notIntrviewer, notEvaluated);
+        return userRepository.getFilteredEmployees(/*fromRows, rowsNum, sortingCol, increase, idStart, idFinish, roles, interviewer,
+                notIntrviewer, notEvaluated*/);
     }
-
-    ///REFACTORED TO REPOSITORY - END
-    ///--------------------------------------------------
-
-    //SCHEDULING - not necessary to refactor now as scheduling will be changed
 
     @Override
     public List<User> getUserByTimeAndRole(Long scheduleTimePointId, Long roleId) {
@@ -211,8 +255,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getUserWithFinalTimePoint() {
-        return userDao.getUserWithFinalTimePoint();
+    public User confirmByToken(String token) {
+        User user = userRepository.getByConfirmToken(token);
+        log.debug("User [{}] by confirm token: [{}]", user, token);
+        if (user == null) return null;
+
+        user.setActive(true);
+        user.setConfirmToken(null);
+
+        return userRepository.save(user);
     }
 
     @Override
@@ -220,40 +271,5 @@ public class UserServiceImpl implements UserService {
         return userDao.getCountUsersOnInterviewDaysForRole(role);
     }
 
-    //NOT USED
-   /* @Override
-    public Set<User> getAssignedStudents(Long id) {
-        return userDao.getAssignedStudents(id);
-    }
-
-    @Override
-    public Set<User> getAllStudents() {
-        return userDao.getAllStudents();
-    }
-
-    @Override
-    public List<User> getStudentsFromToRows(Long fromRows, Long rowsNum, Long sortingCol, boolean increase) {
-        return userDao.getStudentsFromToRows(fromRows, rowsNum, sortingCol, increase);
-    }
-*/
-
-    /*// TODO: 03.08.2016 - Seems as NOT USED
-  @Override
-  public int deleteRole(User user, Role role) {
-      return userDao.deleteRole(user, role);
-  }*/
-
-    //NOT USED
-   /* @Override
-    public Set<User> getAllEmploees() {
-        return userDao.getAllEmploees();
-    }
-*/
-
-    //NOT USED
-   /* @Override
-    public List<User> getStudentsByNameFromToRows(String lastName, Long fromRows, Long rowsNum) {
-        return userDao.getStudentsByNameFromToRows(lastName, fromRows, rowsNum);
-    }*/
 }
 

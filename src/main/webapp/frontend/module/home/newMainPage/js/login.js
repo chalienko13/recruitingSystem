@@ -9,11 +9,11 @@ $(document).ready(function () {
         event.preventDefault();
         $.ajax({
             type: 'post',
-            url: '/security_check',
+            url: '/loginIn',
             dataType: 'json',
             contentType: "application/json",
             data: JSON.stringify({
-                email: $('#j_username').val(),
+                username: $('#j_username').val(),
                 password: $('#j_password').val()
             }),
             success: function (response) {

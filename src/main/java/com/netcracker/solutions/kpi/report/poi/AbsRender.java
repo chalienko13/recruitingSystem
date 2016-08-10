@@ -21,8 +21,8 @@ import java.util.List;
 
 
 public abstract class AbsRender implements ReportRenderer {
-    protected Workbook wb;
     private static Logger log = LoggerFactory.getLogger(AbsRender.class.getName());
+    protected Workbook wb;
 
     private void autoSize(Sheet sheet, int columnSize) {
         if (sheet instanceof SXSSFSheet) {

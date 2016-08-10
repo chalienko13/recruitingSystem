@@ -63,9 +63,6 @@ angular.module('app', [
     };
 }).config(function ($routeProvider, $httpProvider) {
 
-    $httpProvider.interceptors.push('TokenAuthInterceptor');
-    $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
     $routeProvider
         .when('/home', {
             templateUrl: 'module/home/home.html',

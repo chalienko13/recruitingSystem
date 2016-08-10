@@ -3,6 +3,7 @@ package com.netcracker.solutions.kpi.controller.admin;
 import com.netcracker.solutions.kpi.persistence.model.Recruitment;
 import com.netcracker.solutions.kpi.service.ApplicationFormService;
 import com.netcracker.solutions.kpi.service.RecruitmentService;
+import com.netcracker.solutions.kpi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,14 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminMainController {
 
     @Autowired
-    private RecruitmentService recruitmentService;// = ServiceFactory.getRecruitmentService();
+    private RecruitmentService recruitmentService;
 
     @Autowired
-    private ApplicationFormService applicationFormService;// = ServiceFactory.getApplicationFormService();
+    private ApplicationFormService applicationFormService;
 
     @RequestMapping(value = "recruitment", method = RequestMethod.POST)
     public Recruitment getRecruitmentData() {
-        if(null == recruitmentService.getCurrentRecruitmnet()){
+        if (null == recruitmentService.getCurrentRecruitmnet()) {
             return recruitmentService.getLastRecruitment();
         }
         return recruitmentService.getCurrentRecruitmnet();

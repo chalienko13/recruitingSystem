@@ -7,7 +7,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
  */
 public class RenderXLSX extends AbsRender {
 
-	public RenderXLSX() {
-		wb = new SXSSFWorkbook();
-	}
+    public RenderXLSX() {
+        wb = new SXSSFWorkbook();
+    }
 }

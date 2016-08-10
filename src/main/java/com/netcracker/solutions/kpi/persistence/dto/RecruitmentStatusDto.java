@@ -2,39 +2,39 @@ package com.netcracker.solutions.kpi.persistence.dto;
 
 public class RecruitmentStatusDto {
 
-	private boolean recruitmentExists;
-	
-	private boolean scheduleExists;
+    private boolean recruitmentExists;
 
-	public RecruitmentStatusDto() {}
-	
-	public RecruitmentStatusDto(boolean recruitmentExists, boolean scheduleExists) {
-		this.recruitmentExists = recruitmentExists;
-		this.scheduleExists = scheduleExists;
-	}
+    private boolean scheduleExists;
 
-	public boolean isRecruitmentExists() {
-		return recruitmentExists;
-	}
+    public RecruitmentStatusDto() {
+    }
 
-	public void setRecruitmentExists(boolean recruitmentExists) {
-		this.recruitmentExists = recruitmentExists;
-	}
+    public RecruitmentStatusDto(boolean recruitmentExists, boolean scheduleExists) {
+        this.recruitmentExists = recruitmentExists;
+        this.scheduleExists = scheduleExists;
+    }
 
-	public boolean isScheduleExists() {
-		return scheduleExists;
-	}
+    public boolean isRecruitmentExists() {
+        return recruitmentExists;
+    }
 
-	public void setScheduleExists(boolean scheduleExists) {
-		this.scheduleExists = scheduleExists;
-	}
+    public void setRecruitmentExists(boolean recruitmentExists) {
+        this.recruitmentExists = recruitmentExists;
+    }
 
-	@Override
-	public String toString() {
-		return "RecruitmentStastusDto [recruitmentExists=" + recruitmentExists + ", scheduleExists=" + scheduleExists
-				+ "]";
-	}
-	
-	
-	
+    public boolean isScheduleExists() {
+        return scheduleExists;
+    }
+
+    public void setScheduleExists(boolean scheduleExists) {
+        this.scheduleExists = scheduleExists;
+    }
+
+    @Override
+    public String toString() {
+        return "RecruitmentStastusDto [recruitmentExists=" + recruitmentExists + ", scheduleExists=" + scheduleExists
+                + "]";
+    }
+
+
 }

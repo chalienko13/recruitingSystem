@@ -10,11 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 @Service
+@Transactional
 public class RecruitmentServiceImpl implements RecruitmentService {
 
     @Autowired
     private RecruitmentRepository recruitmentRepository;
-
     @Autowired
     private RecruitmentDAO recruitmentDAO;
 
@@ -27,14 +27,14 @@ public class RecruitmentServiceImpl implements RecruitmentService {
         return recruitmentRepository.findOne(id);
     }
 
-    @Override
+/*    @Override
     public Recruitment getRecruitmentByName(String name) {
         return recruitmentDAO.getRecruitmentByName(name);
-    }
+    }*/
 
     @Override
     public int updateRecruitment(Recruitment recruitment) {
-        return recruitmentDAO.updateRecruitment(recruitment);
+        return null==recruitmentRepository.save(recruitment)?0:1;
     }
 
     @Override
@@ -44,12 +44,7 @@ public class RecruitmentServiceImpl implements RecruitmentService {
 
     @Override
     public boolean addRecruitment(Recruitment recruitment) {
-        return recruitmentDAO.addRecruitment(recruitment);
-    }
-
-    @Override
-    public int deleteRecruitment(Recruitment recruitment) {
-        return recruitmentDAO.deleteRecruitment(recruitment);
+        return recruitmentRepository.save(recruitment) == null;
     }
 
     @Override
@@ -57,18 +52,18 @@ public class RecruitmentServiceImpl implements RecruitmentService {
         return recruitmentRepository.findAll();
     }
 
-	@Override
-	public Recruitment getCurrentRecruitmnet() {
-		return recruitmentDAO.getCurrentRecruitmnet();
-	}
+    @Override
+    public Recruitment getCurrentRecruitmnet() {
+        return recruitmentRepository.getCurrent();
+    }
 
-	@Override
-	public List<Recruitment> getAllSorted() {
-		return recruitmentDAO.getAllSorted();
-	}
+    @Override
+    public List<Recruitment> getAllSorted() {
+        return recruitmentDAO.getAllSorted();
+    }
 
     @Override
     public Recruitment getLastRecruitment() {
-        return recruitmentDAO.getLastRecruitment();
+        return  recruitmentRepository.findLast();
     }
 }

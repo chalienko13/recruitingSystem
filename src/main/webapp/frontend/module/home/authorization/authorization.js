@@ -7,8 +7,8 @@ angular.module('appAuthorization', ['angular-loading-bar'])
     .factory('TokenStorage', function ($rootScope) {
         var storageTokenLP = 'auth-tokenLP';
         var storageTokenSN = 'auth-tokenSN';
-        
-        
+
+
         return {
             store: function (token, title) {
                 $rootScope.authenticated = true;
@@ -17,7 +17,7 @@ angular.module('appAuthorization', ['angular-loading-bar'])
                 }else if (title === 'X-AUTH-TOKEN_SOCIAL') {
                     return localStorage.setItem(storageTokenSN, token);
                 }
-                
+
             },
             retrieve: function () {
                 if (localStorage.getItem(storageTokenLP) != undefined){
@@ -34,7 +34,7 @@ angular.module('appAuthorization', ['angular-loading-bar'])
                 $rootScope.id = null;
                 localStorage.removeItem(storageTokenSN);
                 return localStorage.removeItem(storageTokenLP);
-                
+
             }
         };
     }).factory('TokenAuthInterceptor', function ($q, TokenStorage, $location) {
@@ -67,7 +67,7 @@ angular.module('appAuthorization', ['angular-loading-bar'])
     };
 });
 VK.init(function() {
-    apiId:5484909   
+    apiId:5484909
 }, function() {
 
 }, '5.52');
@@ -80,11 +80,3 @@ window.fbAsyncInit = function() {
     });
 };
 
-
-(function(d, s, id){
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) {return;}
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));

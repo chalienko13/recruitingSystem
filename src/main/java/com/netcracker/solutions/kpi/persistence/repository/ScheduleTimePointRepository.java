@@ -9,5 +9,5 @@ import javax.jdo.annotations.Transactional;
 import java.util.ArrayList;
 
 @Repository
-public interface ScheduleTimePointRepository extends JpaRepository<ScheduleTimePoint, Long>{
+public interface ScheduleTimePointRepository extends JpaRepository<ScheduleTimePoint, Long> {
 }

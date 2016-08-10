@@ -1,10 +1,8 @@
 package com.netcracker.solutions.kpi.persistence.repository;
 
 import com.netcracker.solutions.kpi.persistence.model.Recruitment;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,4 +16,10 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Long> 
     void updateTimeInterviewTechAndSoft( short timeInterviewTech,
                                          short timeInterviewSoft,
                                          long recruitmentId);
+}
+    @Query(value = "SELECT * FROM recruitment ORDER BY id DESC LIMIT 1", nativeQuery = true)
+    Recruitment findLast();
+
+    @Query(value = "SELECT * FROM recruitment WHERE end_date > CURRENT_DATE", nativeQuery = true)
+    Recruitment getCurrent();
 }

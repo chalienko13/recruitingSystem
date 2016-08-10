@@ -1,6 +1,5 @@
 package com.netcracker.solutions.kpi.service.impl;
 
-import com.netcracker.solutions.kpi.persistence.dao.RoleDao;
 import com.netcracker.solutions.kpi.persistence.model.ApplicationForm;
 import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.User;
@@ -9,12 +8,13 @@ import com.netcracker.solutions.kpi.persistence.repository.RoleRepository;
 import com.netcracker.solutions.kpi.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 @Service
+@Transactional
 public class RoleServiceImpl implements RoleService {
 
     @Autowired
@@ -35,18 +35,13 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.findAll();
     }
 
-    @Override
-    public void deleteRole(Role role) {
-        roleRepository.delete(role);
-    }
-
     public boolean isInterviewerRole(Role role) {
         return RoleEnum.ROLE_SOFT.name().equals(role.getRoleName()) || RoleEnum.ROLE_TECH.name().equals(role.getRoleName());
     }
 
     @Override
     public List<Role> getPossibleInterviewsRoles(ApplicationForm applicationForm, User interviewer) {
-        if(applicationForm != null && interviewer != null) {
+        if (applicationForm != null && interviewer != null) {
             return roleRepository.getPossibleInterviewsRoles(interviewer.getId(), applicationForm.getId());
         }
         return Collections.emptyList();

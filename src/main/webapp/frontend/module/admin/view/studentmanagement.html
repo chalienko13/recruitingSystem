@@ -10,25 +10,27 @@
     <div class="col-md-12 col-sm-12 left-info-col">
         <div>
             <div class="row">
+                <div class="col-md-2"><h6><i>Registered: {{registered}}</i></h6></div>
+                <div class="col-md-2"><h6><i>Approved to interview: {{approvedToInterview}}</i></h6></div>
                 <div class="col-md-2"><h6><i>Approved to work: {{approvedToWork}}</i></h6></div>
                 <div class="col-md-2"><h6><i>Approved to advanced: {{approvedToAdvanced}}</i></h6></div>
                 <div class="col-md-2"><h6><i>Approved to general: {{approvedToGeneral}}</i></h6></div>
                 <div class="col-md-2"><h6><i>Rejected: {{rejected}}</i></h6></div>
             </div>
             <div class="row">
-                <button type="button"  ng-disabled="!recruitmentStatus.recruitmentExists || recruitmentStatus.scheduleExists" ng-click="confirmSelectionInfo()" class="btn btn-info search-element col-md-1" data-toggle="modal" data-target="#confirmSelection">
-                    Confirm selection
-                </button>
-                
-                <button type="button" ng-disabled="!recruitmentStatus.recruitmentExists || !recruitmentStatus.scheduleExists" ng-click="announceResults()" class="btn btn-info search-element col-md-1">Announce results
-                </button>
+                <!--                <button type="button"  ng-disabled="!recruitmentStatus.recruitmentExists || recruitmentStatus.scheduleExists" ng-click="confirmSelectionInfo()" class="btn btn-info search-element col-md-1" data-toggle="modal" data-target="#confirmSelection">
+                                    Confirm selection
+                                </button>
+                                -->
+                <!--                <button type="button" ng-disabled="!recruitmentStatus.recruitmentExists || !recruitmentStatus.scheduleExists" ng-click="announceResults()" class="btn btn-info search-element col-md-1">Announce results
+                                </button>-->
                 <button type="button" ng-disabled="!recruitmentStatus.recruitmentExists || !recruitmentStatus.scheduleExists" ng-click="calculateStatuses()" class="btn btn-info search-element col-md-1">Calculate statuses
                 </button>
-            <button ng-click="showFiltration()" class="btn btn-info col-md-1 col-md-offset-7" type="button"
-                    data-toggle="modal"
-                    data-target="#filtration">
-                Filter table
-            </button>
+                <button ng-click="showFiltration()" class="btn btn-info col-md-1 col-md-offset-7" type="button"
+                        data-toggle="modal"
+                        data-target="#filtration">
+                    Filter table
+                </button>
             </div>
             <br>
             <div class="row">
@@ -44,16 +46,16 @@
                     entries
                 </div>
                 <div class="col-md-5 col-md-offset-2">
-                <select ng-model="statusSelect" ng-change="showSelectStatusValue(statusSelect)">
-                    <option ng-repeat="st in statusTemp">{{st.title}}</option>
-                </select>
+                    <select ng-model="statusSelect" ng-change="showSelectStatusValue(statusSelect)">
+                        <option ng-repeat="st in statusTemp">{{st.title}}</option>
+                    </select>
                     <button type="button" ng-click="applyStatus()" class="btn btn-info search-element">Apply Status to checked</button>
-                    </div>
-                    <div class="col-md-3 info-text search-block">Search:
+                </div>
+                <div class="col-md-3 info-text search-block">Search:
                     <input ng-model-options="{ debounce: 1000 }"
                            ng-model="studentName" ng-change="searchStudent(studentName)">
-                    </div>
                 </div>
+            </div>
             <table class="table table-condensed table-hover col-md-8">
                 <thead class="table-head">
                 <tr><th class ='student-check'>
@@ -109,92 +111,92 @@
         </div>
     </div>
 
-<div id="filtration" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button class="close" type="button" data-dismiss="modal"><span
-                        class="glyphicon glyphicon-remove"></span></button>
-                <h4 class="modal-title">Filtration</h4>
+    <div id="filtration" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal"><span
+                            class="glyphicon glyphicon-remove"></span></button>
+                    <h4 class="modal-title">Filtration</h4>
 
-                <div>
-                    <p>Choose appropriate parameters:</p>
-                </div>
-                <table class="table table-hover table-condensed">
-                    <thead>
-                    <tr>
-                        <th>Field</th>
-                        <th>Restriction</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>
-                        Active
-                        </td>
-                        <td>
-                            <p>
-                                <input type="checkbox" ng-model="isActive">
-                            </p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Status
-                        </td>
-                        <td>
+                    <div>
+                        <p>Choose appropriate parameters:</p>
+                    </div>
+                    <table class="table table-hover table-condensed">
+                        <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Restriction</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                Active
+                            </td>
+                            <td>
+                                <p>
+                                    <input type="checkbox" ng-model="isActive">
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Status
+                            </td>
+                            <td>
                             <span ng-repeat="st in statuses track by $index">
                                 <p>
                                     <input type="checkbox" ng-checked="existsItem(st, statusesChoosen)"
                                            ng-click="toggleItem(st, statusesChoosen)">{{st.title}}
                                 </p>
                             </span>
-                        </td>
-                    </tr>
-                    <tr ng-repeat="question in questions">
-                        <td>{{question.title}}</td>
-                        <td>
+                            </td>
+                        </tr>
+                        <tr ng-repeat="question in questions">
+                            <td>{{question.title}}</td>
+                            <td>
                                 <span ng-repeat="variant in question.variants track by $index ">
                                     <p>
                                         <input type="checkbox" ng-checked="exists(variant, question)"
                                                ng-click="toggle(variant, question)"> {{variant.variant}}
                                     </p>
                                 </span>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-info" type="button" data-dismiss="modal" ng-click="filter()">Filter</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-info" type="button" data-dismiss="modal" ng-click="filter()">Filter</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div id="confirmSelection" class="modal fade">
-<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button class="close" type="button" data-dismiss="modal">
-					<span class="glyphicon glyphicon-remove"></span>
-				</button>
-				<h4 class="modal-title">Confirming selection</h4></div>
-				<div class="modal-body">
-				 	<h2>Confirm selection of {{approved}} students.</h2>
-				 	<h3>You have chosen next time points in schedule:</h3>
-				 	<div style="padding-left:50px">
-				 	<ul>
-				 	<li  ng-repeat="dayPoint in timePoints">{{dayPoint.dayPoint | date:'yyyy-MM-dd HH:mm'}}</li>
-				 	</ul></div>
-					<button type="button"
-						ng-disabled="!recruitmentStatus.recruitmentExists || recruitmentStatus.scheduleExists"
-						ng-click="confirmSelection()"
-						class="btn btn-info search-element">
-						Confirm</button>
-				</div>
-			
-		</div>
-	</div>
-</div>
+    <div id="confirmSelection" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" type="button" data-dismiss="modal">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                    <h4 class="modal-title">Confirming selection</h4></div>
+                <div class="modal-body">
+                    <h2>Confirm selection of {{approved}} students.</h2>
+                    <h3>You have chosen next time points in schedule:</h3>
+                    <div style="padding-left:50px">
+                        <ul>
+                            <li  ng-repeat="timePoint in timePoints">{{timePoint.timePoint | date:'yyyy-MM-dd HH:mm'}}</li>
+                        </ul></div>
+                    <button type="button"
+                            ng-disabled="!recruitmentStatus.recruitmentExists || recruitmentStatus.scheduleExists"
+                            ng-click="confirmSelection()"
+                            class="btn btn-info search-element">
+                        Confirm</button>
+                </div>
 
-<div app-footer></div>
+            </div>
+        </div>
+    </div>
+
+    <div app-footer></div>

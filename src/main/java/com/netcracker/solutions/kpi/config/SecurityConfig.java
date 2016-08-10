@@ -1,11 +1,7 @@
 package com.netcracker.solutions.kpi.config;
 
-import com.netcracker.solutions.kpi.controller.auth.*;
-import com.netcracker.solutions.kpi.filter.SocialLoginFilter;
-import com.netcracker.solutions.kpi.filter.StatelessAuthenticationFilter;
-import com.netcracker.solutions.kpi.filter.StatelessLoginFilter;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,101 +9,89 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
-import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+
 
 @Configuration
 @EnableWebSecurity
 @ComponentScan(basePackages = "com.netcracker.solutions.kpi")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private static final String SECRET_KEY = "verySecret";
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Autowired
-    private LoginPasswordAuthenticationManager loginPasswordAuthenticationManager;// = LoginPasswordAuthenticationManager.getInstance();
-
-    @Autowired
-    private SocialNetworkAuthenticationManager socialNetworkAuthenticationManager;// = SocialNetworkAuthenticationManager.getInstance();
-
-    @Autowired
-    private AuthenticationSuccessHandler authenticationSuccessHandler;// = AuthenticationSuccessHandlerService.getInstance();
-
-    @Autowired
-    private UserAuthServiceLoginPassword userAuthServiceLoginPassword;// = UserAuthServiceLoginPassword.getInstance();
-
-    @Autowired
-    @Qualifier("TokenHandlerLoginPassword")
-    private TokenHandler tokenHandlerLoginPassword;// = TokenHandlerLoginPassword.getInstance();
-
-    @Autowired
-    @Qualifier("TokenHandlerSocial")
-    private TokenHandler tokenHandlerSocial;// = TokenHandlerSocial.getInstance();
-
-    @Autowired
-    private AuthenticationSuccessHandlerService authenticationSuccessHandlerService;
-
-    private TokenAuthenticationService tokenAuthenticationServiceLoginPassword;
-
-    private TokenAuthenticationService tokenAuthenticationServiceSocial;
-
-    @PostConstruct
-    public void init() {
-        tokenAuthenticationServiceLoginPassword = new TokenAuthenticationService(tokenHandlerLoginPassword);
-        tokenAuthenticationServiceSocial = new TokenAuthenticationService(tokenHandlerSocial);
+    public void registerGlobalAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordencoder());
     }
 
+    @Autowired
+    private AuthenticationSuccessHandler successHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http
+        http.csrf().csrfTokenRepository(csrfTokenRepository())
+                .and()
                 .authorizeRequests()
                 .antMatchers("/home").anonymous()
-
                 .and()
                 .authorizeRequests()
                 .antMatchers("/frontend/module/admin/view/**").hasRole("ADMIN")
                 .antMatchers("**/reports/**").hasRole("ADMIN")
 
-                .and()
-                .authorizeRequests()
+
                 .antMatchers("/frontend/module/student/view/**").hasRole("STUDENT")
                 .antMatchers("/student/appform/**").permitAll()
                 .antMatchers("/student/**").hasRole("STUDENT")
 
-                .and()
-                .authorizeRequests()
+
                 .antMatchers("/frontend/module/staff/view/**").hasAnyRole("SOFT", "TECH")
                 .antMatchers("/staff/appForm/**").permitAll()
                 .antMatchers("/staff/**").hasAnyRole("SOFT", "TECH")
-
                 .and()
+                .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
 
-                .addFilterBefore(new StatelessAuthenticationFilter(tokenAuthenticationServiceLoginPassword,
-                        tokenAuthenticationServiceSocial),
-                        UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new StatelessLoginFilter("/loginIn", tokenAuthenticationServiceLoginPassword,
-                        loginPasswordAuthenticationManager, authenticationSuccessHandler, authenticationSuccessHandlerService),
-                        UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new SocialLoginFilter(new AntPathRequestMatcher("/socialAuth/**"),
-                        socialNetworkAuthenticationManager,
-                        authenticationSuccessHandler,
-                        tokenAuthenticationServiceSocial),
-                        UsernamePasswordAuthenticationFilter.class)
+        http
+                .csrf().csrfTokenRepository(csrfTokenRepository())
+                .and()
+                .formLogin()
+                .loginPage("/")
+                .loginProcessingUrl("/j_spring_security_check")
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .successHandler(successHandler)
+                .failureUrl("/login?error")
+                .permitAll()
+                .and()
+                .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
 
 
-                .exceptionHandling().and()
-                .csrf().disable()
-                .servletApi().and()
-                .headers().cacheControl();
+        http.logout()
+                .permitAll()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout")
+                .invalidateHttpSession(true);
+
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userAuthServiceLoginPassword).passwordEncoder(new BCryptPasswordEncoder());
+    private CsrfTokenRepository csrfTokenRepository() {
+        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+        repository.setHeaderName("X-XSRF-TOKEN");
+        return repository;
     }
+
+    @Bean(name = "passwordEncoder")
+    public PasswordEncoder passwordencoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 }

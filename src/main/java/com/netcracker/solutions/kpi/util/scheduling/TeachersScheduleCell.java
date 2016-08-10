@@ -1,8 +1,5 @@
 package com.netcracker.solutions.kpi.util.scheduling;
 
-/**
- * Created by natalya on 14.05.2016.
- */
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -21,10 +18,6 @@ public class TeachersScheduleCell {
 
     public ArrayList<User> getTeachers() {
         return teachers;
-    }
-
-    public void setTeachers(ArrayList<User> teachers) {
-        this.teachers = teachers;
     }
 
     @Override

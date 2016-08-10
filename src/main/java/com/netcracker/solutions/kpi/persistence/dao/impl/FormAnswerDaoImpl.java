@@ -8,42 +8,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.util.List;
 
 @Repository
 public class FormAnswerDaoImpl implements FormAnswerDao {
 
-    @Autowired
-    private JdbcDaoSupport jdbcDaoSupport;
-
-    private ResultSetExtractor<FormAnswer> extractor = resultSet -> {
-        FormAnswer formAnswer = new FormAnswer();
-        formAnswer.setId(resultSet.getLong(ID_COL));
-        formAnswer.setAnswer(resultSet.getString(ANSWER_COL));
-        formAnswer.setInterview(new Interview(resultSet.getLong(ID_INTERVIEW_COL)));
-        formAnswer.setApplicationForm(new ApplicationForm(resultSet.getLong(ID_APPLICATION_FORM_COL)));
-        long answerVariantId = resultSet.getLong(ID_VARIANT_COL);
-        if (answerVariantId != 0)
-            formAnswer.setFormAnswerVariant(new FormAnswerVariant(resultSet.getLong(ID_VARIANT_COL)));
-        formAnswer.setFormQuestion(new FormQuestion(resultSet.getLong(ID_QUESTION_COL)));
-        return formAnswer;
-    };
-
     static final String TABLE_NAME = "form_answer";
-
     static final String ID_COL = "id";
     static final String ANSWER_COL = "answer";
     static final String ID_QUESTION_COL = "id_question";
     static final String ID_VARIANT_COL = "id_variant";
     static final String ID_INTERVIEW_COL = "id_interview";
     static final String ID_APPLICATION_FORM_COL = "id_application_form";
-
     private static final String SQL_GET = "SELECT fa." + ID_COL + ", fa." + ANSWER_COL + ", fa." + ID_QUESTION_COL
             + ", fa." + ID_APPLICATION_FORM_COL + ", fa." + ID_VARIANT_COL + ", fa." + ID_INTERVIEW_COL + " FROM "
             + TABLE_NAME + " fa";
-
     private static final String SQL_GET_BY_ID = SQL_GET + " WHERE fa." + ID_COL + " = ?;";
     private static final String SQL_GET_BY_INTERVIEW_AND_QUESTION = SQL_GET + " WHERE fa." + ID_INTERVIEW_COL
             + "= ? and  fa." + ID_QUESTION_COL + " = ?;";
@@ -62,6 +42,20 @@ public class FormAnswerDaoImpl implements FormAnswerDao {
     private static final String SQL_DELETE_NOT_PRESENTED_APP_FORM = "DELETE FROM " + TABLE_NAME + " WHERE " + ID_APPLICATION_FORM_COL + " = ? ";
     private static final String SQL_DELETE_NOT_PRESENTED_INTERVIEW = "DELETE FROM " + TABLE_NAME + " WHERE " + ID_INTERVIEW_COL + " = ? ";
     private static Logger log = LoggerFactory.getLogger(FormAnswerDaoImpl.class.getName());
+    @Autowired
+    private JdbcDaoSupport jdbcDaoSupport;
+    private ResultSetExtractor<FormAnswer> extractor = resultSet -> {
+        FormAnswer formAnswer = new FormAnswer();
+        formAnswer.setId(resultSet.getLong(ID_COL));
+        formAnswer.setAnswer(resultSet.getString(ANSWER_COL));
+        formAnswer.setInterview(new Interview(resultSet.getLong(ID_INTERVIEW_COL)));
+        formAnswer.setApplicationForm(new ApplicationForm(resultSet.getLong(ID_APPLICATION_FORM_COL)));
+        long answerVariantId = resultSet.getLong(ID_VARIANT_COL);
+        if (answerVariantId != 0)
+            formAnswer.setFormAnswerVariant(new FormAnswerVariant(resultSet.getLong(ID_VARIANT_COL)));
+        formAnswer.setFormQuestion(new FormQuestion(resultSet.getLong(ID_QUESTION_COL)));
+        return formAnswer;
+    };
 
     @Override
     public FormAnswer getById(Long id) {
@@ -153,36 +147,36 @@ public class FormAnswerDaoImpl implements FormAnswerDao {
                 formAnswer.getFormQuestion().getId(), variant != null ? variant.getId() : null, formAnswer.getInterview().getId());
     }
 
-	@Override
-	public void deleteNotPresented(List<FormAnswer> presentedAnswers, ApplicationForm applicationForm,
-			Connection connection) {
-		log.trace("Deleting form answers from appliction form {}", applicationForm.getId());
-		String sql = getDeleteNotPresentedSql(SQL_DELETE_NOT_PRESENTED_APP_FORM, presentedAnswers);
-		jdbcDaoSupport.getJdbcTemplate().update(sql, connection, applicationForm.getId());
-	}
+    @Override
+    public void deleteNotPresented(List<FormAnswer> presentedAnswers, ApplicationForm applicationForm,
+                                   Connection connection) {
+        log.trace("Deleting form answers from appliction form {}", applicationForm.getId());
+        String sql = getDeleteNotPresentedSql(SQL_DELETE_NOT_PRESENTED_APP_FORM, presentedAnswers);
+        jdbcDaoSupport.getJdbcTemplate().update(sql, connection, applicationForm.getId());
+    }
 
-	@Override
-	public void deleteNotPresented(List<FormAnswer> presentedAnswers, Interview interview, Connection connection) {
-		log.trace("Deleting form answers from interview {}", interview.getId());
-		String sql = getDeleteNotPresentedSql(SQL_DELETE_NOT_PRESENTED_INTERVIEW, presentedAnswers);
-		jdbcDaoSupport.getJdbcTemplate().update(sql, connection, interview.getId());
-	}
-	
-	private String getDeleteNotPresentedSql(String startSql, List<FormAnswer> presentedAnswers) {
-		if(!presentedAnswers.isEmpty()) {
-			StringBuilder notInQuery = new StringBuilder(" AND " + ID_COL + " NOT IN (");
-			int i = 0;
-			for(FormAnswer formAnswer : presentedAnswers ) {
-				if (formAnswer.getId() != null) {
-					if (i++ == 0)
-						notInQuery.append(Long.toString(formAnswer.getId()));
-					else
-						notInQuery.append("," + formAnswer.getId());
-				}
-			}
-			notInQuery.append(')');
-			startSql += notInQuery;
-		}	
-		return startSql;
-	}
+    @Override
+    public void deleteNotPresented(List<FormAnswer> presentedAnswers, Interview interview, Connection connection) {
+        log.trace("Deleting form answers from interview {}", interview.getId());
+        String sql = getDeleteNotPresentedSql(SQL_DELETE_NOT_PRESENTED_INTERVIEW, presentedAnswers);
+        jdbcDaoSupport.getJdbcTemplate().update(sql, connection, interview.getId());
+    }
+
+    private String getDeleteNotPresentedSql(String startSql, List<FormAnswer> presentedAnswers) {
+        if (!presentedAnswers.isEmpty()) {
+            StringBuilder notInQuery = new StringBuilder(" AND " + ID_COL + " NOT IN (");
+            int i = 0;
+            for (FormAnswer formAnswer : presentedAnswers) {
+                if (formAnswer.getId() != null) {
+                    if (i++ == 0)
+                        notInQuery.append(Long.toString(formAnswer.getId()));
+                    else
+                        notInQuery.append("," + formAnswer.getId());
+                }
+            }
+            notInQuery.append(')');
+            startSql += notInQuery;
+        }
+        return startSql;
+    }
 }

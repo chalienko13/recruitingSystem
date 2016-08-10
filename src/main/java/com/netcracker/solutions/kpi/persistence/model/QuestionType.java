@@ -24,7 +24,6 @@ public class QuestionType implements Serializable {
     private FormQuestion formQuestion;
 
 
-
     public QuestionType() {
     }
 
@@ -41,16 +40,16 @@ public class QuestionType implements Serializable {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getTypeTitle() {
         return typeTitle;
     }
 
     public void setTypeTitle(String typeTitle) {
         this.typeTitle = typeTitle;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public FormQuestion getFormQuestion() {

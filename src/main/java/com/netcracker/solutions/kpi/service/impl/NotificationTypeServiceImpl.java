@@ -5,18 +5,16 @@ import com.netcracker.solutions.kpi.persistence.model.NotificationType;
 import com.netcracker.solutions.kpi.service.NotificationTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
 @Service
+@Transactional
 public class NotificationTypeServiceImpl implements NotificationTypeService {
 
     @Autowired
     private NotificationTypeDao notificationTypeDao;
-
-    /*public NotificationTypeServiceImpl(NotificationTypeDao notificationTypeDao) {
-        this.notificationTypeDao = notificationTypeDao;
-    }*/
 
     @Override
     public NotificationType getById(Long id) {
@@ -26,16 +24,6 @@ public class NotificationTypeServiceImpl implements NotificationTypeService {
     @Override
     public NotificationType getByTitle(String title) {
         return notificationTypeDao.getByTitle(title);
-    }
-
-    @Override
-    public int updateNotificationType(NotificationType notificationType) {
-        return notificationTypeDao.updateNotificationType(notificationType);
-    }
-
-    @Override
-    public int deleteNotificationType(NotificationType notificationType) {
-        return notificationTypeDao.deleteNotificationType(notificationType);
     }
 
     @Override

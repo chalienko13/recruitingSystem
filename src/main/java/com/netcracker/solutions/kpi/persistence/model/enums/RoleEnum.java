@@ -1,6 +1,5 @@
 package com.netcracker.solutions.kpi.persistence.model.enums;
 
-import com.netcracker.solutions.kpi.controller.auth.UserAuthority;
 import com.netcracker.solutions.kpi.persistence.model.Role;
 
 public enum RoleEnum {
@@ -12,15 +11,15 @@ public enum RoleEnum {
         this.id = id;
     }
 
-    public static RoleEnum valueOf(final UserAuthority authority) {
-        switch (authority.getAuthority()) {
-            case "ROLE_ADMIN":
-                return ROLE_ADMIN;
-            case "ROLE_STUDENT":
-                return ROLE_STUDENT;
-        }
-        throw new IllegalArgumentException("No role defined for user: " + authority.getAuthority());
-    }
+//    public static RoleEnum valueOf(final UserAuthority authority) {
+//        switch (authority.getAuthority()) {
+//            case "ROLE_ADMIN":
+//                return ROLE_ADMIN;
+//            case "ROLE_STUDENT":
+//                return ROLE_STUDENT;
+//        }
+//        throw new IllegalArgumentException("No role defined for user: " + authority.getAuthority());
+//    }
 
     public static String valueOf(RoleEnum role) {
         switch (role) {

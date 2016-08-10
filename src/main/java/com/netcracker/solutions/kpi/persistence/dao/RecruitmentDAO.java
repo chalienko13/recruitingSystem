@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by Vova on 21.04.2016.
  */
-public interface RecruitmentDAO  {
+public interface RecruitmentDAO {
 
     Recruitment getRecruitmentById(Long id);
 
@@ -21,11 +21,9 @@ public interface RecruitmentDAO  {
 
     List<Recruitment> getAll();
 
-	Recruitment getCurrentRecruitmnet();
+    Recruitment getCurrentRecruitmnet();
 
-	List<Recruitment> getAllSorted();
-
-    Recruitment getLastRecruitment();
+    List<Recruitment> getAllSorted();
 
 
 }

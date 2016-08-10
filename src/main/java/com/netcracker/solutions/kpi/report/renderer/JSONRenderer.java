@@ -8,12 +8,12 @@ import java.io.PrintStream;
 
 public class JSONRenderer implements ReportRenderer {
 
-	@Override
-	public void render(Report report, OutputStream out) {
-		Gson gson = new Gson();
-		PrintStream printStream = new PrintStream(out);
-		printStream.print(gson.toJson(report));
-		printStream.flush();
-	}
+    @Override
+    public void render(Report report, OutputStream out) {
+        Gson gson = new Gson();
+        PrintStream printStream = new PrintStream(out);
+        printStream.print(gson.toJson(report));
+        printStream.flush();
+    }
 
 }

@@ -1,30 +1,27 @@
 package com.netcracker.solutions.kpi.config;
 
-import org.hibernate.ejb.HibernatePersistence;
+import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.annotation.Resource;
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
-@PropertySource("classpath:app.properties")
+@PropertySource("classpath:/app.properties")
 @ComponentScan("com.netcracker.solutions.kpi")
 @EnableJpaRepositories("com.netcracker.solutions.kpi")
-//@EnableSpringConfigured
 public class DataConfig {
 
     private static final String DATABASE_DRIVER_PROP = "db.driver";
@@ -37,6 +34,7 @@ public class DataConfig {
     private static final String HIBERNATE_DIALECT_PROP = "db.hibernate.dialect";
     private static final String HIBERNATE_SHOW_SQL_PROP = "db.hibernate.show_sql";
     private static final String HIBERNATE_HBM2DDL_AUTO_PROP = "db.hibernate.hbm2ddl.auto";
+    private static final String HIBERNATE_FLUSH_MODE_PROP = "db.org.hibernate.flushMode";
 
     @Resource
     private Environment env;
@@ -49,7 +47,6 @@ public class DataConfig {
         dataSource.setUrl(env.getRequiredProperty(DATABASE_URL_PROP));
         dataSource.setUsername(env.getRequiredProperty(DATABASE_USERNAME_PROP));
         dataSource.setPassword(env.getRequiredProperty(DATABASE_PASSWD_PROP));
-        //dataSource.setConnectionProperties();
 
         return dataSource;
     }
@@ -58,30 +55,15 @@ public class DataConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(dataSource());
-        entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistence.class);
+        entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
         entityManagerFactoryBean.setPackagesToScan(ENTITY_PACKAGES);
-
         entityManagerFactoryBean.setJpaProperties(getHibernateProperties());
 
         return entityManagerFactoryBean;
     }
 
-//    @Bean
-//    public LocalSessionFactoryBean sessionFactory() {
-//        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-//        sessionFactory.setDataSource(dataSource());
-//        sessionFactory.setPackagesToScan(ENTITY_PACKAGES);
-//        sessionFactory.setHibernateProperties(getHibernateProperties());
-//
-//        return sessionFactory;
-//    }
-
     @Bean
     public JpaTransactionManager transactionManager() {
-//        JpaTransactionManager transactionManager = new JpaTransactionManager();
-//        transactionManager.setEntityManagerFactory((EntityManagerFactory) sessionFactory().getObject());
-//
-//        return transactionManager;
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
 
@@ -93,12 +75,8 @@ public class DataConfig {
         hiberProps.put(HIBERNATE_DIALECT_PROP, env.getRequiredProperty(HIBERNATE_DIALECT_PROP));
         hiberProps.put(HIBERNATE_SHOW_SQL_PROP, env.getRequiredProperty(HIBERNATE_SHOW_SQL_PROP));
         hiberProps.put(HIBERNATE_HBM2DDL_AUTO_PROP, env.getProperty(HIBERNATE_HBM2DDL_AUTO_PROP));
-
+        //hiberProps.put(HIBERNATE_FLUSH_MODE_PROP, env.getProperty(HIBERNATE_FLUSH_MODE_PROP));
+        hiberProps.put("hibernate.enable_lazy_load_no_trans", "true");
         return hiberProps;
-    }
-
-    private Properties getConnectionProperties() {
-        Properties conProps = new Properties();
-        return  conProps;
     }
 }

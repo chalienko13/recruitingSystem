@@ -15,4 +15,4 @@ public interface SchedulingSettingsDao {
     int deleteAll();
 
     List<SchedulingSettings> getAll();
- }
+}

@@ -2,22 +2,19 @@ package com.netcracker.solutions.kpi.persistence.dao.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.GenericDAO;
 import org.hibernate.SessionFactory;
-//import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.io.Serializable;
 import java.util.*;
 
-@Repository
-public abstract class GenericHibernateDAO <T, PK extends Serializable> extends HibernateDaoSupport implements GenericDAO <T, PK>{
+//import org.hibernate.query.Query;
 
-    @Autowired
-    public void injectSessionFactory(SessionFactory sessionFactory) {
-        setSessionFactory(sessionFactory);
-    }
+@Repository
+public abstract class GenericHibernateDAO<T, PK extends Serializable> extends HibernateDaoSupport implements GenericDAO<T, PK> {
 
     private Class<T> type;
 
@@ -25,17 +22,17 @@ public abstract class GenericHibernateDAO <T, PK extends Serializable> extends H
         this.type = type;
     }
 
-    @Override
-    public void create(T newInstance) {
-        getHibernateTemplate().persist(newInstance);
-    }
+   /* @Autowired
+    public void injectSessionFactory(SessionFactory sessionFactory) {
+        setSessionFactory(sessionFactory);
+    }*/
 
     @Override
     public T getByID(PK id) {
         return getHibernateTemplate().get(type, id);
     }
 
-    @Override
+    @Transactional(readOnly = false)
     public void update(T transientObject) {
         getHibernateTemplate().update(transientObject);
     }
@@ -53,7 +50,7 @@ public abstract class GenericHibernateDAO <T, PK extends Serializable> extends H
     @Override
     public Set<T> getAllUnique() {
         List<T> allEntities = getAll();
-        if(!CollectionUtils.isEmpty(allEntities)) {
+        if (!CollectionUtils.isEmpty(allEntities)) {
             Set<T> uniqueEntities = new HashSet<>();
             uniqueEntities.addAll(allEntities);
 

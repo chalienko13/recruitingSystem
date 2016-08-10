@@ -33,17 +33,17 @@ public interface ApplicationFormDao {
 
     Long getCountAdvancedAppForm();
 
-	ApplicationForm getCurrentApplicationFormByUserId(Long id);
+    ApplicationForm getCurrentApplicationFormByUserId(Long id);
 
     List<ApplicationForm> getOldApplicationFormsByUserId(Long id);
 
-	ApplicationForm getLastApplicationFormByUserId(Long id);
+    ApplicationForm getLastApplicationFormByUserId(Long id);
 
-	List<ApplicationForm> getByInterviewer(User interviewer);
+    List<ApplicationForm> getByInterviewer(User interviewer);
 
-	boolean isAssignedForThisRole(ApplicationForm applicationForm, Role role);
+    boolean isAssignedForThisRole(ApplicationForm applicationForm, Role role);
 
-    int changeCurrentsAppFormStatus(Long fromIdStatus,Long toIdStatus);
+    int changeCurrentsAppFormStatus(Long fromIdStatus, Long toIdStatus);
 
     Long getCountRecruitmentStudents(Long id);
 
@@ -61,13 +61,13 @@ public interface ApplicationFormDao {
 
     Long getCountInReviewAppForm();
 
-	List<ApplicationForm> getByStatusAndRecruitment(Status status, Recruitment recruitment);
+    List<ApplicationForm> getByStatusAndRecruitment(Status status, Recruitment recruitment);
 
     List<ApplicationForm> getByRecruitment(Recruitment recruitment);
 
-	List<ApplicationForm> getRejectedAfterInterview(Recruitment recruitment);
+    List<ApplicationForm> getRejectedAfterInterview(Recruitment recruitment);
 
-	Long getCountApprovedAppForm();
+    Long getCountApprovedAppForm();
 
-	int updateApplicationForm(ApplicationForm applicationForm, Connection connection);
+    int updateApplicationForm(ApplicationForm applicationForm, Connection connection);
 }

@@ -26,21 +26,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin")
 public class AdminReportsController {
-    private static Logger log = LoggerFactory.getLogger(AdminReportsController.class.getName());
-
     private static final String CONTENT_DISPOSITION_NAME = "Content-Disposition";
     private static final String JSON_MIME_TYPE = "application/json";
     private static final String XLS_MIME_TYPE = "application/vnd.ms-excel";
     private static final String XLSX_MIME_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    private static Logger log = LoggerFactory.getLogger(AdminReportsController.class.getName());
+    @Autowired
+    private ReportService service;
 
     @Autowired
-    private ReportService service;// = ServiceFactory.getReportService();
+    private FormQuestionService questionService;
 
     @Autowired
-    private FormQuestionService questionService;// = ServiceFactory.getFormQuestionService();
-
-    @Autowired
-    private RoleService roleService;// = ServiceFactory.getRoleService();
+    private RoleService roleService;
 
     @RequestMapping(value = "reports/approved.{format}", method = RequestMethod.GET)
     public void generateReportOfApproved(@PathVariable String format, HttpServletResponse response) {

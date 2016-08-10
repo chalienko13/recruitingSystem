@@ -1,39 +1,30 @@
 package com.netcracker.solutions.kpi.util.export;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.*;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 import com.netcracker.solutions.kpi.config.PropertiesReader;
 import com.netcracker.solutions.kpi.persistence.model.*;
 import com.netcracker.solutions.kpi.persistence.model.enums.FormQuestionTypeEnum;
-import com.netcracker.solutions.kpi.service.FormAnswerService;
-import com.netcracker.solutions.kpi.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.netcracker.solutions.kpi.service.*;
+import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 
 @Service
 public class ExportApplicationFormImp implements ExportApplicationForm {
-    private static Logger log = LoggerFactory.getLogger(ExportApplicationFormImp.class.getName());
-
     private final static int FONT_SIZE_BIG = 20;
     private final static int FONT_SIZE_MIDDLE = 13;
-    private final static String CHECKBOX_FONT_PATH = "fonts/wingding.ttf";
     private final static String PHOTO_PATH = "photodir.path";
     private final static char CHECKED = '\u00FE';
     private final static char UNCHECKED = '\u00A8';
+    private static Logger log = LoggerFactory.getLogger(ExportApplicationFormImp.class.getName());
     private Font fontCheckboxes;
     private Font fontBig;
     private Font fontMiddle;
@@ -43,19 +34,15 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
     @Autowired
     private FormAnswerService formAnswerService;// = ServiceFactory.getFormAnswerService();
 
+    @Autowired
+    private PropertiesReader propertiesReader;
+
     public ExportApplicationFormImp() throws IOException, DocumentException {
         //Initializing fonts
         fontBig = new Font(Font.FontFamily.TIMES_ROMAN, FONT_SIZE_BIG, Font.BOLD);
         fontMiddle = new Font(Font.FontFamily.TIMES_ROMAN, FONT_SIZE_MIDDLE, Font.BOLD);
-        URL urlFont = Thread.currentThread().getContextClassLoader().getResource(CHECKBOX_FONT_PATH);
-        BaseFont base = null;
-        if (urlFont != null) {
-            base = BaseFont.createFont(urlFont.getPath(), BaseFont.IDENTITY_H, false);
-        } else {
-            log.error("Error initializing font for checkboxes");
-            throw new FileNotFoundException("Error initializing font for checkboxes");
-        }
-        fontCheckboxes = new Font(base, 16f, Font.BOLD);
+
+        fontCheckboxes = new Font(Font.FontFamily.TIMES_ROMAN, 16f, Font.BOLD);
     }
 
     @Override
@@ -85,7 +72,7 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
         insertBaseStudentData(table, user, selectInputQuestions, selectInputAnswers);
 
         // Inserting Image in document
-        String photoDirPath = PropertiesReader.getInstance().propertiesReader(PHOTO_PATH);
+        String photoDirPath = propertiesReader.propertiesReader(PHOTO_PATH);
         URL url1 = new File(photoDirPath + applicationForm.getPhotoScope()).toURI().toURL();
         insertImage(table, url1);
         // Image inserted
@@ -117,7 +104,7 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
         cell.setPhrase(new Phrase("Email:"));
         innerTable1.addCell(cell);
         for (String string : selectInputQuestions) {
-            cell.setPhrase(new Phrase(string +":"));
+            cell.setPhrase(new Phrase(string + ":"));
             innerTable1.addCell(cell);
         }
         PdfPCell cellTableLeft = new PdfPCell(innerTable1);
@@ -247,7 +234,7 @@ public class ExportApplicationFormImp implements ExportApplicationForm {
         }
     }
 
-    private void insertImage(PdfPTable table, URL url) throws IOException,BadElementException {
+    private void insertImage(PdfPTable table, URL url) throws IOException, BadElementException {
         try {
             PdfPCell cellImg;
             cellImg = new PdfPCell(getImage(url));

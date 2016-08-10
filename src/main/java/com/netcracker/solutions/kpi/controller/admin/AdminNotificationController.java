@@ -2,10 +2,10 @@ package com.netcracker.solutions.kpi.controller.admin;
 
 import com.netcracker.solutions.kpi.persistence.model.EmailTemplate;
 import com.netcracker.solutions.kpi.persistence.model.NotificationType;
-import com.netcracker.solutions.kpi.service.EmailTemplateService;
 import com.netcracker.solutions.kpi.service.NotificationTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Set;
 
@@ -14,9 +14,7 @@ import java.util.Set;
 public class AdminNotificationController {
 
     @Autowired
-    private NotificationTypeService notificationTypeService;// = ServiceFactory.getNotificationTypeService();
-    @Autowired
-    private EmailTemplateService emailTemplateService;// = ServiceFactory.getEmailTemplateService();
+    private NotificationTypeService notificationTypeService;
 
     @RequestMapping(value = "/getAllNotificationType", method = RequestMethod.GET)
     public Set<NotificationType> getAllNotificationType() {
@@ -25,11 +23,11 @@ public class AdminNotificationController {
 
     @RequestMapping(value = "/showTemplate", method = RequestMethod.GET)
     public EmailTemplate showTemplate(@RequestParam String title) {
-        return emailTemplateService.getByTitle(title);
+        throw new NotImplementedException();
     }
 
     @RequestMapping(value = "/changeNotification", method = RequestMethod.POST)
     public void changeNotification(@RequestBody EmailTemplate emailTemplate) {
-        emailTemplateService.updateEmailTemplate(emailTemplate);
+        throw new NotImplementedException();
     }
 }

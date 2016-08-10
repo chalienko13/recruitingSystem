@@ -20,8 +20,8 @@ public abstract class AbstractQuestionsWithAnswersAdapter {
                 o2.getOrder()));
         for (FormAnswer answer : formAnswers) {
             FormQuestion question = answer.getFormQuestion();
-            if(!question.isEnable()) {
-            	continue;
+            if (!question.isEnable()) {
+                continue;
             }
             JsonObject jsonQuestion = questionsMap.get(question);
             if (jsonQuestion == null) {

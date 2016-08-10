@@ -12,6 +12,10 @@ public enum SchedulingStatusEnum {
     DATES(1L), TIME_POINTS(2L), STAFF_SCHEDULING(3L), STUDENT_SCHEDULING(4L), NOT_STARTED(5L);
     Long id;
 
+    SchedulingStatusEnum(Long id) {
+        this.id = id;
+    }
+
     public static String valueOf(SchedulingStatusEnum schedulingStatusEnum) {
         switch (schedulingStatusEnum) {
             case DATES:
@@ -44,7 +48,7 @@ public enum SchedulingStatusEnum {
         }
     }
 
-    public static SchedulingStatusEnum getStatusEnum(Long id){
+    public static SchedulingStatusEnum getStatusEnum(Long id) {
         if (Objects.equals(id, DATES.getId())) {
             return SchedulingStatusEnum.DATES;
         } else if (Objects.equals(id, TIME_POINTS.getId())) {
@@ -58,10 +62,6 @@ public enum SchedulingStatusEnum {
         } else {
             throw new IllegalStateException("status not found");
         }
-    }
-
-    SchedulingStatusEnum(Long id) {
-        this.id = id;
     }
 
     public Long getId() {

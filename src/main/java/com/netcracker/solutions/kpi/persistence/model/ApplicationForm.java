@@ -1,40 +1,37 @@
 package com.netcracker.solutions.kpi.persistence.model;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
-/**
- * Created by Алексей on 21.04.2016.
- */
 @Entity
 @Table(name = "application_form")
 public class ApplicationForm implements Serializable {
+
     private static final long serialVersionUID = 2573334038825578138L;
     @Id
     @GeneratedValue
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_status")
     private Status status;
 
     @Column(name = "is_active")
     private boolean active;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_recruitment")
     private Recruitment recruitment;
 
     @Column(name = "photo_scope")
     private String photoScope;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user")
     private User user;
 
@@ -46,8 +43,9 @@ public class ApplicationForm implements Serializable {
     @Transient
     private List<Interview> interviews;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "applicationForm")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "applicationForm")
     private List<FormAnswer> answers;
+
     @Transient
     private List<FormQuestion> questions;
 

@@ -12,7 +12,7 @@ public class FormQuestionComparator implements Comparator<FormQuestion> {
 
     @Override
     public int compare(FormQuestion o1, FormQuestion o2) {
-        if(o1.getOrder() < o2.getOrder()){
+        if (o1.getOrder() < o2.getOrder()) {
             return -1;
         } else {
             return 1;

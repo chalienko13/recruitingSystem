@@ -1,8 +1,8 @@
 package com.netcracker.solutions.kpi.persistence.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.netcracker.solutions.kpi.persistence.model.User;
 import com.netcracker.solutions.kpi.persistence.model.Role;
+import com.netcracker.solutions.kpi.persistence.model.User;
 
 import java.util.List;
 
@@ -37,7 +37,6 @@ public class UserDto {
         this.email = email;
         this.firstName = firstName;
     }
-
 
 
     public UserDto(String email, String firstName, String secondName, String lastName, List<Role> roleList) {
@@ -107,16 +106,16 @@ public class UserDto {
         return roleList;
     }
 
+    public void setRoleList(List<Role> roleList) {
+        this.roleList = roleList;
+    }
+
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public void setRoleList(List<Role> roleList) {
-        this.roleList = roleList;
     }
 
     @Override

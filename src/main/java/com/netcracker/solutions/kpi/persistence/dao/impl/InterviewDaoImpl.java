@@ -2,24 +2,17 @@ package com.netcracker.solutions.kpi.persistence.dao.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.InterviewDao;
 import com.netcracker.solutions.kpi.persistence.model.*;
-import com.netcracker.solutions.kpi.persistence.util.JdbcTemplate;
 import com.netcracker.solutions.kpi.persistence.util.ResultSetExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.util.List;
 
 @Repository
 public class InterviewDaoImpl implements InterviewDao {
-    private static Logger log = LoggerFactory.getLogger(InterviewDaoImpl.class.getName());
-
-    @Autowired
-    private JdbcDaoSupport jdbcDaoSupport;
-
     private static final String SQL_GET_BY_ID = "SELECT i.id, i.mark, i.date, i.id_interviewer, i.interviewer_role, i.adequate_mark, i.id_application_form \n"
             + "FROM interview i \n" + "WHERE i.id = ?;";
     private static final String SQL_GET_ALL = "SELECT i.id, i.mark, i.date, i.id_interviewer, i.interviewer_role, i.adequate_mark, i.id_application_form \n"
@@ -37,13 +30,10 @@ public class InterviewDaoImpl implements InterviewDao {
             " i.id_interviewer, i.interviewer_role, i.adequate_mark, i.id_application_form FROM interview i " +
             "WHERE i.id_application_form = ? and i.interviewer_role=?;";
     private static final String SQL_IS_ASSIGNED = "SELECT EXISTS (SELECT 1 FROM interview i WHERE i.id_application_form = ? AND i.id_interviewer = ?)";
-
-/*
-    public InterviewDaoImpl(DataSource dataSource) {
-        this.jdbcDaoSupport = new JdbcDaoSupport();
-        jdbcDaoSupport.setJdbcTemplate(new JdbcTemplate(dataSource));
-    }*/
-
+    private static final String SQL_GET_ANSWERS = "SELECT fa.id FROM \"form_answer\" fa WHERE fa.id_interview = ?;";
+    private static Logger log = LoggerFactory.getLogger(InterviewDaoImpl.class.getName());
+    @Autowired
+    private JdbcDaoSupport jdbcDaoSupport;
     private ResultSetExtractor<Interview> extractor = resultSet -> {
         Interview interview = new Interview();
         interview.setId(resultSet.getLong("id"));
@@ -136,8 +126,6 @@ public class InterviewDaoImpl implements InterviewDao {
                 resultSet.getBoolean(1), applicationFormID);
     }
 
-    private static final String SQL_GET_ANSWERS = "SELECT fa.id FROM \"form_answer\" fa WHERE fa.id_interview = ?;";
-
     private List<FormAnswer> getAnswers(Long interviewId) {
         return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_ANSWERS, resultSet -> {
             FormAnswer formAnswerProxy = new FormAnswer(resultSet.getLong("id"));
@@ -151,11 +139,11 @@ public class InterviewDaoImpl implements InterviewDao {
         return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_IS_ASSIGNED, resultSet -> resultSet.getBoolean(1), applicationForm.getId(), interviewer.getId());
     }
 
-	@Override
-	public int updateInterview(Interview interview, Connection connection) {
-		log.info("Update interview with id = {}", interview.getId());
-		return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE, connection, interview.getMark(), interview.getDate(),
-				interview.getInterviewer().getId(), interview.getRole().getId(), interview.isAdequateMark(),
-				interview.getApplicationForm().getId(), interview.getId());
-	}
+    @Override
+    public int updateInterview(Interview interview, Connection connection) {
+        log.info("Update interview with id = {}", interview.getId());
+        return jdbcDaoSupport.getJdbcTemplate().update(SQL_UPDATE, connection, interview.getMark(), interview.getDate(),
+                interview.getInterviewer().getId(), interview.getRole().getId(), interview.isAdequateMark(),
+                interview.getApplicationForm().getId(), interview.getId());
+    }
 }
