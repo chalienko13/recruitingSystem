@@ -1,5 +1,6 @@
 package com.netcracker.solutions.kpi.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -13,11 +14,10 @@ public class Recruitment implements Serializable {
 
     private static final long serialVersionUID = 4839409160085869405L;
 
-    //TODO Change to Long
     @Id
     @GeneratedValue
     @Column(name = "id", unique = true, nullable = false)
-    private Short id;
+    private Long id;
 
     @Column(name = "name")
     private String name;
@@ -58,14 +58,14 @@ public class Recruitment implements Serializable {
     @Column(name = "number_of_days")
     private Short numberOfDays;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "scheduling_status")
     private SchedulingStatus schedulingStatus;
 
     public Recruitment() {
     }
 
-    public Recruitment(Short id) {
+    public Recruitment(Long id) {
         this.id = id;
     }
 
@@ -89,7 +89,7 @@ public class Recruitment implements Serializable {
         this.schedulingStatus = schedulingStatus;
     }
 
-    public Recruitment(Short id, String name, Timestamp startDate, Timestamp endDate, Short maxGeneralGroup,
+    public Recruitment(Long id, String name, Timestamp startDate, Timestamp endDate, Short maxGeneralGroup,
                        Short maxAdvancedGroup, Timestamp registrationDeadline, Timestamp scheduleChoicesDeadline,
                        Short studentsOnInterview, Short timeInterviewTech, Short timeInterviewSoft,
                        Short numberTechInterviewers, Short numberSoftInterviewers, Short numberOfDays, SchedulingStatus schedulingStatus) {
@@ -119,11 +119,11 @@ public class Recruitment implements Serializable {
         this.scheduleChoicesDeadline = scheduleChoicesDeadline;
     }
 
-    public Short getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Short id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

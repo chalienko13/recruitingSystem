@@ -2,6 +2,7 @@ package com.netcracker.solutions.kpi.controller.admin;
 
 import com.netcracker.solutions.kpi.persistence.dto.*;
 import com.netcracker.solutions.kpi.persistence.dto.scheduling.InterviewParametersDTO;
+import com.netcracker.solutions.kpi.persistence.dto.scheduling.UserIdTimeIdDTO;
 import com.netcracker.solutions.kpi.persistence.model.*;
 import com.netcracker.solutions.kpi.persistence.model.enums.RoleEnum;
 import com.netcracker.solutions.kpi.persistence.model.enums.SchedulingStatusEnum;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -23,6 +25,15 @@ public class AdminSchedulingController {
 
     @Autowired
     SchedulingService schedulingService;
+
+    @Autowired
+    RecruitmentService recruitmentService;
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    ScheduleDayPointService scheduleDayPointService;
 
     //FOR WORK WITH SCHEDULE
 
@@ -60,6 +71,22 @@ public class AdminSchedulingController {
 
     @RequestMapping(value = "/addTimeInterviewTech", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public void addTimeInterviewTech (@RequestBody InterviewParametersDTO interviewParameters) {
-        schedulingService.addTimeInterviewTech(interviewParameters.getRecruitmentId(), interviewParameters.getTimeInterviewTech(), interviewParameters.getTimeInterviewSoft());
+        schedulingService.addTimeInterviewTechAndSoft(interviewParameters.getTimeInterviewTech(), interviewParameters.getTimeInterviewSoft(), interviewParameters.getRecruitmentId());
+    }
+
+    //FOR WORK WITH INTERVIEWERS IN RECRUITMENT
+
+    @RequestMapping(value = "/addTechInterviewerForInterview", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public void addTechInterviewerForInterview(@RequestBody UserIdTimeIdDTO userIdTimeIdDTO) {
+        System.out.println("lol");
+        User interwiewer = userService.getUserByID(userIdTimeIdDTO.getUserId());
+        System.out.println(interwiewer);
+        ScheduleDayPoint dayPoint = schedulingService.findScheduleDayPoint(userIdTimeIdDTO.getDayPointId());
+        System.out.println(dayPoint);
+        //TODO Add enum
+        TimeType timeType = schedulingService.findTimeTypeByName("interviewer_time");
+        System.out.println(timeType);
+        UserTime userTime = new UserTime(interwiewer, dayPoint, timeType);
+        schedulingService.addTechInterviewerForInterview(userTime);
     }
 }

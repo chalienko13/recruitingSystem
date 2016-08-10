@@ -1,12 +1,9 @@
 package com.netcracker.solutions.kpi.service.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.SchedulingSettingsDao;
-import com.netcracker.solutions.kpi.persistence.model.ScheduleDayPoint;
-import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
-import com.netcracker.solutions.kpi.persistence.model.SchedulingSettings;
-import com.netcracker.solutions.kpi.persistence.repository.RecruitmentRepository;
-import com.netcracker.solutions.kpi.persistence.repository.ScheduleDayPointRepository;
-import com.netcracker.solutions.kpi.persistence.repository.ScheduleTimePointRepository;
+import com.netcracker.solutions.kpi.persistence.model.*;
+import com.netcracker.solutions.kpi.persistence.repository.*;
+import com.netcracker.solutions.kpi.service.RecruitmentService;
 import com.netcracker.solutions.kpi.service.SchedulingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,13 +22,21 @@ public class SchedulingServiceImpl implements SchedulingService {
     private ScheduleTimePointRepository scheduleTimePointRepository;
 
     @Autowired
-    private RecruitmentRepository recruitmentRepository;
+    private UserTimeRepository userTimeRepository;
+
+    @Autowired
+    private TimeTypeRepository timeTypeRepository;
+
+    @Autowired
+    private RecruitmentService recruitmentService;
 
     //TODO delete this later (Olesia)
     @Autowired
     private SchedulingSettingsDao schedulingSettingsDao;
 
     //FOR WORK WITH SCHEDULE
+
+        //Day
     @Override
     @Transactional
     public void createScheduleDayPoints(List<ScheduleDayPoint> scheduleDayPoints) {
@@ -51,9 +56,16 @@ public class SchedulingServiceImpl implements SchedulingService {
     }
 
     @Override
+    public ScheduleDayPoint findScheduleDayPoint(Short id) {
+        return scheduleDayPointRepository.findOne(id);
+    }
+
+    @Override
     public List<ScheduleDayPoint> findAllScheduleDayPoints() {
         return scheduleDayPointRepository.findAll();
     }
+
+        //Time
 
     @Transactional
     @Override
@@ -67,17 +79,24 @@ public class SchedulingServiceImpl implements SchedulingService {
         scheduleTimePointRepository.delete(scheduleTimePoints);
     }
 
-    //FOR WORK WITH RECRUITMENT PARAMETERS
+        //Time type
 
-
-    @Override
-    public void addTimeInterviewTech(Short timeInterviewTech, Short recruitmentId, Short timeInterviewSoft ) {
-        recruitmentRepository.updateTimeInterviewTech(recruitmentId.shortValue(), timeInterviewTech.shortValue(), timeInterviewSoft.shortValue());
+    public TimeType findTimeTypeByName(String name) {
+        return timeTypeRepository.findOneByType(name);
     }
 
-    @Override
-    public void addTimeInterviewSoft(Short timeInterviewSoft, Short recruitmentId) {
+    //FOR WORK WITH RECRUITMENT PARAMETERS
 
+    @Override
+    public void addTimeInterviewTechAndSoft(Short timeInterviewTech, Short timeInterviewSoft, Long recruitmentId) {
+        recruitmentService.updateTimeInterviewTechAndSoft(timeInterviewTech, timeInterviewSoft, recruitmentId);
+    }
+
+    //FOR WORK WITH INTERVIEWERS IN RECRUITMENT
+
+    @Override
+    public void addTechInterviewerForInterview(UserTime userTime) {
+        userTimeRepository.save(userTime);
     }
 
     //TODO Rewrite (Olesia)

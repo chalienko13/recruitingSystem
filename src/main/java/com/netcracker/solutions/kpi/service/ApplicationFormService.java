@@ -47,7 +47,7 @@ public interface ApplicationFormService {
 
     int changeCurrentsAppFormStatus(Long fromIdStatus, Long toIdStatus);
 
-    Long getCountRecruitmentStudents(Short id);
+    Long getCountRecruitmentStudents(Long id);
 
     Long getCountApprovedStudentsByRecruitmentId(Short id);
 

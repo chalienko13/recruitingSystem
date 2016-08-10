@@ -135,7 +135,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 	}
 
 	@Override
-	public Long getCountRecruitmentStudents(Short id) {
+	public Long getCountRecruitmentStudents(Long id) {
 		return applicationFormDao.getCountRecruitmentStudents(id);
 	}
 

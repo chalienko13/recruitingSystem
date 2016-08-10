@@ -40,7 +40,7 @@ public class ApplicationFormDaoImpl implements ApplicationFormDao {
         applicationForm.setDateCreate(resultSet.getTimestamp(DATE_CREATE_COL));
         applicationForm.setFeedback(resultSet.getString(FEEDBACK));
         applicationForm.setId(id);
-        applicationForm.setRecruitment(new Recruitment(resultSet.getShort(ID_RECRUITMENT_COL)));
+        applicationForm.setRecruitment(new Recruitment(resultSet.getLong(ID_RECRUITMENT_COL)));
         if (resultSet.wasNull()) {
             applicationForm.setRecruitment(null);
         }
@@ -350,7 +350,7 @@ public class ApplicationFormDaoImpl implements ApplicationFormDao {
     }
 
     @Override
-    public Long getCountRecruitmentStudents(Short id) {
+    public Long getCountRecruitmentStudents(Long id) {
         return jdbcDaoSupport.getJdbcTemplate().queryWithParameters(SQL_GET_ALL_CURRENT_RECRUITMENT_STUDENTS,
                 resultSet -> resultSet.getLong("rowcount"), id);
     }

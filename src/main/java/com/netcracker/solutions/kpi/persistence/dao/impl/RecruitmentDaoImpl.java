@@ -26,7 +26,7 @@ public class RecruitmentDaoImpl implements RecruitmentDAO {
 
     private ResultSetExtractor<Recruitment> extractor = resultSet -> {
         Recruitment recruitment = new Recruitment();
-        recruitment.setId(resultSet.getShort("id"));
+        recruitment.setId(resultSet.getLong("id"));
         recruitment.setEndDate(resultSet.getTimestamp("end_date"));
         recruitment.setName(resultSet.getString("name"));
         recruitment.setStartDate(resultSet.getTimestamp("start_date"));

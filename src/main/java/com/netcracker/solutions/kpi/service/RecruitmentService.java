@@ -15,6 +15,8 @@ public interface RecruitmentService {
 
     int updateRecruitment(Recruitment recruitment);
 
+    void updateTimeInterviewTechAndSoft(Short timeInterviewTech, Short timeInterviewSoft,Long recruitmentId);
+
     boolean addRecruitment(Recruitment recruitment);
 
     int deleteRecruitment(Recruitment recruitment);

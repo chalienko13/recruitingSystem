@@ -1,8 +1,6 @@
 package com.netcracker.solutions.kpi.service;
 
-import com.netcracker.solutions.kpi.persistence.model.ScheduleDayPoint;
-import com.netcracker.solutions.kpi.persistence.model.ScheduleTimePoint;
-import com.netcracker.solutions.kpi.persistence.model.SchedulingSettings;
+import com.netcracker.solutions.kpi.persistence.model.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,17 +21,21 @@ public interface SchedulingService {
 
     List<ScheduleDayPoint> findAllScheduleDayPoints();
 
+    ScheduleDayPoint findScheduleDayPoint(Short id);
+
     void createScheduleTimePoints(List<ScheduleTimePoint> scheduleTimePoints);
 
     void deleteScheduleTimePoints(List<ScheduleTimePoint> scheduleTimePoints);
 
+    TimeType findTimeTypeByName(String name);
+
     //FOR WORK WITH RECRUITMENT PARAMETERS
 
-    void addTimeInterviewTech(Short recruitmentId, Short timeInterviewTech, Short timeInterviewSoft);
-
-    void addTimeInterviewSoft(Short timeInterviewSoft, Short recruitmentId);
+    void addTimeInterviewTechAndSoft(Short timeInterviewTech, Short timeInterviewSoft, Long recruitmentId);
 
     //FOR WORK WITH INTERVIEWERS IN RECRUITMENT
+
+    void addTechInterviewerForInterview(UserTime userTime);
 
     //FOR WORK WITH STUDENTS IN RECRUITMENT
 
