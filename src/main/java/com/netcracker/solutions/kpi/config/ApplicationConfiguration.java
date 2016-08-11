@@ -11,7 +11,7 @@ public class ApplicationConfiguration {
     @Value("${server.url}")
     public String serverUrl;
 
-    @Value("${token.expire.time:86400000}")
+    @Value("${token.expire.time}")
     public Long tokenExpireTime;
 
     @Resource

@@ -36,6 +36,7 @@ public class MailConfig {
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
         props.put(MAIL_SMTP_CONNECTIONTIMEOUT, MAIL_SOCKET_TIMEOUT);
         props.put(MAIL_SMTP_TIMEOUT, MAIL_SOCKET_TIMEOUT);
         props.put(MAIL_SMTP_WRITETIMEOUT, MAIL_SOCKET_TIMEOUT);

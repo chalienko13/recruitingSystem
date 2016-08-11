@@ -51,10 +51,10 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendRegistrationConfirmation(String email) {
         User user = userService.getUserByUsername(email);
-
-        SimpleMailMessage simpleMailMessage = getMessage(REG_CONFIRM_TEMPLATE_ID, getContextVariables(user, null));
+        Map<String, String> variables = getContextVariables(user, null);
+        variables.put("confirmationTokenLink", configuration.serverUrl + "/registrationStudent/" + user.getConfirmToken());
+        SimpleMailMessage simpleMailMessage = getMessage(REG_CONFIRM_TEMPLATE_ID, variables);
         simpleMailMessage.setTo(email);
-
         mailSender.send(simpleMailMessage);
     }
 
@@ -98,8 +98,8 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendInterviewResults(Recruitment recruitment) {
         for(Status status : new Status[]{StatusEnum.APPROVED_TO_ADVANCED_COURSES.getStatus(),
-                                         StatusEnum.APPROVED_TO_ADVANCED_COURSES.getStatus(),
-                                         StatusEnum.APPROVED_TO_JOB.getStatus()}) {
+                StatusEnum.APPROVED_TO_ADVANCED_COURSES.getStatus(),
+                StatusEnum.APPROVED_TO_JOB.getStatus()}) {
             SimpleMailMessage simpleMailMessage = getMessage(INTERVIEW_RESULT_TEMPLATE_ID, getContextVariables(null, null));
 
             String[] emails = applicationFormService.getByStatusAndRecruitment(status, recruitment)
@@ -144,7 +144,7 @@ public class EmailServiceImpl implements EmailService {
             contextVariables.put("password", user.getPassword());
             contextVariables.put("confirmationLink", user.getConfirmToken());
             contextVariables.put("recoveryPassLink", tokenUtil.generateToken(user.getEmail(), configuration.tokenExpireTime));
-        }
+        };
         return contextVariables;
     }
 

@@ -12,7 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.HandlerMapping;
 
 import javax.mail.MessagingException;
 import javax.naming.NamingException;
@@ -60,7 +62,11 @@ public class RegistrationController {
     }
 
     @RequestMapping(value = "/{token}", method = RequestMethod.GET)
-    public ResponseEntity registrationConfirm(@PathVariable("token") String token) {
+    public ResponseEntity registrationConfirm(@PathVariable("token") String token, HttpServletRequest request) {
+        String path = (String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
+        String bestMatchTokenPattern = (String) request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE);
+        AntPathMatcher apm = new AntPathMatcher();
+        token = apm.extractPathWithinPattern(bestMatchTokenPattern, path);
         if (userService.confirmByToken(token) == null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageDto(TOKEN_EXPIRED));
         } else {
