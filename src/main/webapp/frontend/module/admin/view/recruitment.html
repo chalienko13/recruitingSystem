@@ -17,6 +17,28 @@
                             </br>
                         </td>
                     </tr>
+                    <!--add backend-->
+                    <tr>
+                        <td>Registration start </td>
+                        <td>
+                            <div class="form-group">
+                                <div class="input-group date">
+                                    <input ng-show="passedRegDeadline"  class="form-control" ng-model="registrationDeadline"
+                                           name="registrationDeadline" ng-readonly="passedRegDeadline"/>
+                                    <input ng-show = "!passedRegDeadline" datetimepicker  class="form-control" ng-model="registrationDeadline"
+                                           datetime-picker date-format="yyyy-MM-dd HH:mm" name="registrationDeadline"
+                                           required ng-pattern="/^(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2})$/"/>
+									<span class="input-group-addon">
+									<span class="glyphicon glyphicon-calendar"></span>
+                                        <span ng-show="passedRegDeadline">Passed</span>
+									</span>
+                                </div>
+                                <h5 ng-show="recruitmentForm.registrationDeadline.$error.pattern" class="text-danger">Wrong date (expected yyyy-MM-dd HH:mm).</h5>
+                            </div>
+                        </td>
+                    </tr>
+                    <!--add backend-->
+
                     <tr>
                         <td>Registration deadline </td>
                         <td>

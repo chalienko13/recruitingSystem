@@ -10,7 +10,7 @@ function recoverRequestPageController($scope, $http, $timeout) {
     $scope.hideSuccessRequestRecoveryMessage = function() {
         $timeout(function() {
             $scope.showSuccessRequestRecovery = false;
-        }, 3000);
+        }, 5000);
     };
 
     $scope.sendEmail = function () {
