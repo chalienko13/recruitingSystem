@@ -20,7 +20,7 @@ import java.util.Set;
 /**
  * Created by dmch0716 on 05.08.2016.
  */
-@Service("customUserDetailsService")
+@Service
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired

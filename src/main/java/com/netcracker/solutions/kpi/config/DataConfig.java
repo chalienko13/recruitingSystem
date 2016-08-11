@@ -75,8 +75,8 @@ public class DataConfig {
         hiberProps.put(HIBERNATE_DIALECT_PROP, env.getRequiredProperty(HIBERNATE_DIALECT_PROP));
         hiberProps.put(HIBERNATE_SHOW_SQL_PROP, env.getRequiredProperty(HIBERNATE_SHOW_SQL_PROP));
         hiberProps.put(HIBERNATE_HBM2DDL_AUTO_PROP, env.getProperty(HIBERNATE_HBM2DDL_AUTO_PROP));
+
         //hiberProps.put(HIBERNATE_FLUSH_MODE_PROP, env.getProperty(HIBERNATE_FLUSH_MODE_PROP));
-        hiberProps.put("hibernate.enable_lazy_load_no_trans", "true");
         return hiberProps;
     }
 }

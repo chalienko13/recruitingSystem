@@ -21,6 +21,8 @@ public class    WebAppConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/frontend/**").addResourceLocations("/frontend/");
     }
 
+
+
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver createMultipartResolver() {
         CommonsMultipartResolver resolver = new CommonsMultipartResolver();

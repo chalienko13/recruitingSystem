@@ -14,4 +14,7 @@ public interface FormAnswerService {
     List<FormAnswer> getByInterviewAndQuestion(Interview interview, FormQuestion question);
 
     List<FormAnswer> getByApplicationFormAndQuestion(ApplicationForm applicationForm, FormQuestion question);
+
+    void insertFormAnswerForApplicationForm(FormAnswer formAnswer, FormQuestion question,
+                                            ApplicationForm applicationForm);
 }

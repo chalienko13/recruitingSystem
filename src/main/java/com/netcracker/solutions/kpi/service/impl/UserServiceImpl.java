@@ -4,11 +4,16 @@ import com.google.common.collect.Sets;
 import com.netcracker.solutions.kpi.config.ApplicationConfiguration;
 import com.netcracker.solutions.kpi.persistence.dao.UserDao;
 import com.netcracker.solutions.kpi.persistence.dto.UserDto;
+import com.netcracker.solutions.kpi.persistence.model.ApplicationForm;
+import com.netcracker.solutions.kpi.persistence.model.Recruitment;
 import com.netcracker.solutions.kpi.persistence.model.Role;
 import com.netcracker.solutions.kpi.persistence.model.User;
+import com.netcracker.solutions.kpi.persistence.model.enums.StatusEnum;
 import com.netcracker.solutions.kpi.persistence.repository.RoleRepository;
 import com.netcracker.solutions.kpi.persistence.repository.UserRepository;
+import com.netcracker.solutions.kpi.service.ApplicationFormService;
 import com.netcracker.solutions.kpi.service.EmailService;
+import com.netcracker.solutions.kpi.service.RecruitmentService;
 import com.netcracker.solutions.kpi.service.UserService;
 import com.netcracker.solutions.kpi.util.TokenUtil;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -41,6 +46,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private RecruitmentService recruitmentService;
+    @Autowired
+    private ApplicationFormService applicationFormService;
 
     @Autowired
     private EmailService emailService;
@@ -74,7 +83,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUser(String email, String firstname, String secondname, String lastname, String password, Iterable<Role> roles, boolean isActive) {
+    @Transactional
+    public User createUser(String email, String firstname, String secondname, String lastname, String password, Iterable<Role> roles, boolean isActive, boolean isStudent) {
+
         password = password == null ? RandomStringUtils.randomAlphabetic(10) : password;
         String token = RandomStringUtils.randomAlphabetic(50);
         User user = new User(email,
@@ -91,16 +102,28 @@ public class UserServiceImpl implements UserService {
             dbRoles.add(roleRepository.getByRoleName(r.getRoleName()));
         }
         user.setRoles(dbRoles);
+        User saveUser = userRepository.save(user);
 
-        userRepository.save(user);
+        if (isStudent){
+            Recruitment recruitment = recruitmentService.getCurrentRecruitmnet();
+            ApplicationForm applicationForm = new ApplicationForm();
+            applicationForm.setActive(true);
+            applicationForm.setUser(saveUser);
+            applicationForm.setDateCreate(new Timestamp(System.currentTimeMillis()));
+            applicationForm.setRecruitment(recruitment);
+            applicationForm.setStatus(StatusEnum.REGISTERED.getStatus());
+            applicationFormService.insertApplicationForm(applicationForm);
+        }
 
-        if (!user.isActive())
-        {
-            user.setConfirmToken(tokenUtil.generateToken(email, configuration.tokenExpireTime));
-            userRepository.save(user);
-            emailService.sendRegistrationConfirmation(user.getEmail()); }
-        else
-        { emailService.sendCreationNotification(user.getEmail()); }
+
+
+//        if (!user.isActive())
+//        {
+//            user.setConfirmToken(tokenUtil.generateToken(email, configuration.tokenExpireTime));
+//            userRepository.save(user);
+//            emailService.sendRegistrationConfirmation(user.getEmail()); }
+//        else
+//        { emailService.sendCreationNotification(user.getEmail()); }
         return user;
     }
 
@@ -212,7 +235,7 @@ public class UserServiceImpl implements UserService {
         } catch (NumberFormatException e) {
             log.info("Search. Search field don`t equals id");
         }
-        return userRepository.getEmployeesByNameFromToRows(id, "%" + name + "%");
+        return userRepository.getEmployeesByNameFromToRows(id, "'%" + name + "%'");
     }
 
     // TODO: 04.08.2016

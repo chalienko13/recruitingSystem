@@ -54,7 +54,7 @@ public class RecruitmentServiceImpl implements RecruitmentService {
 
     @Override
     public Recruitment getCurrentRecruitmnet() {
-        return recruitmentRepository.getCurrent();
+        return recruitmentRepository.getCurrentRecruitmnet();
     }
 
     @Override

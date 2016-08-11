@@ -27,6 +27,8 @@ public interface ApplicationFormService {
 
     Long getCountApprovedAppForm();
 
+    ApplicationForm getApplicationFormByStudent(User student);
+
     boolean insertApplicationForm(ApplicationForm applicationForm);
 
     void updateApplicationForm(ApplicationForm applicationForm);

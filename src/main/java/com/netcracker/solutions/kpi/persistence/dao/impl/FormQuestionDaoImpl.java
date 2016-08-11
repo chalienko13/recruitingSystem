@@ -208,9 +208,9 @@ public class FormQuestionDaoImpl implements FormQuestionDao {
     }
 
     @Override
-    public List<FormQuestion> getEnableByRole(Role role) {
-        log.info("Looking for form question by role = {}", role.getRoleName());
-        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_ENABLE_BY_ROLE, extractor, role.getId());
+    public List<FormQuestion> getEnableByRole(Long roleId) {
+        log.info("Looking for form question by role = {}", roleId);
+        return jdbcDaoSupport.getJdbcTemplate().queryForList(SQL_GET_ENABLE_BY_ROLE, extractor, roleId);
     }
 
     @Override

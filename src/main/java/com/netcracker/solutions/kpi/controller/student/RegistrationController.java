@@ -56,7 +56,8 @@ public class RegistrationController {
                     userDto.getLastName(),
                     userDto.getPassword(),
                     roles,
-                    false);//isActive
+                    false,//isActive
+                    true);//isStudent
             return ResponseEntity.ok(new UserDto(user.getEmail(), user.getFirstName()));
         }
     }

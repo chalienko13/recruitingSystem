@@ -16,7 +16,7 @@ public interface UserService {
 
     boolean isExist(String username);
 
-    User createUser(String email, String firstname, String secondname, String lastname, String password, Iterable<Role> roles, boolean isActive);
+    User createUser(String email, String firstname, String secondname, String lastname, String password, Iterable<Role> roles, boolean isActive, boolean isStudent);
 
     void updateUser(User user);
 

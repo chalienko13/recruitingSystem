@@ -42,7 +42,8 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "id_role", referencedColumnName = "id"))
     private Set<Role> roles;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @JsonIgnore
     private Set<UserTime> userTimes;
 
     @Column(name = "confirm_token")

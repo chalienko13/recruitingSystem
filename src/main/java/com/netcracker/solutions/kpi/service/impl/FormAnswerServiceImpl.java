@@ -1,10 +1,8 @@
 package com.netcracker.solutions.kpi.service.impl;
 
 import com.netcracker.solutions.kpi.persistence.dao.FormAnswerDao;
-import com.netcracker.solutions.kpi.persistence.model.ApplicationForm;
-import com.netcracker.solutions.kpi.persistence.model.FormAnswer;
-import com.netcracker.solutions.kpi.persistence.model.FormQuestion;
-import com.netcracker.solutions.kpi.persistence.model.Interview;
+import com.netcracker.solutions.kpi.persistence.model.*;
+import com.netcracker.solutions.kpi.persistence.repository.FormAnswerRepository;
 import com.netcracker.solutions.kpi.service.FormAnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +17,9 @@ public class FormAnswerServiceImpl implements FormAnswerService {
     @Autowired
     private FormAnswerDao formAnswerDao;
 
+    @Autowired
+    private FormAnswerRepository formAnswerRepository;
+
     @Override
     public List<FormAnswer> getByInterviewAndQuestion(Interview interview, FormQuestion question) {
         return formAnswerDao.getByInterviewAndQuestion(interview, question);
@@ -27,5 +28,13 @@ public class FormAnswerServiceImpl implements FormAnswerService {
     @Override
     public List<FormAnswer> getByApplicationFormAndQuestion(ApplicationForm applicationForm, FormQuestion question) {
         return formAnswerDao.getByApplicationFormAndQuestion(applicationForm, question);
+    }
+
+    public void insertFormAnswerForApplicationForm(FormAnswer formAnswer, FormQuestion question,
+                                       ApplicationForm applicationForm){
+        formAnswer.setFormQuestion(question);
+        formAnswer.setApplicationForm(applicationForm);
+        formAnswerRepository.save(formAnswer);
+
     }
 }

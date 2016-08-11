@@ -26,7 +26,7 @@ public interface FormQuestionService {
 
     List<FormQuestion> getAll();
 
-    List<FormQuestion> getEnableByRole(Role role);
+    List<FormQuestion> getEnableByRole(Long roleId);
 
     Set<FormQuestion> getByEnableRoleAsSet(Role role);
 

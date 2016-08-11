@@ -139,7 +139,7 @@ public class InterviewServiceImpl implements InterviewService {
             interview.setDate(new Timestamp(System.currentTimeMillis()));
             interview.setRole(role);
 
-            List<FormQuestion> questions = questionService.getEnableByRole(role);
+            List<FormQuestion> questions = questionService.getEnableByRole(role.getId());
             List<FormAnswer> answers = new ArrayList<>();
             for (FormQuestion formQuestion : questions) {
                 FormAnswer formAnswer = new FormAnswer();

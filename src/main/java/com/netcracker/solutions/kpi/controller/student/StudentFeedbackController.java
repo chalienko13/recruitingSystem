@@ -31,16 +31,16 @@ public class StudentFeedbackController {
     @RequestMapping(value = "saveFeedBack", method = RequestMethod.POST)
     public void getFeedback(@RequestParam String feedBack) {
         log.info("Getting last application form");
-        ApplicationForm applicationForm = applicationFormService.getLastApplicationFormByUserId(
-                ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()).getId());
+        User user = userService.getAuthorizedUser();
+        ApplicationForm applicationForm = applicationFormService.getLastApplicationFormByUserId(user.getId());
         applicationForm.setFeedback(feedBack);
         log.info("Save feedback in application form id - {}", applicationForm.getId());
         applicationFormService.updateApplicationForm(applicationForm);
     }
 
     @RequestMapping(value = "getFeedBack", method = RequestMethod.GET)
-    public ApplicationFormDto getFeedBack(@RequestParam String id) {
-        User user = userService.getUserByID(Long.parseLong(id));
+    public ApplicationFormDto getFeedBack() {
+        User user = userService.getAuthorizedUser();
         if (null != user) {
             return new ApplicationFormDto(applicationFormService.getLastApplicationFormByUserId(user.getId()).getFeedback());
         } else {

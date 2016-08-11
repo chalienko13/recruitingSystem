@@ -98,7 +98,8 @@ public class AdminManagementStaffController {
                 userDto.getLastName(),
                 userDto.getPassword(),
                 userDto.getRoleList(),
-                true); //isActive
+                true,
+                false); //isActive
     }
 
 

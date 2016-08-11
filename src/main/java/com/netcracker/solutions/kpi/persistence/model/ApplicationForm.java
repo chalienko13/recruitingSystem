@@ -1,5 +1,6 @@
 package com.netcracker.solutions.kpi.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.*;
 
 import javax.persistence.*;
@@ -17,14 +18,14 @@ public class ApplicationForm implements Serializable {
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_status")
     private Status status;
 
     @Column(name = "is_active")
     private boolean active;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_recruitment")
     private Recruitment recruitment;
 
@@ -36,14 +37,16 @@ public class ApplicationForm implements Serializable {
     private User user;
 
     @Column(name = "date_create")
+    @JsonIgnore
     private Timestamp dateCreate;
 
     @Column(name = "feedback")
     private String feedback;
+
     @Transient
     private List<Interview> interviews;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "applicationForm")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "applicationForm")
     private List<FormAnswer> answers;
 
     @Transient
@@ -206,6 +209,7 @@ public class ApplicationForm implements Serializable {
                 ", active=" + active +
                 ", recruitment=" + recruitment +
                 ", photoScope='" + photoScope + '\'' +
+                ", answers=" + answers +
                 ", user=" + user +
                 ", dateCreate=" + dateCreate +
                 ", feedback='" + feedback + '\'' +

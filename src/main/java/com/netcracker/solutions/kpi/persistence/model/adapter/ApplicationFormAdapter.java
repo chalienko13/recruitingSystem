@@ -18,7 +18,7 @@ public class ApplicationFormAdapter extends AbstractQuestionsWithAnswersAdapter
                                  JsonSerializationContext jsonSerializationContext) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("id", applicationForm.getId());
-//        jsonObject.addProperty("status", applicationForm.getStatus().getTitle());
+        jsonObject.addProperty("status", applicationForm.getStatus().getTitle());
         jsonObject.addProperty("active", applicationForm.isActive());
         jsonObject.addProperty("feedback", applicationForm.getFeedback());
         Recruitment recruitment = applicationForm.getRecruitment();

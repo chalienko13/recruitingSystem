@@ -39,9 +39,6 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
     private FormAnswerDao formAnswerDao;
 
     @Autowired
-    private FormAnswerRepository formAnswerRepository;
-
-    @Autowired
     private JpaTransactionManager jpaTransactionManager;
 
     @Autowired
@@ -87,6 +84,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
         return applicationFormDao.getCountAdvancedAppForm();
     }
 
+    // TODO: 09.08.2016  
     @Override
     public boolean insertApplicationForm(ApplicationForm applicationForm) {
         applicationFormRepository.save(applicationForm);
@@ -105,7 +103,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 
     @Override
     public ApplicationForm getCurrentApplicationFormByUserId(Long id) {
-        return applicationFormRepository.getOne(applicationFormDao.getCurrentApplicationFormByUserId(id).getId());
+        return applicationFormRepository.getCurrentApplicationFormByUserId(id);
     }
 
     @Override
@@ -115,7 +113,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
 
     @Override
     public ApplicationForm getLastApplicationFormByUserId(Long id) {
-        return applicationFormRepository.getOne(applicationFormDao.getLastApplicationFormByUserId(id).getId());
+        return applicationFormRepository.getLastApplicationFormByUserId(id);
     }
 
     @Override
@@ -179,6 +177,12 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
         return applicationFormDao.getCountApprovedAppForm();
     }
 
+    // TODO: 09.08.2016
+    @Override
+    public ApplicationForm getApplicationFormByStudent(User student) {
+        return null;
+    }
+
     @Override
     public boolean updateApplicationFormWithAnswers(ApplicationForm applicationForm) {
         try (Connection connection = jpaTransactionManager.getDataSource().getConnection()) {
@@ -187,8 +191,8 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
             formAnswerDao.deleteNotPresented(applicationForm.getAnswers(), applicationForm, connection);
             for (FormAnswer formAnswer : applicationForm.getAnswers()) {
                 if (formAnswer.getId() == null) {
-                    formAnswerDao.insertFormAnswerForApplicationForm(formAnswer, formAnswer.getFormQuestion(),
-                            applicationForm, connection);
+                    formAnswerService.insertFormAnswerForApplicationForm(formAnswer, formAnswer.getFormQuestion(),
+                            applicationForm);
                 } else {
                     formAnswerDao.updateFormAnswer(formAnswer);
                 }
@@ -254,7 +258,7 @@ public class ApplicationFormServiceImpl implements ApplicationFormService {
         List<FormAnswer> formAnswers = new ArrayList<>();
 
         List<FormQuestion> formQuestions = formQuestionService
-                .getEnableByRole(roleService.getRoleByTitle(RoleEnum.valueOf(RoleEnum.ROLE_STUDENT)));
+                .getEnableByRole(RoleEnum.ROLE_STUDENT.getId());
         for (FormQuestion formQuestion : formQuestions) {
             boolean wasInOldForm = false;
             if (oldApplicationForm != null) {

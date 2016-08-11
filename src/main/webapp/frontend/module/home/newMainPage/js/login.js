@@ -9,7 +9,7 @@ $(document).ready(function () {
         event.preventDefault();
         $.ajax({
             type: 'post',
-            url: '/loginIn',
+            url: '/j_spring_security_check',
             dataType: 'json',
             contentType: "application/json",
             data: JSON.stringify({

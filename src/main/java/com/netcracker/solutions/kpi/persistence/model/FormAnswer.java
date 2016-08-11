@@ -1,5 +1,6 @@
 package com.netcracker.solutions.kpi.persistence.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +25,7 @@ public class FormAnswer implements Serializable {
     private String answer;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_question")
     private FormQuestion formQuestion;
 
@@ -150,7 +151,6 @@ public class FormAnswer implements Serializable {
                 "id=" + id +
                 ", answer='" + answer + '\'' +
                 ", formQuestion=" + formQuestion +
-                ", applicationForm=" + applicationForm +
                 ", formAnswerVariant=" + formAnswerVariant +
                 ", interview=" + interview +
                 '}';

@@ -14,7 +14,6 @@ public class FormQuestion implements Serializable {
     private static final long serialVersionUID = -4875241221362139428L;
 
     @Id
-    @GeneratedValue
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 

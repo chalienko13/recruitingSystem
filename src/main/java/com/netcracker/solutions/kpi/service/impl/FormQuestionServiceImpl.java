@@ -127,8 +127,8 @@ public class FormQuestionServiceImpl implements FormQuestionService {
     }
 
     @Override
-    public List<FormQuestion> getEnableByRole(Role role) {
-        return formQuestionDao.getEnableByRole(role);
+    public List<FormQuestion> getEnableByRole(Long roleId) {
+        return formQuestionDao.getEnableByRole(roleId);
     }
 
     @Override

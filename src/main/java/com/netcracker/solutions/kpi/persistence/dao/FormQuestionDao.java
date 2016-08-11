@@ -34,7 +34,7 @@ public interface FormQuestionDao {
 
     Set<FormQuestion> getEnableByRoleAsSet(Role role);
 
-    List<FormQuestion> getEnableByRole(Role role);
+    List<FormQuestion> getEnableByRole(Long roleID);
 
     Set<FormQuestion> getByApplicationFormAsSet(ApplicationForm applicationForm);
 
