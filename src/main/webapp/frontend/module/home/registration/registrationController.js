@@ -42,6 +42,9 @@ function registrationController($scope, $http, $timeout, registrationService) {
                         $scope.userExist = false;
                         $scope.successRegistrationMessage = "Dear " + $scope.username + ", on your email - " + $scope.email + "address has been sent confirm token. Please, confirm youremail";
                         $scope.showSuccessRegistration = true;
+ /*                       $scope.project = {};
+                        $scope.registrationForm.$setPristine();
+                        $scope.form.$setUntouched();*/
                         $scope.hideSuccessRegistrationMessage();
                     }
                 }).error(function (data, status) {

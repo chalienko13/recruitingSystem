@@ -92,7 +92,7 @@
                     <td ng-if="question.mandatory == false"> {{question.title}}</td>
 
                     <!-- Question type - input -->
-                    <td ng-if="question.questionType.typeTitle == 'input'" ng-repeat="answer in questions">
+                    <td ng-if="question.questionType.typeTitle == 'input'" >
                         <input ng-model="answer.answer" maxlength="70" ng-model="answer.ID"
                                ng-required="question.isMandatory" type="text" value="{{answer.answer}}"
                                class="form-control">
@@ -101,35 +101,39 @@
                     <!-- Question type - select -->
                     <td ng-if="question.questionType.typeTitle == 'select'">
                         <select class="form-control" ng-model="question.formAnswerVariants[0].answer" ng-required="question.isMandatory">
-                            <option ng-repeat="variant in question.formAnswerVariants track by $index"
-                                    value="{{variant.answer}}">{{variant.ansewer}}
+                            <option ng-repeat="variant in question.formAnswerVariants "
+                                    value="{{variant.answer}}">{{variant.answer}}
                             </option>
                         </select>
                     </td>
 
                     <!-- Question type - checkbox -->
-                    <td ng  -if="question.questionType == 'checkbox'">
-                       <span ng-repeat="variant in question.variants">
+                    <td ng-if="question.questionType.typeTitle == 'checkbox'">
+                       <span ng-repeat="variant in question.formAnswerVariants">
                            <p>
                                <input type="checkbox"
                                ng-required="question.isMandatory && !checkAnswersSelected(question)"
                                 ng-checked="exists(variant.variant, question.answers)"
-                                      ng-click="toggle(variant.variant, question.answers)"> {{variant.variant}}
+                                      ng-click="toggle(variant.variant, question.answers)"> {{variant.answer}}
                            </p>
                        </span>
                     </td>
 
                     <!-- Question type - radio -->
-                    <td ng-if="question.questionType == 'radio'">
-                       <div ng-repeat="variant in question.variants">
-                               <input type="radio" name="{{$parent.question.title}}" ng-required="question.isMandatory && !checkAnswersSelected(question)" ng-model="$parent.question.answers[0].answer" name="question.questionTitle" ng-value="variant.variant"> {{variant.variant}}</input>
+                    <td ng-if="question.questionType.typeTitle == 'radio'">
+                       <div ng-repeat="variant in question.formAnswerVariants">
+                               <input type="radio" name="{{$parent.question.title}}" ng-required="question.isMandatory && !checkAnswersSelected(question)"
+                                       name="question.questionTitle"
+                                      ng-model="$parent.question.answers[0].answer"
+                                      ng-value="variant.answer"> {{variant.answer}}</input>
 					 </div>
                     </td>
 
                     <!-- Question type - textarea -->
-                    <td ng-if="question.questionType == 'textarea'" ng-repeat="answer in question.answers">
+                    <td ng-if="question.questionType.typeTitle == 'textarea'" >
                         <p>
-                            <textarea style="height: 150px " ng-model="answer.answer" ng-required="question.isMandatory && !checkAnswersSelected(question)" ng-model="answer.ID" class="form-control" type="text"
+                            <textarea style="height: 150px " ng-required="question.isMandatory && !checkAnswersSelected(question)"
+                                      ng-model="answer.ID" class="form-control" type="text"
                                    value="{{answer.answer}}"> {{variant.variant}}</textarea>
                         </p>
                     </td>
