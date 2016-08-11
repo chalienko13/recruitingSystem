@@ -91,11 +91,11 @@
                             <h4>
                                 Set the interview parameters:
                             </h4>
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                                 Duration for each interview:
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                                 Tech duration:
                                 <input class="input-nums" type="text" placeholder="minutes" name="techDuration"
                                        ng-model="techDuration" required
@@ -103,7 +103,7 @@
                                 <span ng-show="schedulingForm.techDuration.$error.required">required</span>
                                 <span ng-show="schedulingForm.techDuration.$error.pattern">pattern</span>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                                 Soft duration:
                                 <input class="input-nums" type="text" placeholder="minutes" name="softDuration"
                                        ng-model="softDuration" required
@@ -111,6 +111,28 @@
                                 <span ng-show="schedulingForm.softDuration.$error.required">required</span>
                                 <span ng-show="schedulingForm.softDuration.$error.pattern">pattern</span>
                             </div>
+                            <!--    add backend-->
+                            <div class="col-md-4">
+                                Duration for full interview:
+                            </div>
+
+                            <div class="col-md-4">
+                                Tech duration:
+                                <input class="input-nums" type="text" placeholder="hours" name="techDuration"
+                                       ng-model="techDuration" required
+                                       ng-pattern="/^(\d{1,3})+$/">
+                                <span ng-show="schedulingForm.techDuration.$error.required">required</span>
+                                <span ng-show="schedulingForm.techDuration.$error.pattern">pattern</span>
+                            </div>
+                            <div class="col-md-4">
+                                Soft duration:
+                                <input class="input-nums" type="text" placeholder="hours" name="softDuration"
+                                       ng-model="softDuration" required
+                                       ng-minlength="1" ng-maxlength="3" ng-pattern="/^\d+$/">
+                                <span ng-show="schedulingForm.softDuration.$error.required">required</span>
+                                <span ng-show="schedulingForm.softDuration.$error.pattern">pattern</span>
+                            </div>
+                            <!--    add backend-->
                         </div>
                         <div class="row info-text">
                             <button type="submit" class="btn btn-info search-element btn-left col-md-2"

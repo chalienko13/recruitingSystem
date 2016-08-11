@@ -8,7 +8,7 @@ function registrationController($scope, $http, $timeout, registrationService) {
     $scope.hideSuccessRegistrationMessage = function() {
         $timeout(function() {
             $scope.showSuccessRegistration = false;
-        }, 3000);
+        }, 5000);
     };
 
     $scope.registerStudent = function () {

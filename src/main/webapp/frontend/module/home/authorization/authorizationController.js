@@ -1,11 +1,21 @@
 'use strict';
 
-function authorizationController($scope, TokenStorage, $http, $rootScope, $location, $window) {
+function authorizationController($scope, $http, $rootScope, $location, $timeout) {
+    $scope.showWrongCredentials = false;
+    $scope.wrongCredentialsMessage = "Wrong Credentials !"
+
+    $scope.hideWrongCredentialsMessage = function() {
+        $timeout(function() {
+            $scope.showWrongCredentials = false;
+        }, 5000);
+    };
 
     $scope.login = function () {
 
         if ($scope.password === undefined) {
             console.log("Auth error");
+            $scope.showWrongCredentials = true;
+            $scope.hideWrongCredentialsMessage();
         } else {
             $http({
                 method: 'POST',
@@ -20,15 +30,14 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
                     window.location.replace("/frontend/index.html#" + data.redirectUrl);
                 }).error(function (data, status) {
                     console.log("Error " + data);
-                    if (status == 401) {
-                        $scope.errorcredential = true;
-                    }
+                        $scope.showWrongCredentials = true;
+                        $scope.hideWrongCredentialsMessage();
                 });
             }).error(function (data, status, headers) {
                 console.log("Error " + data);
-                if (status == 401) {
-                    $scope.errorcredential = true;
-                }
+                    $scope.showWrongCredentials = true;
+                    $scope.hideWrongCredentialsMessage();
+
             });
         }
     };
@@ -47,4 +56,4 @@ function authorizationController($scope, TokenStorage, $http, $rootScope, $locat
 }
 
 angular.module('appAuthorization')
-    .controller('authorizationController', ['$scope', 'TokenStorage', '$http', '$rootScope', '$location', authorizationController]);
+    .controller('authorizationController', ['$scope', '$http', '$rootScope', '$location', '$timeout', authorizationController]);
